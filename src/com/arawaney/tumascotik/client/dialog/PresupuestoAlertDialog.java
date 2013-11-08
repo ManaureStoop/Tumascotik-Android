@@ -1,14 +1,18 @@
-package com.arawaney.tumascotik.dialog;
+package com.arawaney.tumascotik.client.dialog;
 
-import com.arawaney.tumascotik.activity.Presupuesto;
+import com.arawaney.tumascotik.client.activity.Presupuesto;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import com.arawaney.tumascotik.client.R;
 
 
+
+@SuppressLint("ValidFragment")
 public class PresupuestoAlertDialog extends DialogFragment {
 	
 	String motivos;
@@ -18,9 +22,9 @@ public class PresupuestoAlertDialog extends DialogFragment {
 		motivos=motv;
 		price = pric;
 		
-    }     
-    
+    }  
 	
+    	
 	
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 	

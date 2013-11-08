@@ -1,10 +1,12 @@
-package com.arawaney.tumascotik.dialog;
+package com.arawaney.tumascotik.client.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import com.arawaney.tumascotik.client.R;
+
 
 public class ConnectionDialog extends DialogFragment {
     

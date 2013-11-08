@@ -1,12 +1,14 @@
-package com.arawaney.tumascotik.dialog;
+package com.arawaney.tumascotik.client.dialog;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
+import com.arawaney.tumascotik.client.R;
 
-import com.arawaney.tumascotik.activity.VerCitas;
-import com.arawaney.tumascotik.db.CitationDB;
+
+import com.arawaney.tumascotik.client.activity.VerCitas;
+import com.arawaney.tumascotik.client.db.CitationDB;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;

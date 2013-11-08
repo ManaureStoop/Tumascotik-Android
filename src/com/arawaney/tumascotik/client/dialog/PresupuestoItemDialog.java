@@ -1,9 +1,10 @@
-package com.arawaney.tumascotik.dialog;
+package com.arawaney.tumascotik.client.dialog;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
@@ -18,14 +19,17 @@ import android.provider.CalendarContract.Events;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 
-import com.arawaney.tumascotik.activity.Presupuesto;
-import com.arawaney.tumascotik.db.BudgetDB;
+import com.arawaney.tumascotik.client.activity.Presupuesto;
+import com.arawaney.tumascotik.client.db.BudgetDB;
+import com.arawaney.tumascotik.client.R;
+
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+@SuppressLint("ValidFragment")
 public class PresupuestoItemDialog extends DialogFragment {
 	
 	String title;

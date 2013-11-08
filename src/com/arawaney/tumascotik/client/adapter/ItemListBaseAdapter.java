@@ -1,10 +1,10 @@
-package com.arawaney.tumascotik.adapter;
+package com.arawaney.tumascotik.client.adapter;
 
 import java.util.ArrayList;
 
-import com.arawaney.tumascotik.model.ItemDetails;
+import com.arawaney.tumascotik.client.model.ItemDetails;
 
-
+import com.arawaney.tumascotik.client.R;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;

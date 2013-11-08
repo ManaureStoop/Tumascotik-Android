@@ -1,4 +1,4 @@
-package com.arawaney.tumascotik.activity;
+package com.arawaney.tumascotik.client.activity;
 
 
 
@@ -7,8 +7,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.arawaney.tumascotik.dialog.DatePickr;
-import com.arawaney.tumascotik.dialog.TimePicker;
+import com.arawaney.tumascotik.client.dialog.DatePickr;
+import com.arawaney.tumascotik.client.dialog.TimePicker;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -31,6 +31,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.arawaney.tumascotik.client.R;
+
 
 public class SetDate extends FragmentActivity {
 	int size;

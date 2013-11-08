@@ -1,4 +1,4 @@
-package com.arawaney.tumascotik.dialog;
+package com.arawaney.tumascotik.client.dialog;
 
 import java.util.Calendar;
 

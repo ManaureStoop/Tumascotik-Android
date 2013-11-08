@@ -1,22 +1,24 @@
-package com.arawaney.tumascotik;
+package com.arawaney.tumascotik.client;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import com.arawaney.tumascotik.activity.Pedircita;
-import com.arawaney.tumascotik.activity.Presupuesto;
-import com.arawaney.tumascotik.activity.SetDate;
-import com.arawaney.tumascotik.activity.VerCitas;
-import com.arawaney.tumascotik.db.CitationDB;
-import com.arawaney.tumascotik.dialog.ConnectionDialog;
-import com.arawaney.tumascotik.dialog.SelectFragmentDialog;
+import com.arawaney.tumascotik.client.activity.Pedircita;
+import com.arawaney.tumascotik.client.activity.Presupuesto;
+import com.arawaney.tumascotik.client.activity.SetDate;
+import com.arawaney.tumascotik.client.activity.VerCitas;
+import com.arawaney.tumascotik.client.db.CitationDB;
+import com.arawaney.tumascotik.client.dialog.ConnectionDialog;
+import com.arawaney.tumascotik.client.dialog.SelectFragmentDialog;
+//import com.arawaney.tumascotik.client.R
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
 
 import android.net.ConnectivityManager;
 import android.net.Uri;

@@ -1,15 +1,15 @@
-package com.arawaney.tumascotik.activity;
+package com.arawaney.tumascotik.client.activity;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.arawaney.tumascotik.adapter.BudgetItemListBaseAdapter;
-import com.arawaney.tumascotik.db.BudgetDB;
-import com.arawaney.tumascotik.dialog.PresupuestoAlertDialog;
-import com.arawaney.tumascotik.dialog.PresupuestoDeleteallDialog;
-import com.arawaney.tumascotik.dialog.PresupuestoDialog;
-import com.arawaney.tumascotik.dialog.PresupuestoItemDialog;
-import com.arawaney.tumascotik.model.BudgetItemDetails;
+import com.arawaney.tumascotik.client.adapter.BudgetItemListBaseAdapter;
+import com.arawaney.tumascotik.client.db.BudgetDB;
+import com.arawaney.tumascotik.client.dialog.PresupuestoAlertDialog;
+import com.arawaney.tumascotik.client.dialog.PresupuestoDeleteallDialog;
+import com.arawaney.tumascotik.client.dialog.PresupuestoDialog;
+import com.arawaney.tumascotik.client.dialog.PresupuestoItemDialog;
+import com.arawaney.tumascotik.client.model.BudgetItemDetails;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -26,6 +26,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
+import com.arawaney.tumascotik.client.R;
+
 
 public class Presupuesto extends  FragmentActivity {
 	Button volver;
@@ -104,7 +106,7 @@ public class Presupuesto extends  FragmentActivity {
 		});
 	}
 	
-	void Refresh(){
+	public void Refresh(){
 		// TODO Auto-generated method stub
 		super.onResume();
 		ArrayList<BudgetItemDetails> image_details = SetupList();
@@ -165,7 +167,7 @@ private ArrayList<BudgetItemDetails> SetupList(){
  return results;
 }
 
-void MakeAppointment(String des){
+public void MakeAppointment(String des){
 	
 	Intent pedirIntent = new Intent(Presupuesto.this, SetDate.class);
 	pedirIntent.putExtra("motivos", motivos);
@@ -176,7 +178,7 @@ void MakeAppointment(String des){
   	db.close();
   	Refresh();
 }
-void DeleteAll(){
+public void DeleteAll(){
 	
 	BudgetDB db = new BudgetDB(Presupuesto.this);
 	db.open();

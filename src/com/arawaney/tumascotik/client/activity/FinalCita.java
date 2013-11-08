@@ -1,8 +1,8 @@
-package com.arawaney.tumascotik.activity;
+package com.arawaney.tumascotik.client.activity;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
-
+import com.arawaney.tumascotik.client.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 
 
-import com.arawaney.tumascotik.db.CitationDB;
+import com.arawaney.tumascotik.client.db.CitationDB;
 import com.parse.ParseObject;
 
 public class FinalCita  extends Activity {
@@ -43,7 +43,7 @@ public class FinalCita  extends Activity {
     Objeto  = new ParseObject("Citas");
 	
 	
-	final int a�o = 	getIntent().getIntExtra("ano", 0) ;
+	final int año = 	getIntent().getIntExtra("ano", 0) ;
 	final int mes = 	getIntent().getIntExtra("mes", 0) ;
 	final int dia = 	getIntent().getIntExtra("dia", 0) ; 
 	final int horainicial = getIntent().getIntExtra("horai", 0);
@@ -63,8 +63,8 @@ public class FinalCita  extends Activity {
 	final String telefonom = getIntent().getStringExtra("telm");
 	
 
-	fechainicio = new GregorianCalendar(a�o,mes,dia,horainicial,minutoinicial).getTime();
-	fechafinal = new GregorianCalendar(a�o,mes,dia,horafinal,minutofinal).getTime();
+	fechainicio = new GregorianCalendar(año,mes,dia,horainicial,minutoinicial).getTime();
+	fechafinal = new GregorianCalendar(año,mes,dia,horafinal,minutofinal).getTime();
     
 	resumen = (TextView) findViewById(R.id.txtresumnfinal);
 	String resum = "Estimado "+ nombre+" la cita de "+ mascota +" para "+motivo+" se pautara para el 0"+dia+"/0"+mes+" desde las "+horainicial+":"+minutoinicial+" hasta las "+horafinal+":"+minutofinal+". Por favor espere la respuesta de su veterinario.";
@@ -75,7 +75,7 @@ public class FinalCita  extends Activity {
 		
 		@Override
 		public void onClick(View v) {
-			Log.d("ENVIO","ENVI�");
+			Log.d("ENVIO","ENVÍO");
 			// Uploading data to parse
 			Objeto.put("nombre", nombre );
 			Objeto.put("direccion", direccion );
@@ -97,7 +97,7 @@ public class FinalCita  extends Activity {
 			// Saving pending data on the cellphone so it wont get erased when the aplication closes
 			SharedPreferences reqst = getSharedPreferences("TUMASC", 0);
 			SharedPreferences.Editor editor = reqst.edit();
-			editor.putInt("a�o"+index, a�o);
+			editor.putInt("año"+index, año);
 			editor.putInt("mes"+index, mes);
 			editor.putInt("dia"+index, dia);
 			editor.putInt("horai"+index, horainicial);

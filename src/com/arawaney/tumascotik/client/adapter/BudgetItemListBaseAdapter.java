@@ -1,8 +1,10 @@
-package com.arawaney.tumascotik.adapter;
+package com.arawaney.tumascotik.client.adapter;
 
 import java.util.ArrayList;
 
-import com.arawaney.tumascotik.model.BudgetItemDetails;
+import com.arawaney.tumascotik.client.model.BudgetItemDetails;
+import com.arawaney.tumascotik.client.R;
+
 
 import android.content.Context;
 import android.util.Log;

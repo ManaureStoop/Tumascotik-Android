@@ -1,4 +1,4 @@
-package com.arawaney.tumascotik.db;
+package com.arawaney.tumascotik.client.db;
 
 import android.content.ContentValues;
 import android.content.Context;

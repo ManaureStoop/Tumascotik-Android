@@ -1,4 +1,4 @@
-package com.arawaney.tumascotik.activity;
+package com.arawaney.tumascotik.client.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.arawaney.tumascotik.client.R;
 
 
 public class Datosmascota  extends Activity  {

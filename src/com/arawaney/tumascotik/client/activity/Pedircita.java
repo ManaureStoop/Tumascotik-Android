@@ -1,4 +1,4 @@
-package com.arawaney.tumascotik.activity;
+package com.arawaney.tumascotik.client.activity;
 
 
 import android.app.Activity;
@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.arawaney.tumascotik.client.R;
 
 
 public class Pedircita  extends Activity  {

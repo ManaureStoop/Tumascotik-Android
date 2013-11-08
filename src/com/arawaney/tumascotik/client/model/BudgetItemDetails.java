@@ -1,4 +1,4 @@
-package com.arawaney.tumascotik.model;
+package com.arawaney.tumascotik.client.model;
 
 
 

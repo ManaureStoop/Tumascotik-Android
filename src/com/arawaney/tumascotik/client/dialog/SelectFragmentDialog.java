@@ -1,5 +1,7 @@
-package com.arawaney.tumascotik.dialog;
-import com.arawaney.tumascotik.Menu;
+package com.arawaney.tumascotik.client.dialog;
+import com.arawaney.tumascotik.client.Menu;
+import com.arawaney.tumascotik.client.R;
+
 
 import android.app.AlertDialog;
 import android.app.Dialog;

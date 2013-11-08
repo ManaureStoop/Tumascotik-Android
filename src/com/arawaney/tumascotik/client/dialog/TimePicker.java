@@ -1,15 +1,18 @@
-package com.arawaney.tumascotik.dialog;
+package com.arawaney.tumascotik.client.dialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.arawaney.tumascotik.activity.SetDate;
+import com.arawaney.tumascotik.client.activity.SetDate;
+import com.arawaney.tumascotik.client.R;
+
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import android.R.bool;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -21,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 
 
+@SuppressLint("ValidFragment")
 public class TimePicker extends DialogFragment {
 	String[] hours;
 	int[] preciocaro;
