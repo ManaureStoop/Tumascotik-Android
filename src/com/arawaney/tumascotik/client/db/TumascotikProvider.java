@@ -17,7 +17,7 @@ import android.util.Log;
 public class TumascotikProvider extends ContentProvider {
 
 	private static final String LOG_TAG = "Tumascotik-Client-Provider";
-	public static final String PROVIDER_NAME = "com.arawaney.tumascotik.client.contentprovider";
+	public static final String PROVIDER_NAME = "com.arawaney.tumascotik.client.db.contentprovider";
 
 	// Identifiers
 

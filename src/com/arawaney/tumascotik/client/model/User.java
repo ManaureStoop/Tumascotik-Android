@@ -4,7 +4,7 @@ public class User {
 
 
 	private long id;
-	private long system_id;
+	private String system_id;
 	private String username;
 	private String password;
 	private String name;
@@ -14,7 +14,7 @@ public class User {
 	private String email;
 	private String gender;
 	private Integer mobile_telephone;
-	private String house_telephone;
+	private Integer house_telephone;
 	private Integer admin;
 	
 	public long getId(){
@@ -25,11 +25,11 @@ public class User {
 		this.id = id;
 	}
 	
-	public long getSystemId(){
+	public String getSystemId(){
 		return this.system_id;
 	}
 	
-	public void setSystemId(long system_id){
+	public void setSystemId(String system_id){
 		this.system_id = system_id;
 	}
 	
@@ -105,11 +105,11 @@ public class User {
 		this.mobile_telephone = mobile_telephone;
 	}
 
-	public String getHouse_telephone() {
+	public Integer getHouse_telephone() {
 		return house_telephone;
 	}
 
-	public void setHouse_telephone(String house_telephone) {
+	public void setHouse_telephone(Integer house_telephone) {
 		this.house_telephone = house_telephone;
 	}
 

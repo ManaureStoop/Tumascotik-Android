@@ -22,6 +22,10 @@
     <string name="main_settime">Elija un bloque de hora entre los disponibles:</string>
     <string-array name="horas_array"></string-array>
     <string name="verCitas">¿Qué citas deseas ver?</string>
+    <string name="log_in_username_hint">username</string>
+    <string name="log_in_passw_hint">password</string>
+     <string name="log_in">Login</string>
+   
     <string-array name="Citas">
         <item >Aceptadas</item>
         <item >Pendientes</item>

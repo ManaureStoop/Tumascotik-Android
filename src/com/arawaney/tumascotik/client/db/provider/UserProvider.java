@@ -14,7 +14,7 @@ public class UserProvider {
 	
 	private static final String LOG_TAG = "Tumascotik-Client-UserProvider";
 
-	public static final Uri URI_USER = Uri.parse("conten://"
+	public static final Uri URI_USER = Uri.parse("content://"
 			+ TumascotikProvider.PROVIDER_NAME + "/" + UserEntity.TABLE);
 
 	public static int insertUser(Context context, User user) {
@@ -24,7 +24,6 @@ public class UserProvider {
 
 		try {
 			ContentValues values = new ContentValues();
-			values.put(UserEntity.COLUMN_ID, user.getId());
 			values.put(UserEntity.COLUMN_SYSTEM_ID, user.getSystemId());
 			values.put(UserEntity.COLUMN_NAME, user.getName());
 			values.put(UserEntity.COLUMN_LASTNAME, user.getLastname());
@@ -122,7 +121,7 @@ public class UserProvider {
 		
 		do {
 			final long id = cursor.getLong(cursor.getColumnIndex(UserEntity.COLUMN_ID));
-			final long system_id = cursor.getLong(cursor.getColumnIndex(UserEntity.COLUMN_SYSTEM_ID));
+			final String system_id = cursor.getString(cursor.getColumnIndex(UserEntity.COLUMN_SYSTEM_ID));
 			final String username = cursor.getString(cursor.getColumnIndex(UserEntity.COLUMN_USERNAME));
 			final String password = cursor.getString(cursor.getColumnIndex(UserEntity.COLUMN_PASSWORD));
 			final String name = cursor.getString(cursor.getColumnIndex(UserEntity.COLUMN_NAME));
@@ -132,7 +131,7 @@ public class UserProvider {
 			final String email = cursor.getString(cursor.getColumnIndex(UserEntity.COLUMN_EMAIL));
 			final String gender = cursor.getString(cursor.getColumnIndex(UserEntity.COLUMN_GENDER));
 			final Integer mobile_telephone = cursor.getInt(cursor.getColumnIndex(UserEntity.COLUMN_TELEPHONE_MOBILE));
-			final String house_telephone = cursor.getString(cursor.getColumnIndex(UserEntity.COLUMN_TELEPHONE_HOUSE));
+			final Integer house_telephone = cursor.getInt(cursor.getColumnIndex(UserEntity.COLUMN_TELEPHONE_HOUSE));
 			final Integer admin = cursor.getInt(cursor.getColumnIndex(UserEntity.COLUMN_ADMIN));
 			
 			user = new User();

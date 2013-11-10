@@ -16,7 +16,7 @@ import com.arawaney.tumascotik.client.model.Request;
 public class RequestProvider {
 	private static final String LOG_TAG = "Tumascotik-Client-RequestProvider";
 
-	public static final Uri URI_REQUEST = Uri.parse("conten://"
+	public static final Uri URI_REQUEST = Uri.parse("content://"
 			+ TumascotikProvider.PROVIDER_NAME + "/" + RequestEntity.TABLE);
 
 	public static int insertRequest(Context context, Request request) {
@@ -26,7 +26,6 @@ public class RequestProvider {
 
 		try {
 			ContentValues values = new ContentValues();
-			values.put(RequestEntity.COLUMN_ID, request.getId());
 			values.put(RequestEntity.COLUMN_SYSTEM_ID, request.getSystem_id());
 			values.put(RequestEntity.COLUMN_START_DATE, request.getStart_date().getTimeInMillis());
 			values.put(RequestEntity.COLUMN_FINISH_DATE, request.getFinisch_date().getTimeInMillis());

@@ -15,7 +15,7 @@ import com.arawaney.tumascotik.client.model.Pet;
 public class PetProvider {
 	private static final String LOG_TAG = "Tumascotik-Client-PetProvider";
 
-	public static final Uri URI_PET = Uri.parse("conten://"
+	public static final Uri URI_PET = Uri.parse("content://"
 			+ TumascotikProvider.PROVIDER_NAME + "/" + PetEntity.TABLE);
 
 	public static int insertPet(Context context, Pet pet) {
@@ -25,7 +25,6 @@ public class PetProvider {
 
 		try {
 			ContentValues values = new ContentValues();
-			values.put(PetEntity.COLUMN_ID, pet.getId());
 			values.put(PetEntity.COLUMN_SYSTEM_ID, pet.getSystem_id());
 			values.put(PetEntity.COLUMN_NAME, pet.getName());
 			values.put(PetEntity.COLUMN_USER_ID, pet.getOwner().getId());
