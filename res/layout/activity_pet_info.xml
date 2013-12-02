@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo"
+    android:orientation="vertical"
+    android:screenOrientation="portrait" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/image_pet_info_avatar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/otro" />
+
+                <TextView
+                    android:id="@+id/text_pet_info_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Pancho"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <EditText
+                    android:id="@+id/edit_text_pet_info_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp"
+                    android:ems="10"
+                    android:inputType="textPersonName" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/text_pet_info_specie_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/pet_info_title_specie"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/hinttext" />
+
+                <TextView
+                    android:id="@+id/text_pet_info_specie"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Perro" />
+
+                <Spinner
+                    android:id="@+id/spiner_pet_info_specie"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scrollbars="horizontal"
+                    android:splitMotionEvents="false"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/text_pet_info_breed_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/pet_info_title_breed"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/hinttext" />
+
+                <TextView
+                    android:id="@+id/text_pet_info_breed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Boxer" />
+
+                <Spinner
+                    android:id="@+id/spiner_pet_info_breed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scrollbars="horizontal"
+                    android:splitMotionEvents="false"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/text_pet_info_gender_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/pet_info_title_gender"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/hinttext" />
+
+                <TextView
+                    android:id="@+id/text_pet_info_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Macho" />
+
+                <Spinner
+                    android:id="@+id/spiner_pet_info_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/Genders"
+                    android:scrollbars="horizontal"
+                    android:splitMotionEvents="false"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/text_pet_info_properties_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/pet_info_title_properties"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/hinttext" />
+
+                <TextView
+                    android:id="@+id/text_pet_info_properties"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pelo Largo- Grande" />
+
+                <Spinner
+                    android:id="@+id/spiner_pet_info_properties"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/Genders"
+                    android:scrollbars="horizontal"
+                    android:splitMotionEvents="false"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/text_pet_info_puppy_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/pet_info_title_puppy"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/hinttext" />
+
+                <TextView
+                    android:id="@+id/text_pet_info_puppy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cachorro" />
+
+                <Spinner
+                    android:id="@+id/spiner_pet_info_puppy"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/Age"
+                    android:scrollbars="horizontal"
+                    android:splitMotionEvents="false"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/text_pet_info_comment_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/pet_info_title_comment"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/hinttext" />
+
+                <TextView
+                    android:id="@+id/text_pet_info_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Blah blah" />
+
+                <EditText
+                    android:id="@+id/edit_text_pet_info_comment"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button_pet_info_edit_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pet_info_button_edit"
+                android:gravity="center"
+                android:layout_gravity="center" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

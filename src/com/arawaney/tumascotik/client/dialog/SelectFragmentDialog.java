@@ -1,5 +1,5 @@
 package com.arawaney.tumascotik.client.dialog;
-import com.arawaney.tumascotik.client.Menu;
+import com.arawaney.tumascotik.client.ClientMainActivity;
 import com.arawaney.tumascotik.client.R;
 
 
@@ -22,7 +22,7 @@ public class SelectFragmentDialog extends DialogFragment{
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				
-				Menu callingActivity = (Menu) getActivity();
+				ClientMainActivity callingActivity = (ClientMainActivity) getActivity();
 				callingActivity.appointmentCall(which);
 				
 			}

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-	android:background="@drawable/fondo"
+    android:background="@drawable/fondo"
     android:orientation="vertical"
     android:screenOrientation="portrait" >
 
@@ -90,19 +90,6 @@
         android:splitMotionEvents="false"
         android:textAlignment="center" />
 
-    <EditText
-        android:id="@+id/etxtmascotadatmasc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/spinmotivodatmasc"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"
-        android:ems="10"
-        android:hint="Nombre de Mascota"
-        android:inputType="textPersonName"
-        android:textColor="@color/hinttext"
-        android:textColorHint="@color/hinttext" />
-
     <Button
         android:id="@+id/bcancdatmasc"
         android:layout_width="wrap_content"
@@ -119,5 +106,20 @@
         android:layout_below="@+id/bsigdatmasc"
         android:layout_toLeftOf="@+id/spinrazadatmasc"
         android:text="Anterior" />
+
+    <EditText
+        android:id="@+id/etxtmascotadatmasc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/spinmotivodatmasc"
+        android:layout_toLeftOf="@+id/bcancdatmasc"
+        android:ems="10"
+        android:hint="Nombre de Mascota"
+        android:inputType="textPersonName"
+        android:textColor="@color/hinttext"
+        android:textColorHint="@color/hinttext" >
+
+        <requestFocus />
+    </EditText>
 
 </RelativeLayout>

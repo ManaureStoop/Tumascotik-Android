@@ -29,12 +29,12 @@
     <string name="log_in">Login</string>
 
     <string-array name="Citas">
-        <item>Accepted</item>
-        <item>Pending</item>
+        <item>Aceptadas</item>
+        <item>Pendientes</item>
     </string-array>
     <string-array name="Motivos">
-        <item>--Choose--</item>
-        <item>Bath</item>
+        <item>--Elija--</item>
+        <item>Baño</item>
         <item>Peluqueria</item>
         <item>Consulta</item>
         <item>Emergencia</item>
@@ -88,26 +88,26 @@
     </string-array>
 
     <!-- PET PICKER -->
-    <string name="pet_picker_title">There are your pets</string>
+    <string name="pet_picker_title">Aquí están tus mascotas</string>
 
     <!-- MENU -->
-    <string name="menu_my_profile">My profile</string>
-    <string name="menu_my_pets">My pets</string>
+    <string name="menu_my_profile">Mi perfil</string>
+    <string name="menu_my_pets">Mis Mascotas</string>
 
-    <!-- Pet Info -->
-    <string name="pet_info_button_edit">Edit</string>
-    <string name="pet_info_button_save">Save</string>
-    <string name="pet_info_title_specie">Specie</string>
-    <string name="pet_info_title_breed">Breed</string>
-    <string name="pet_info_title_gender">Gender</string>
-    <string name="pet_info_title_properties">Properties</string>
-    <string name="pet_info_title_puppy">Age</string>
-    <string name="pet_info_title_comment">Comments</string>
+    <!-- PET INFO -->
+    <string name="pet_info_button_edit">Editar</string>
+    <string name="pet_info_button_save">Guardar</string>
+    <string name="pet_info_title_specie">Especie</string>
+    <string name="pet_info_title_breed">Raza</string>
+    <string name="pet_info_title_gender">Sexo</string>
+    <string name="pet_info_title_properties">Propiedades</string>
+    <string name="pet_info_title_puppy">Edad</string>
+    <string name="pet_info_title_comment">Otros comentarios</string>
 
     <string-array name="Genders">
-        <item>--Choose--</item>
-        <item>Male</item>
-        <item>Female</item>
+        <item>--Elija--</item>
+        <item>Macho</item>
+        <item>Hembra</item>
     </string-array>
     <string-array name="Age">
         <item>--Choose--</item>

@@ -7,39 +7,41 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="16" />
+
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
-    <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
+    <uses-permission android:name="android.permission.CALL_PHONE" >
+    </uses-permission>
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/mascotiklogo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.arawaney.tumascotik.client.Menu"
+            android:name="com.arawaney.tumascotik.client.ClientMainActivity"
             android:label="Tumascotik Client"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-           
         <activity
             android:name="com.arawaney.tumascotik.client.activity.FinalCita"
-            android:label="FinalCita" 
-            android:screenOrientation="portrait">
+            android:label="FinalCita"
+            android:screenOrientation="portrait" >
         </activity>
-           <activity
+        <activity
             android:name="com.arawaney.tumascotik.client.activity.Pedircita"
             android:label="Pedircita"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.arawaney.tumascotik.client.activity.SetDate"
-            android:label="SetDate" 
-            android:screenOrientation="portrait">
+            android:label="SetDate"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.arawaney.tumascotik.client.activity.VerCitas"
@@ -51,17 +53,29 @@
             android:label="Presupuesto"
             android:screenOrientation="portrait" >
         </activity>
-         <activity
+        <activity
             android:name="com.arawaney.tumascotik.client.activity.Datosmascota"
-            android:label="Datosmascota" 
-            android:screenOrientation="portrait">
+            android:label="Datosmascota"
+            android:screenOrientation="portrait" >
         </activity>
-        
-         <provider android:authorities="com.arawaney.tumascotik.client.db.contentprovider"
- 		android:name=".db.TumascotikProvider">
-            </provider>
+        <activity
+            android:name="com.arawaney.tumascotik.client.activity.PetInfoActivity"
+            android:label="PetInfoActivity"
+            android:screenOrientation="sensorPortrait" >
+        </activity>
+        <activity
+            android:name="com.arawaney.tumascotik.client.activity.PetPicker"
+            android:label="PetPicker"
+            android:screenOrientation="sensorPortrait">
+        </activity>
+
+        <provider
+            android:name=".db.TumascotikProvider"
+            android:authorities="com.arawaney.tumascotik.client.db.contentprovider" >
+        </provider>
     </application>
-     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
