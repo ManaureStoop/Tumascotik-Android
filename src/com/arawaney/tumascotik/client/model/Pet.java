@@ -3,15 +3,24 @@ package com.arawaney.tumascotik.client.model;
 public class Pet {
 
 	private long id;
-	private long system_id;
+	private String system_id;
 	private String name;
 	private User owner;
 	private String comment;
 	private String breed;
 	private String pet_properties;
 	private String specie;
-	private String gender;
+	private Integer gender;
 	private Integer puppy;
+	
+	public final int GENDER_MALE = 0;
+	public final int GENDER_FEMALE = 1;
+	
+	public final int PUPPY_TRUE = 1;
+	public final int PUPPY_FALSE = 0;
+
+	
+	
 	
 	public long getId() {
 		return id;
@@ -19,10 +28,10 @@ public class Pet {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public long getSystem_id() {
+	public String getSystem_id() {
 		return system_id;
 	}
-	public void setSystem_id(long system_id) {
+	public void setSystem_id(String system_id) {
 		this.system_id = system_id;
 	}
 	public String getName() {
@@ -61,10 +70,10 @@ public class Pet {
 	public void setSpecie(String specie) {
 		this.specie = specie;
 	}
-	public String getGender() {
+	public int getGender() {
 		return gender;
 	}
-	public void setGender(String gender) {
+	public void setGender(int gender) {
 		this.gender = gender;
 	}
 	public Integer isPuppy() {

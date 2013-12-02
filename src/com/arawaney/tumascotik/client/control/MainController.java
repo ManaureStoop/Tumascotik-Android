@@ -1,18 +1,20 @@
 package com.arawaney.tumascotik.client.control;
 
 import com.arawaney.tumascotik.client.db.provider.UserProvider;
+import com.arawaney.tumascotik.client.model.Pet;
 import com.arawaney.tumascotik.client.model.User;
 
 import android.content.Context;
 import android.util.Log;
 
 public class MainController {
-	private final String LOG_TAG = "Tumascotik-Client-Main Controller";
+	private final static String LOG_TAG = "Tumascotik-Client-Main Controller";
 	Context context;
-	User USER;
+	public static User USER;
+	static Pet PET;
 
-	public boolean Initialize(Context context) {
-Log.d(LOG_TAG, "Initialize");
+	public static boolean Initialize(Context context) {
+		Log.d(LOG_TAG, "Initialize");
 		try {
 			USER = UserProvider.readUser(context);
 
@@ -25,12 +27,20 @@ Log.d(LOG_TAG, "Initialize");
 
 	}
 
-	public boolean isActive() {
+	public static boolean isActive() {
 		if (USER != null) {
 			return true;
 		}
 
 		return false;
+	}
+
+	public static Pet getPET() {
+		return PET;
+	}
+
+	public static void setPET(Pet pET) {
+		PET = pET;
 	}
 
 }

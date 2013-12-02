@@ -44,7 +44,7 @@ public class RequestEntity {
 			+ COLUMN_ACTIVE
 			+ " INTEGER, " 
 			+ COLUMN_PET_ID 
-			+ " INTEGER);";
+			+ " TEXT);";
 
 
 }

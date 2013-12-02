@@ -35,7 +35,7 @@ public class RequestProvider {
 			values.put(RequestEntity.COLUMN_DELIVERY, request.isDelivery());
 			values.put(RequestEntity.COLUMN_IS_APPOINTMENT, request.Is_appointment());
 			values.put(RequestEntity.COLUMN_ACTIVE, request.isActive());
-			values.put(RequestEntity.COLUMN_PET_ID, request.getPet().getId());
+			values.put(RequestEntity.COLUMN_PET_ID, request.getPet().getSystem_id());
 			
 
 			final Uri result = context.getContentResolver().insert(URI_REQUEST,
@@ -77,7 +77,7 @@ public class RequestProvider {
 			values.put(RequestEntity.COLUMN_DELIVERY, request.isDelivery());
 			values.put(RequestEntity.COLUMN_IS_APPOINTMENT, request.Is_appointment());
 			values.put(RequestEntity.COLUMN_ACTIVE, request.isActive());
-			values.put(RequestEntity.COLUMN_PET_ID, request.getPet().getId());
+			values.put(RequestEntity.COLUMN_PET_ID, request.getPet().getSystem_id());
 
 			String condition = RequestEntity.COLUMN_ID + " = "
 					+ String.valueOf(request.getId());
@@ -86,7 +86,7 @@ public class RequestProvider {
 					condition, null);
 
 			if (row == 1) {
-				Log.i(LOG_TAG, " Request :" + request.getId() + " has bee updated");
+				Log.i(LOG_TAG, " Request :" + request.getId() + " has bee upId(dated");
 				return true;
 			}
 		} catch (Exception e) {
@@ -130,7 +130,7 @@ public class RequestProvider {
 				final Integer delivery  = cursor.getInt(cursor.getColumnIndex(RequestEntity.COLUMN_DELIVERY));		
 				final Integer is_appointment = cursor.getInt(cursor.getColumnIndex(RequestEntity.COLUMN_DELIVERY));	
 				final Integer active = cursor.getInt(cursor.getColumnIndex(RequestEntity.COLUMN_ACTIVE));	
-				final long pet_id = cursor.getLong(cursor.getColumnIndex(RequestEntity.COLUMN_PET_ID));
+				final String pet_id = cursor.getString(cursor.getColumnIndex(RequestEntity.COLUMN_PET_ID));
 
 				Calendar startCalendar = Calendar.getInstance();
 				startCalendar.setTimeInMillis(start_date);
@@ -151,7 +151,7 @@ public class RequestProvider {
 				request.setActive(active);
 				
 				
-				if (pet_id != 0) {
+				if (pet_id != null) {
 					request.setPet(PetProvider.readPet(context, pet_id));
 				} 
 	

@@ -31,7 +31,7 @@ public class PetEntity {
 			+ COLUMN_BREED 
 			+ " TEXT, "
 			+ COLUMN_GENDER 
-			+ " TEXT, " 
+			+ " INTEGER, " 
 			+ COLUMN_PET_PROPERTIES 
 			+ " TEXT, " 
 			+ COLUMN_SPECIE 
