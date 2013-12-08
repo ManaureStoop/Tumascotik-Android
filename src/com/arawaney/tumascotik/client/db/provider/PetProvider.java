@@ -32,9 +32,11 @@ public class PetProvider {
 			values.put(PetEntity.COLUMN_COMMENT, pet.getComment());
 			values.put(PetEntity.COLUMN_BREED, pet.getBreed());
 			values.put(PetEntity.COLUMN_GENDER, pet.getGender());
-			values.put(PetEntity.COLUMN_PET_PROPERTIES, pet.getPet_properties());
+			if (pet.getPet_properties() != null) {
+				values.put(PetEntity.COLUMN_PET_PROPERTIES, pet.getPet_properties());
+			}
 			values.put(PetEntity.COLUMN_SPECIE, pet.getSpecie());
-			values.put(PetEntity.COLUMN_PUPPY, pet.isPuppy());
+			values.put(PetEntity.COLUMN_PUPPY, pet.getPuppy());
 			
 
 			final Uri result = context.getContentResolver().insert(URI_PET,
@@ -68,8 +70,9 @@ public class PetProvider {
 			ContentValues values = new ContentValues();
 			values.put(PetEntity.COLUMN_ID, pet.getId());
 			values.put(PetEntity.COLUMN_SYSTEM_ID, pet.getSystem_id());
+			values.put(PetEntity.COLUMN_NAME, pet.getName());
 			
-//			if(pet.getOwner() != null)
+			if(pet.getOwner() != null)
 			values.put(PetEntity.COLUMN_USER_ID, pet.getOwner().getId());
 			
 			values.put(PetEntity.COLUMN_COMMENT, pet.getComment());
@@ -77,7 +80,7 @@ public class PetProvider {
 			values.put(PetEntity.COLUMN_GENDER, pet.getGender());
 			values.put(PetEntity.COLUMN_PET_PROPERTIES, pet.getPet_properties());
 			values.put(PetEntity.COLUMN_SPECIE, pet.getSpecie());
-			values.put(PetEntity.COLUMN_PUPPY, pet.isPuppy());
+			values.put(PetEntity.COLUMN_PUPPY, pet.getPuppy());
 
 			String condition = PetEntity.COLUMN_SYSTEM_ID + " = "
 					+"'"+ String.valueOf(pet.getSystem_id())+"'";
@@ -202,11 +205,11 @@ public class PetProvider {
 				pet.setSpecie(specie);
 				pet.setGender(gender);
 				pet.setPuppy(puppy);
-				User user = UserProvider.readUser(context);
-				Log.d(LOG_TAG, user.getName());
-				Log.d(LOG_TAG, user.getSystemId());
-				pet.setOwner(user);
 				
+				User owner = UserProvider.readUser(context);
+				Log.d(LOG_TAG, owner.getName());
+				Log.d(LOG_TAG, owner.getSystemId());
+				pet.setOwner(owner);
 				
 				pets.add(pet);
 				

@@ -12,10 +12,13 @@ public class User {
 	private Integer cedula;
 	private String address;
 	private String email;
-	private String gender;
+	private int gender;
 	private Integer mobile_telephone;
 	private Integer house_telephone;
 	private Integer admin;
+	
+	public final static int GENDER_MAN= 1;
+	public final static int GENDER_WOMAN = 2;
 	
 	public long getId(){
 		return this.id;
@@ -89,11 +92,11 @@ public class User {
 		this.email = mail;
 	}
 
-	public String getGender() {
+	public int getGender() {
 		return gender;
 	}
 
-	public void setGender(String gender) {
+	public void setGender(int gender) {
 		this.gender = gender;
 	}
 

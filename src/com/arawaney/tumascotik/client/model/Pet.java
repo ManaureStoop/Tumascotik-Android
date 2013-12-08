@@ -13,11 +13,12 @@ public class Pet {
 	private Integer gender;
 	private Integer puppy;
 	
-	public final int GENDER_MALE = 0;
-	public final int GENDER_FEMALE = 1;
+	public final static int GENDER_MALE = 1;
+	public final static int GENDER_FEMALE = 2;
 	
-	public final int PUPPY_TRUE = 1;
-	public final int PUPPY_FALSE = 0;
+	public final static int AGE_ADULT = 1;
+	public final static int AGE_PUPPY = 2;
+
 
 	
 	
@@ -71,12 +72,18 @@ public class Pet {
 		this.specie = specie;
 	}
 	public int getGender() {
+		if (gender == null) {
+			return 0;
+		}else
 		return gender;
 	}
 	public void setGender(int gender) {
 		this.gender = gender;
 	}
-	public Integer isPuppy() {
+	public Integer getPuppy() {
+		if (puppy == null) {
+			return 0;
+		}else
 		return puppy;
 	}
 	public void setPuppy(Integer puppy) {

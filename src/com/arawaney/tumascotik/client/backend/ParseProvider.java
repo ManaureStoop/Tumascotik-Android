@@ -28,8 +28,6 @@ import com.parse.SaveCallback;
 public class ParseProvider {
 	private static final String LOG_TAG = "Tumascotik-Client-ParseProvider";
 
-	private static ParseObject mainPet;
-
 	public static void logIn(String username, final String password,
 			final Context context, final ParseListener listener) {
 		final ProgressDialog progressDialog = ProgressDialog.show(context, "",
@@ -68,7 +66,7 @@ public class ParseProvider {
 		dbuser.setCedula(user.getInt("Cedula"));
 		dbuser.setAddress(user.get("Address").toString());
 		dbuser.setEmail(user.getEmail());
-		dbuser.setGender(user.get("Gender").toString());
+		dbuser.setGender(user.getInt("Gender"));
 		dbuser.setMobile_telephone(user.getInt("Telephone_mobile"));
 		dbuser.setHouse_telephone(user.getInt("Telephone_House"));
 		dbuser.setAdmin(user.getBoolean("Admin") ? 1 : 0);
@@ -101,9 +99,12 @@ public class ParseProvider {
 		});
 	}
 
-	public static void getBreed(final ParseListener listener) {
-
+	public static void getBreed(final ParseListener listener, String specieName) {
+		ParseQuery innerQuery = new ParseQuery("Specie");
+		innerQuery.whereEqualTo("Name", specieName);
 		ParseQuery query = new ParseQuery("Breed");
+		query.whereMatchesQuery("Specie_ID", innerQuery);
+
 		query.findInBackground(new FindCallback() {
 
 			public void done(List<ParseObject> cList, ParseException e) {
@@ -120,30 +121,6 @@ public class ParseProvider {
 				}
 
 				listener.onBreedQueryFinished(breed);
-			}
-
-		});
-	}
-
-	public static void getProperties(final ParseListener listener) {
-
-		ParseQuery query = new ParseQuery("Pet_Properties");
-		query.findInBackground(new FindCallback() {
-
-			public void done(List<ParseObject> cList, ParseException e) {
-				final ArrayList<String> properties;
-				if (e == null) {
-					properties = new ArrayList<String>();
-					for (ParseObject object : cList) {
-						properties.add(object.getString("Name"));
-					}
-
-				} else {
-					properties = null;
-					Log.d(LOG_TAG, " Query Error: " + e.getMessage());
-				}
-
-				listener.onPropertiesQueryFinished(properties);
 			}
 
 		});
@@ -176,17 +153,23 @@ public class ParseProvider {
 		});
 	}
 
-	private static Pet readPetfromParsedObject(ParseObject parsedPet, final ParseListener listener) {
+	private static Pet readPetfromParsedObject(ParseObject parsedPet,
+			final ParseListener listener) {
 
 		final Pet pet = new Pet();
 
 		pet.setName(parsedPet.getString("Name"));
-		int puppy = parsedPet.getBoolean("Puppy") ? 1 : 0;
-		pet.setPuppy(puppy);
+
+		if (parsedPet.getBoolean("Puppy")) {
+			pet.setPuppy(Pet.AGE_PUPPY);
+		} else {
+			pet.setPuppy(Pet.AGE_ADULT);
+		}
 		pet.setComment(parsedPet.getString("Comment"));
 		pet.setGender(parsedPet.getInt("Gender"));
+
 		pet.setSystem_id(parsedPet.getObjectId());
-		
+
 		ParseRelation breedRelation = parsedPet.getRelation("Breed_ID");
 		breedRelation.getQuery().findInBackground(new FindCallback() {
 
@@ -212,9 +195,7 @@ public class ParseProvider {
 									} else
 										Log.e(LOG_TAG, "Getting Breed error"
 												+ e.getMessage());
-								
-									
-										
+
 								}
 							});
 
@@ -237,7 +218,6 @@ public class ParseProvider {
 										Log.e(LOG_TAG,
 												"Getting propertie error"
 														+ e.getMessage());
-									
 
 								}
 							});
@@ -246,10 +226,6 @@ public class ParseProvider {
 
 			}
 		});
-
-
-
-
 
 		return pet;
 
@@ -263,13 +239,20 @@ public class ParseProvider {
 		query.getInBackground(pet.getSystem_id(), new GetCallback() {
 			public void done(ParseObject parsedPet, ParseException e) {
 				if (e == null) {
-					mainPet = parsedPet;
+
 					parsedPet.put("Name", pet.getName());
 					parsedPet.put("Gender", pet.getGender());
 					parsedPet.put("Comment", pet.getComment());
+					if (pet.getPuppy() == Pet.AGE_PUPPY) {
+						parsedPet.put("Puppy", true);
+					} else {
+						parsedPet.put("Puppy", false);
+					}
 					parsedPet.saveInBackground();
 
 					listener.OnPetUpdateFinished(true);
+
+					updateBreed(pet, parsedPet);
 
 				} else
 					listener.OnPetUpdateFinished(false);
@@ -277,42 +260,47 @@ public class ParseProvider {
 			}
 		});
 
-		ParseQuery query2 = new ParseQuery("Breed");
-		query2.whereMatches("Name", pet.getBreed());
-		query2.getFirstInBackground(new GetCallback() {
+	}
+
+	private static void updateBreed(final Pet pet, final ParseObject parsedPet) {
+		ParseQuery query = new ParseQuery("Breed");
+		query.whereMatches("Name", pet.getBreed());
+		query.getFirstInBackground(new GetCallback() {
 			public void done(ParseObject breed, ParseException e) {
-				if (breed == null) {
-					mainPet.put("Breed_ID", breed);
-					mainPet.saveInBackground();
+				if (e == null) {
+					ParseRelation relation = parsedPet.getRelation("Breed_ID");
+					relation.add(breed);
+					parsedPet.saveInBackground();
+					cleanBreeds(breed.getString("Name"), parsedPet);
 				} else {
-					Log.d(LOG_TAG, "Breed not found");
+					Log.d(LOG_TAG, "Breed not found : " + e.getMessage());
 				}
 			}
-		});
 
-		ParseQuery query3 = new ParseQuery("Secie");
-		query3.whereMatches("Name", pet.getSpecie());
-		query3.getFirstInBackground(new GetCallback() {
-			public void done(ParseObject specie, ParseException e) {
-				if (specie == null) {
-					mainPet.put("Specie_ID", specie);
-					mainPet.saveInBackground();
-				} else {
-					Log.d(LOG_TAG, "Specie not found");
-				}
-			}
-		});
+			private void cleanBreeds(String breedName,
+					final ParseObject parsedPet) {
+				final ParseRelation breedrelation = parsedPet
+						.getRelation("Breed_ID");
+				ParseQuery query = breedrelation.getQuery();
+				query.whereNotEqualTo("Name", breedName);
+				query.findInBackground(new FindCallback() {
 
-		ParseQuery query4 = new ParseQuery("Pet_Properties");
-		query4.whereMatches("Name", pet.getPet_properties());
-		query4.getFirstInBackground(new GetCallback() {
-			public void done(ParseObject properties, ParseException e) {
-				if (properties == null) {
-					mainPet.put("PetProperties_ID", properties);
-					mainPet.saveInBackground();
-				} else {
-					Log.d(LOG_TAG, "Properties not found");
-				}
+					@Override
+					public void done(List<ParseObject> arg0, ParseException e) {
+						if (e == null) {
+							for (ParseObject parseObject : arg0) {
+								breedrelation.remove(parseObject);
+							}
+							parsedPet.saveInBackground();
+						} else {
+							Log.d(LOG_TAG,
+									"Breed Relations not found: "
+											+ e.getMessage());
+						}
+
+					}
+				});
+
 			}
 		});
 	}
@@ -331,7 +319,7 @@ public class ParseProvider {
 					for (ParseObject parseObject : parsedPets) {
 
 						Pet pet = new Pet();
-						pet = readPetfromParsedObject(parseObject, listener);	
+						pet = readPetfromParsedObject(parseObject, listener);
 						pet.setOwner(user);
 						pets.add(pet);
 					}
@@ -346,19 +334,116 @@ public class ParseProvider {
 
 	}
 
-	public static void insertPet(Context context, Pet auxPet, final ParseListener listener) {
-		
+	public static void insertPet(final Context context, final Pet auxPet,
+			final ParseListener listener) {
+
 		final ParseObject parsePet = new ParseObject("Pet");
 		parsePet.put("Name", auxPet.getName());
 		parsePet.put("Gender", auxPet.getGender());
-		parsePet.put("Puppy", auxPet.isPuppy());
+
+		if (auxPet.getPuppy() == Pet.AGE_PUPPY) {
+			parsePet.put("Puppy", true);
+		} else {
+			parsePet.put("Puppy", false);
+		}
 		parsePet.put("Comment", auxPet.getComment());
+
 		parsePet.saveInBackground(new SaveCallback() {
-			
+
 			@Override
 			public void done(ParseException arg0) {
 				listener.onPetInserted(parsePet.getObjectId());
+				saveNewPetUser(parsePet, auxPet, context);
 			}
+
+			private void saveNewPetUser(final ParseObject parsePet,
+					final Pet auxPet, final Context context) {
+				
+				String systemId = auxPet.getOwner().getSystemId();
+				ParseQuery innerQuery = new ParseQuery("_User");
+				innerQuery.whereEqualTo("objectId", systemId);
+				innerQuery.findInBackground(new FindCallback() {
+
+					@Override
+					public void done(List<ParseObject> arg0, ParseException e) {
+						if (e == null) {
+							ParseRelation userRelation = parsePet
+									.getRelation("User_ID");
+							userRelation.add(arg0.get(0));
+							parsePet.saveInBackground();
+							saveNewPetBreed(parsePet, auxPet, context);
+						}else {
+							Log.e(LOG_TAG,
+									"No uset matches inserting new pet "
+											+ e.getMessage());
+
+						}
+
+					}
+				});
+
+			}
+
+			private void saveNewPetBreed(final ParseObject parsePet,
+					final Pet auxPet, final Context context) {
+
+				ParseQuery innerQuery = new ParseQuery("Breed");
+				innerQuery.whereEqualTo("Name", auxPet.getBreed());
+				innerQuery.findInBackground(new FindCallback() {
+
+					@Override
+					public void done(List<ParseObject> arg0, ParseException e) {
+						if (e == null) {
+							ParseRelation breedRelation = parsePet
+									.getRelation("Breed_ID");
+							breedRelation.add(arg0.get(0));
+							parsePet.saveInBackground();
+						} else {
+							Log.e(LOG_TAG,
+									"No breed matches inserting new pet "
+											+ e.getMessage());
+
+						}
+					}
+				});
+			}
+
 		});
+
+	}
+
+	public static void getUser(ParseListener parseListener, final User user) {
+		
+		String systemId = user.getSystemId();
+		ParseQuery query = new ParseQuery("_User");
+		query.whereEqualTo("objectId", systemId);
+		query.findInBackground(new FindCallback() {
+
+			@Override
+			public void done(List<ParseObject> arg0, ParseException e) {
+				if (e == null) {
+					ParseObject parseUSer = arg0.get(0);
+					
+					User updatedUSer = user;
+					
+					updatedUSer.setName(parseUSer.get("Name").toString());
+					updatedUSer.setLastname(parseUSer.get("LastName").toString());
+					updatedUSer.setCedula(parseUSer.getInt("Cedula"));
+					updatedUSer.setAddress(parseUSer.get("Address").toString());
+					updatedUSer.setEmail(parseUSer.getString("email"));
+					updatedUSer.setGender(parseUSer.getInt("Gender"));
+					updatedUSer.setMobile_telephone(parseUSer.getInt("Telephone_mobile"));
+					updatedUSer.setHouse_telephone(parseUSer.getInt("Telephone_House"));
+					updatedUSer.setAdmin(parseUSer.getBoolean("Admin") ? 1 : 0);
+				}else {
+					Log.e(LOG_TAG,
+							"No user " + e.getMessage());
+
+				}
+
+		
 			}
+
+});
+	}
 }

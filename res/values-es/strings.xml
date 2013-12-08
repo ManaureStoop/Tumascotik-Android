@@ -103,6 +103,20 @@
     <string name="pet_info_title_properties">Propiedades</string>
     <string name="pet_info_title_puppy">Edad</string>
     <string name="pet_info_title_comment">Otros comentarios</string>
+    <string name="pet_info_loading_lists">Cargando Listas ...</string>
+    <string name="pet_info_loading_breed_lists">Cargando Razas ...</string>
+    <string name="pet_info_loading_specie_lists">Cargando Especies ...</string>
+
+    <!-- User Info -->
+    <string name="user_info_button_edit">Editar</string>
+    <string name="user_info_button_save">GUardar</string>
+    <string name="user_info_title_name">Nombres</string>
+    <string name="user_info_title_lastname">Apellidos</string>
+    <string name="user_info_title_email">Email</string>
+    <string name="user_info_title_address">Dirección</string>
+    <string name="user_info_title_gender">Sexo</string>
+    <string name="user_info_title_phone_home">Teléfono Fijo</string>
+    <string name="user_info_title_phone_mobile">Teléfono Celular</string>
 
     <string-array name="Genders">
         <item>--Elija--</item>
@@ -113,6 +127,11 @@
         <item>--Choose--</item>
         <item>Adult</item>
         <item>Puppy</item>
+    </string-array>
+    <string-array name="User_Genders">
+        <item>--Choose--</item>
+        <item>Hombre</item>
+        <item>Mujer</item>
     </string-array>
 
 </resources>

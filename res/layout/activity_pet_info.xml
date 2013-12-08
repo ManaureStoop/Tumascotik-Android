@@ -135,35 +135,35 @@
                     android:textAlignment="center" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+<!--             <LinearLayout -->
+<!--                 android:layout_width="match_parent" -->
+<!--                 android:layout_height="wrap_content" > -->
 
-                <TextView
-                    android:id="@+id/text_pet_info_properties_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:text="@string/pet_info_title_properties"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/hinttext" />
+<!--                 <TextView -->
+<!--                     android:id="@+id/text_pet_info_properties_title" -->
+<!--                     android:layout_width="wrap_content" -->
+<!--                     android:layout_height="wrap_content" -->
+<!--                     android:layout_marginRight="10dp" -->
+<!--                     android:text="@string/pet_info_title_properties" -->
+<!--                     android:textAppearance="?android:attr/textAppearanceMedium" -->
+<!--                     android:textColor="@color/hinttext" /> -->
 
-                <TextView
-                    android:id="@+id/text_pet_info_properties"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pelo Largo- Grande" />
+<!--                 <TextView -->
+<!--                     android:id="@+id/text_pet_info_properties" -->
+<!--                     android:layout_width="wrap_content" -->
+<!--                     android:layout_height="wrap_content" -->
+<!--                     android:text="Pelo Largo- Grande" /> -->
 
-                <Spinner
-                    android:id="@+id/spiner_pet_info_properties"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:entries="@array/Genders"
-                    android:scrollbars="horizontal"
-                    android:splitMotionEvents="false"
-                    android:textAlignment="center" />
-            </LinearLayout>
+<!--                 <Spinner -->
+<!--                     android:id="@+id/spiner_pet_info_properties" -->
+<!--                     android:layout_width="0dip" -->
+<!--                     android:layout_height="wrap_content" -->
+<!--                     android:layout_weight="1" -->
+<!--                     android:entries="@array/Genders" -->
+<!--                     android:scrollbars="horizontal" -->
+<!--                     android:splitMotionEvents="false" -->
+<!--                     android:textAlignment="center" /> -->
+<!--             </LinearLayout> -->
 
             <LinearLayout
                 android:layout_width="match_parent"

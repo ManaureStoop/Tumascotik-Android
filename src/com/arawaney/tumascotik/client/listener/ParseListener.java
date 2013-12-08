@@ -16,8 +16,6 @@ public interface ParseListener {
 
 	public void onBreedQueryFinished(ArrayList<String> breed);
 
-	public void onPropertiesQueryFinished(ArrayList<String> properties);
-
 	public void onPetQueryFinished(Pet pet);
 
 	public void OnPetUpdateFinished(boolean b);
@@ -25,6 +23,8 @@ public interface ParseListener {
 	public void onGetAllPets(ArrayList<Pet> pets);
 
 	public void onPetInserted(String objectId);
+	
+	public void onUSerUpdateFinish();
 	
 
 }

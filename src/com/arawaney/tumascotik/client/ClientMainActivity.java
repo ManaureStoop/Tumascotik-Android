@@ -680,27 +680,15 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 	public void onBreedQueryFinished(ArrayList<String> breed) {		
 	}
 
-	@Override
-	public void onPropertiesQueryFinished(ArrayList<String> properties) {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void onPropertiesQueryFinished(ArrayList<String> properties) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	@Override
 	public void onPetQueryFinished(Pet pet) {
 		if (pet != null) {
-//	if (pet.getBreed() != null) {
-//		Log.d(LOG_TAG, "breed : "+pet.getBreed());
-//
-//	}
-//	if (pet.getSpecie() != null) {
-//		Log.d(LOG_TAG, "specie : "+pet.getSpecie());
-//
-//	}
-//	if (pet.getPet_properties() != null) {
-//		Log.d(LOG_TAG, "properties : "+pet.getPet_properties());
-//
-//	}
 	PetProvider.updatePet(this, pet);
 }		
 	}
@@ -727,6 +715,12 @@ if (pets != null) {
 
 	@Override
 	public void onPetInserted(String objectId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUSerUpdateFinish() {
 		// TODO Auto-generated method stub
 		
 	}

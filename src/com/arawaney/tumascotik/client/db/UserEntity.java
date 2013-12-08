@@ -36,7 +36,7 @@ public class UserEntity {
 			+ COLUMN_CEDULA 
 			+ " INTEGER, "
 			+ COLUMN_GENDER 
-			+ " TEXT, " 
+			+ " INTEGER, " 
 			+ COLUMN_ADDRESS 
 			+ " TEXT, " 
 			+ COLUMN_EMAIL 

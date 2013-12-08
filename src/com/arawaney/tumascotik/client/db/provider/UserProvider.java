@@ -129,7 +129,7 @@ public class UserProvider {
 			final Integer cedula = cursor.getInt(cursor.getColumnIndex(UserEntity.COLUMN_CEDULA));
 			final String address = cursor.getString(cursor.getColumnIndex(UserEntity.COLUMN_ADDRESS));
 			final String email = cursor.getString(cursor.getColumnIndex(UserEntity.COLUMN_EMAIL));
-			final String gender = cursor.getString(cursor.getColumnIndex(UserEntity.COLUMN_GENDER));
+			final Integer gender = cursor.getInt(cursor.getColumnIndex(UserEntity.COLUMN_GENDER));
 			final Integer mobile_telephone = cursor.getInt(cursor.getColumnIndex(UserEntity.COLUMN_TELEPHONE_MOBILE));
 			final Integer house_telephone = cursor.getInt(cursor.getColumnIndex(UserEntity.COLUMN_TELEPHONE_HOUSE));
 			final Integer admin = cursor.getInt(cursor.getColumnIndex(UserEntity.COLUMN_ADMIN));

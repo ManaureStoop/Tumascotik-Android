@@ -8,7 +8,9 @@ import com.arawaney.tumascotik.client.adapter.ItemListBaseAdapter;
 import com.arawaney.tumascotik.client.adapter.ItemPetGridAdapter;
 import com.arawaney.tumascotik.client.control.MainController;
 import com.arawaney.tumascotik.client.db.provider.PetProvider;
+import com.arawaney.tumascotik.client.db.provider.UserProvider;
 import com.arawaney.tumascotik.client.model.Pet;
+import com.arawaney.tumascotik.client.model.User;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -68,6 +70,8 @@ public class PetPicker extends Activity {
 			public void onClick(View v) {
 				Log.d(LOG_TAG, "Add new pet!!");
 				Pet pet = new Pet();
+				User owner = UserProvider.readUser(getApplicationContext());
+				pet.setOwner(owner);
 				MainController.setPET(pet);
 				PetInfoActivity.viewMode = PetInfoActivity.MODE_EDIT_LIST;
 				Intent i = new Intent(PetPicker.this, PetInfoActivity.class);
