@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.arawaney.tumascotik.client.R;
 import com.arawaney.tumascotik.client.model.Pet;
+import com.arawaney.tumascotik.client.util.*;
 
 public class ItemPetGridAdapter extends BaseAdapter {
 	private static ArrayList<Pet> itemsPet;
@@ -66,12 +67,10 @@ public class ItemPetGridAdapter extends BaseAdapter {
 		}
 		String path = new String( String.valueOf(itemsPet.get(position).getSpecie()));
 		holder.petName.setText(itemsPet.get(position).getName());
-		holder.petAvatar.setImageResource(getImageId(contxt, path));
+		holder.petAvatar.setImageResource(BitMapUtil.getImageId(contxt, path));
 		return convertView;
 	}
-	public static int getImageId(Context context, String imageName) {
-	    return context.getResources().getIdentifier("drawable/" + imageName.toLowerCase(), null, context.getPackageName());
-	}
+	
 	static class ViewHolder {
 
 		TextView petName;

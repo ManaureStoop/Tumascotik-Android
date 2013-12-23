@@ -4,24 +4,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import android.R.string;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,11 +25,12 @@ import com.arawaney.tumascotik.client.R;
 import com.arawaney.tumascotik.client.backend.ParseProvider;
 import com.arawaney.tumascotik.client.control.MainController;
 import com.arawaney.tumascotik.client.db.provider.PetProvider;
-import com.arawaney.tumascotik.client.listener.ParseListener;
+import com.arawaney.tumascotik.client.listener.ParsePetListener;
 import com.arawaney.tumascotik.client.model.Pet;
+import com.arawaney.tumascotik.client.util.BitMapUtil;
 import com.arawaney.tumascotik.client.util.NetworkUtil;
 
-public class PetInfoActivity extends Activity implements ParseListener {
+public class PetInfoActivity extends Activity implements ParsePetListener {
 
 	private static final String LOG_TAG = "Tumascotik-Client-PetinfoActivity";
 
@@ -44,7 +39,6 @@ public class PetInfoActivity extends Activity implements ParseListener {
 	TextView petSpecie;
 	TextView petBreed;
 	TextView petGEnder;
-//	TextView petProperties;
 	TextView petPuppy;
 	TextView petComments;
 
@@ -52,7 +46,6 @@ public class PetInfoActivity extends Activity implements ParseListener {
 	Spinner editPetSpecie;
 	Spinner editPetBreed;
 	Spinner editPetGEnder;
-//	Spinner editPetProperties;
 	Spinner editPetPuppy;
 	EditText editPetComments;
 
@@ -64,7 +57,6 @@ public class PetInfoActivity extends Activity implements ParseListener {
 	private ProgressDialog progressDialog;
 	private boolean loadingSpecies = false;
 	private boolean loadingBreeds = false;
-//	private boolean loadingProperties = false;
 
 	ArrayAdapter<String> SpecieAdapter;
 	ArrayAdapter<String> BreedAdapter;
@@ -77,6 +69,8 @@ public class PetInfoActivity extends Activity implements ParseListener {
 	ArrayList<String> properties;
 	List<String> genders;
 	List<String> ages;
+	
+	String auxSpecie ;
 
 	public static final int MODE_INFO_LIST = 1;
 	public static final int MODE_EDIT_LIST = 2;
@@ -127,8 +121,9 @@ public class PetInfoActivity extends Activity implements ParseListener {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
-				if (!editPetSpecie.getSelectedItem().equals(pet.getSpecie())) {
+				if (!editPetSpecie.getSelectedItem().equals(auxSpecie)) {
 					downloadBreedLists() ;
+					auxSpecie = (String) editPetSpecie.getSelectedItem();
 				}
 				
 			}
@@ -152,11 +147,9 @@ public class PetInfoActivity extends Activity implements ParseListener {
 
 			ParseProvider.getSpecies(this);
 			ParseProvider.getBreed(this, pet.getSpecie());
-//			ParseProvider.getProperties(this);
 
 			loadingSpecies = true;
 			loadingBreeds = true;
-//			loadingProperties = true;
 
 		}
 	}
@@ -201,7 +194,6 @@ public class PetInfoActivity extends Activity implements ParseListener {
 		petSpecie = (TextView) findViewById(R.id.text_pet_info_specie);
 		petBreed = (TextView) findViewById(R.id.text_pet_info_breed);
 		petGEnder = (TextView) findViewById(R.id.text_pet_info_gender);
-//		petProperties = (TextView) findViewById(R.id.text_pet_info_properties);
 		petPuppy = (TextView) findViewById(R.id.text_pet_info_puppy);
 		petComments = (TextView) findViewById(R.id.text_pet_info_comment);
 
@@ -209,7 +201,6 @@ public class PetInfoActivity extends Activity implements ParseListener {
 		editPetSpecie = (Spinner) findViewById(R.id.spiner_pet_info_specie);
 		editPetBreed = (Spinner) findViewById(R.id.spiner_pet_info_breed);
 		editPetGEnder = (Spinner) findViewById(R.id.spiner_pet_info_gender);
-//		editPetProperties = (Spinner) findViewById(R.id.spiner_pet_info_properties);
 		editPetPuppy = (Spinner) findViewById(R.id.spiner_pet_info_puppy);
 		editPetComments = (EditText) findViewById(R.id.edit_text_pet_info_comment);
 
@@ -247,8 +238,6 @@ public class PetInfoActivity extends Activity implements ParseListener {
 				private void savePet() {
 					auxPet.setName(editpetName.getText().toString());
 					auxPet.setGender(editPetGEnder.getSelectedItemPosition());
-//					auxPet.setPet_properties(editPetProperties
-//							.getSelectedItem().toString());
 					auxPet.setBreed(editPetBreed.getSelectedItem().toString());
 					auxPet.setSpecie(editPetSpecie.getSelectedItem().toString());
 					auxPet.setComment(editPetComments.getText().toString());
@@ -282,7 +271,6 @@ public class PetInfoActivity extends Activity implements ParseListener {
 		petSpecie.setVisibility(View.GONE);
 		petBreed.setVisibility(View.GONE);
 		petGEnder.setVisibility(View.GONE);
-//		petProperties.setVisibility(View.GONE);
 		petPuppy.setVisibility(View.GONE);
 		petComments.setVisibility(View.GONE);
 
@@ -290,7 +278,6 @@ public class PetInfoActivity extends Activity implements ParseListener {
 		editPetSpecie.setVisibility(View.VISIBLE);
 		editPetBreed.setVisibility(View.VISIBLE);
 		editPetGEnder.setVisibility(View.VISIBLE);
-//		editPetProperties.setVisibility(View.VISIBLE);
 		editPetPuppy.setVisibility(View.VISIBLE);
 		editPetComments.setVisibility(View.VISIBLE);
 
@@ -308,6 +295,7 @@ public class PetInfoActivity extends Activity implements ParseListener {
 				if (pet.getSpecie() != null) {
 					editPetSpecie
 							.setSelection(species.indexOf(pet.getSpecie()));
+					auxSpecie = (String) editPetSpecie.getSelectedItem();
 				}
 			}
 		}
@@ -338,6 +326,13 @@ public class PetInfoActivity extends Activity implements ParseListener {
 		if (pet.getComment() != null) {
 			editPetComments.setText(pet.getComment());
 		}
+		
+		String path = (String) editPetSpecie.getSelectedItem();		
+		if (path == null) {
+			path = "other";	
+		}
+		petAvatar.setImageResource(BitMapUtil.getImageId(this, path));
+
 
 		saveEditButton.setText(getResources().getString(
 				R.string.pet_info_button_save));
@@ -350,7 +345,6 @@ public class PetInfoActivity extends Activity implements ParseListener {
 		petSpecie.setVisibility(View.VISIBLE);
 		petBreed.setVisibility(View.VISIBLE);
 		petGEnder.setVisibility(View.VISIBLE);
-//		petProperties.setVisibility(View.VISIBLE);
 		petPuppy.setVisibility(View.VISIBLE);
 		petComments.setVisibility(View.VISIBLE);
 
@@ -358,7 +352,6 @@ public class PetInfoActivity extends Activity implements ParseListener {
 		editPetSpecie.setVisibility(View.GONE);
 		editPetBreed.setVisibility(View.GONE);
 		editPetGEnder.setVisibility(View.GONE);
-//		editPetProperties.setVisibility(View.GONE);
 		editPetPuppy.setVisibility(View.GONE);
 		editPetComments.setVisibility(View.GONE);
 
@@ -374,10 +367,6 @@ public class PetInfoActivity extends Activity implements ParseListener {
 		if (pet.getBreed() != null) {
 			petBreed.setText(pet.getBreed());
 		}
-//
-//		if (pet.getPet_properties() != null) {
-//			petProperties.setText(pet.getPet_properties());
-//		}
 
 		if (pet.getGender() > 0) {
 			petGEnder.setText(genders.get(pet.getGender()));
@@ -392,6 +381,14 @@ public class PetInfoActivity extends Activity implements ParseListener {
 		if (pet.getComment() != null) {
 			petComments.setText(pet.getComment());
 		}
+		
+
+		String path = (String) petSpecie.getText();	
+		
+		if (path == null) {
+			path = "other";	
+		}
+		petAvatar.setImageResource(BitMapUtil.getImageId(this, path));
 
 		saveEditButton.setText(getResources().getString(
 				R.string.pet_info_button_edit));
@@ -411,11 +408,6 @@ public class PetInfoActivity extends Activity implements ParseListener {
 
 	}
 
-	@Override
-	public void OnLoginResponse() {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void onSpecieQueryFinished(ArrayList<String> species) {
@@ -452,22 +444,6 @@ public class PetInfoActivity extends Activity implements ParseListener {
 
 	}
 
-//	@Override
-//	public void onPropertiesQueryFinished(ArrayList<String> properties) {
-//		loadingProperties = false;
-//
-//		if (properties != null) {
-//			this.properties = properties;
-//			this.properties.add(0, "--Choose--");
-//			PropertiesAdapter = new ArrayAdapter<String>(this,
-//					android.R.layout.simple_spinner_item, this.properties);
-//		}
-//
-//		if (!loadingSpecies && !loadingBreeds && !loadingProperties) {
-//			progressDialog.dismiss();
-//			refreshView();
-//		}
-//	}
 
 	@Override
 	public void onPetQueryFinished(Pet pet) {
@@ -488,7 +464,9 @@ public class PetInfoActivity extends Activity implements ParseListener {
 			pet = auxPet;
 			PetProvider.updatePet(this, pet);
 
-		}
+		}else{
+			Toast.makeText(getApplicationContext(), getResources().getString(R.string.user_info_user_not_updated), 
+					   Toast.LENGTH_LONG).show();}
 		refreshView();
 		progressDialog.dismiss();
 
@@ -513,5 +491,6 @@ public class PetInfoActivity extends Activity implements ParseListener {
 		progressDialog.dismiss();
 
 	}
+
 
 }
