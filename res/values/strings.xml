@@ -106,6 +106,9 @@
     <string name="pet_info_loading_lists">Loading lists ...</string>
     <string name="pet_info_loading_breed_lists">Loading Breeds ...</string>
     <string name="pet_info_loading_specie_lists">Loadin Species ...</string>
+    <string name="pet_info_pet_not_updated">It is not possible to update the your pet at the moment</string>
+    <string name="pet_info_pet_not_inserted">It is not possible to insert your pet at the moment</string>
+    
 
     <!-- User Info -->
     <string name="user_info_button_edit">Edit</string>
@@ -117,6 +120,7 @@
     <string name="user_info_title_gender">Gender</string>
     <string name="user_info_title_phone_home">Phone Number</string>
     <string name="user_info_title_phone_mobile">Cellphone</string>
+    <string name="user_info_user_not_updated">It is not possible to update your information at the moment</string>
 
     <string-array name="Genders">
         <item>--Choose--</item>

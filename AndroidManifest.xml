@@ -64,9 +64,14 @@
             android:screenOrientation="sensorPortrait" >
         </activity>
         <activity
+            android:name="com.arawaney.tumascotik.client.activity.UserInfoActivity"
+            android:label="UserInfoActivity"
+            android:screenOrientation="sensorPortrait" >
+        </activity>
+        <activity
             android:name="com.arawaney.tumascotik.client.activity.PetPicker"
             android:label="PetPicker"
-            android:screenOrientation="sensorPortrait">
+            android:screenOrientation="sensorPortrait" >
         </activity>
 
         <provider
