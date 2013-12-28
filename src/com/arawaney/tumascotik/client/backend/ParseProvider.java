@@ -1,17 +1,18 @@
 package com.arawaney.tumascotik.client.backend;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.arawaney.tumascotik.client.R;
-import com.arawaney.tumascotik.client.activity.SetDate;
+import com.arawaney.tumascotik.client.control.MainController;
 import com.arawaney.tumascotik.client.db.provider.UserProvider;
-import com.arawaney.tumascotik.client.listener.ParseListener;
+import com.arawaney.tumascotik.client.listener.ParsePetListener;
+import com.arawaney.tumascotik.client.listener.ParseUserListener;
 import com.arawaney.tumascotik.client.model.Pet;
 import com.arawaney.tumascotik.client.model.User;
 import com.parse.FindCallback;
@@ -29,7 +30,7 @@ public class ParseProvider {
 	private static final String LOG_TAG = "Tumascotik-Client-ParseProvider";
 
 	public static void logIn(String username, final String password,
-			final Context context, final ParseListener listener) {
+			final Context context, final ParseUserListener listener) {
 		final ProgressDialog progressDialog = ProgressDialog.show(context, "",
 				"Realizando Login...");
 		ParseUser.logInInBackground(username, password, new LogInCallback() {
@@ -67,19 +68,20 @@ public class ParseProvider {
 		dbuser.setAddress(user.get("Address").toString());
 		dbuser.setEmail(user.getEmail());
 		dbuser.setGender(user.getInt("Gender"));
-		dbuser.setMobile_telephone(user.getInt("Telephone_mobile"));
-		dbuser.setHouse_telephone(user.getInt("Telephone_House"));
+		dbuser.setMobile_telephone(user.getLong("Telephone_mobile"));
+		dbuser.setHouse_telephone(user.getLong("Telephone_House"));
 		dbuser.setAdmin(user.getBoolean("Admin") ? 1 : 0);
 
 		UserProvider.insertUser(context, dbuser);
 
 	}
 
-	public static void getSpecies(final ParseListener listener) {
+	public static void getSpecies(final ParsePetListener listener) {
 
-		ParseQuery query = new ParseQuery("Specie");
-		query.findInBackground(new FindCallback() {
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Specie");
+		query.findInBackground(new FindCallback<ParseObject>() {
 
+			@Override
 			public void done(List<ParseObject> cList, ParseException e) {
 				final ArrayList<String> species;
 				if (e == null) {
@@ -99,14 +101,17 @@ public class ParseProvider {
 		});
 	}
 
-	public static void getBreed(final ParseListener listener, String specieName) {
-		ParseQuery innerQuery = new ParseQuery("Specie");
+	public static void getBreed(final ParsePetListener listener,
+			String specieName) {
+		ParseQuery<ParseObject> innerQuery = new ParseQuery<ParseObject>(
+				"Specie");
 		innerQuery.whereEqualTo("Name", specieName);
-		ParseQuery query = new ParseQuery("Breed");
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Breed");
 		query.whereMatchesQuery("Specie_ID", innerQuery);
 
-		query.findInBackground(new FindCallback() {
+		query.findInBackground(new FindCallback<ParseObject>() {
 
+			@Override
 			public void done(List<ParseObject> cList, ParseException e) {
 				final ArrayList<String> breed;
 				if (e == null) {
@@ -126,12 +131,12 @@ public class ParseProvider {
 		});
 	}
 
-	public static void getPet(final ParseListener listener, String systemId) {
+	public static void getPet(final ParsePetListener listener, String systemId) {
 
-		ParseQuery query = new ParseQuery("Pet");
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Pet");
 
 		// Retrieve the object by id
-		query.getInBackground(systemId, new GetCallback() {
+		query.getInBackground(systemId, new GetCallback<ParseObject>() {
 
 			@Override
 			public void done(ParseObject parsedPet, ParseException e) {
@@ -154,7 +159,7 @@ public class ParseProvider {
 	}
 
 	private static Pet readPetfromParsedObject(ParseObject parsedPet,
-			final ParseListener listener) {
+			final ParsePetListener listener) {
 
 		final Pet pet = new Pet();
 
@@ -170,105 +175,115 @@ public class ParseProvider {
 
 		pet.setSystem_id(parsedPet.getObjectId());
 
-		ParseRelation breedRelation = parsedPet.getRelation("Breed_ID");
-		breedRelation.getQuery().findInBackground(new FindCallback() {
+		ParseRelation<ParseObject> breedRelation = parsedPet
+				.getRelation("Breed_ID");
+		breedRelation.getQuery().findInBackground(
+				new FindCallback<ParseObject>() {
 
-			@Override
-			public void done(List<ParseObject> breeds, ParseException e) {
-				if (e == null) {
-					ParseObject breed = breeds.get(0);
-					pet.setBreed(breed.getString("Name"));
-					listener.onPetQueryFinished(pet);
-					ParseRelation speciedRelation = breed
-							.getRelation("Specie_ID");
-					speciedRelation.getQuery().findInBackground(
-							new FindCallback() {
+					@Override
+					public void done(List<ParseObject> breeds, ParseException e) {
+						if (e == null) {
+							ParseObject breed = breeds.get(0);
+							pet.setBreed(breed.getString("Name"));
+							listener.onPetQueryFinished(pet);
+							ParseRelation<ParseObject> speciedRelation = breed
+									.getRelation("Specie_ID");
+							speciedRelation.getQuery().findInBackground(
+									new FindCallback<ParseObject>() {
 
-								@Override
-								public void done(List<ParseObject> species,
-										ParseException e) {
-									if (e == null) {
-										ParseObject specie = species.get(0);
-										pet.setSpecie(specie.getString("Name"));
-										listener.onPetQueryFinished(pet);
+										@Override
+										public void done(
+												List<ParseObject> species,
+												ParseException e) {
+											if (e == null) {
+												ParseObject specie = species
+														.get(0);
+												pet.setSpecie(specie
+														.getString("Name"));
+												listener.onPetQueryFinished(pet);
 
-									} else
-										Log.e(LOG_TAG, "Getting Breed error"
-												+ e.getMessage());
+											} else
+												Log.e(LOG_TAG,
+														"Getting Breed error"
+																+ e.getMessage());
 
-								}
-							});
+										}
+									});
 
-					ParseRelation propertiesRelation = breed
-							.getRelation("PetProperties_ID");
-					propertiesRelation.getQuery().findInBackground(
-							new FindCallback() {
+							ParseRelation<ParseObject> propertiesRelation = breed
+									.getRelation("PetProperties_ID");
+							propertiesRelation.getQuery().findInBackground(
+									new FindCallback<ParseObject>() {
 
-								@Override
-								public void done(List<ParseObject> properties,
-										ParseException e) {
-									if (e == null) {
-										ParseObject propertie = properties
-												.get(0);
-										pet.setPet_properties(propertie
-												.getString("Name"));
-										listener.onPetQueryFinished(pet);
+										@Override
+										public void done(
+												List<ParseObject> properties,
+												ParseException e) {
+											if (e == null) {
+												ParseObject propertie = properties
+														.get(0);
+												pet.setPet_properties(propertie
+														.getString("Name"));
+												listener.onPetQueryFinished(pet);
 
-									} else
-										Log.e(LOG_TAG,
-												"Getting propertie error"
-														+ e.getMessage());
+											} else
+												Log.e(LOG_TAG,
+														"Getting propertie error"
+																+ e.getMessage());
 
-								}
-							});
-				} else
-					Log.e(LOG_TAG, "Getting Breed error" + e.getMessage());
+										}
+									});
+						} else
+							Log.e(LOG_TAG,
+									"Getting Breed error" + e.getMessage());
 
-			}
-		});
+					}
+				});
 
 		return pet;
 
 	}
 
-	public static void updatePet(final ParseListener listener, final Pet pet) {
+	public static void updatePet(final ParsePetListener listener, final Pet pet) {
 
-		ParseQuery query = new ParseQuery("Pet");
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Pet");
 
 		// Retrieve the object by id
-		query.getInBackground(pet.getSystem_id(), new GetCallback() {
-			public void done(ParseObject parsedPet, ParseException e) {
-				if (e == null) {
+		query.getInBackground(pet.getSystem_id(),
+				new GetCallback<ParseObject>() {
+					public void done(ParseObject parsedPet, ParseException e) {
+						if (e == null) {
 
-					parsedPet.put("Name", pet.getName());
-					parsedPet.put("Gender", pet.getGender());
-					parsedPet.put("Comment", pet.getComment());
-					if (pet.getPuppy() == Pet.AGE_PUPPY) {
-						parsedPet.put("Puppy", true);
-					} else {
-						parsedPet.put("Puppy", false);
+							parsedPet.put("Name", pet.getName());
+							parsedPet.put("Gender", pet.getGender());
+							parsedPet.put("Comment", pet.getComment());
+							if (pet.getPuppy() == Pet.AGE_PUPPY) {
+								parsedPet.put("Puppy", true);
+							} else {
+								parsedPet.put("Puppy", false);
+							}
+							parsedPet.saveInBackground();
+
+							listener.OnPetUpdateFinished(true);
+
+							updateBreed(pet, parsedPet);
+
+						} else
+							listener.OnPetUpdateFinished(false);
+
 					}
-					parsedPet.saveInBackground();
-
-					listener.OnPetUpdateFinished(true);
-
-					updateBreed(pet, parsedPet);
-
-				} else
-					listener.OnPetUpdateFinished(false);
-
-			}
-		});
+				});
 
 	}
 
 	private static void updateBreed(final Pet pet, final ParseObject parsedPet) {
-		ParseQuery query = new ParseQuery("Breed");
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Breed");
 		query.whereMatches("Name", pet.getBreed());
-		query.getFirstInBackground(new GetCallback() {
+		query.getFirstInBackground(new GetCallback<ParseObject>() {
 			public void done(ParseObject breed, ParseException e) {
 				if (e == null) {
-					ParseRelation relation = parsedPet.getRelation("Breed_ID");
+					ParseRelation<ParseObject> relation = parsedPet
+							.getRelation("Breed_ID");
 					relation.add(breed);
 					parsedPet.saveInBackground();
 					cleanBreeds(breed.getString("Name"), parsedPet);
@@ -279,11 +294,11 @@ public class ParseProvider {
 
 			private void cleanBreeds(String breedName,
 					final ParseObject parsedPet) {
-				final ParseRelation breedrelation = parsedPet
+				final ParseRelation<ParseObject> breedrelation = parsedPet
 						.getRelation("Breed_ID");
-				ParseQuery query = breedrelation.getQuery();
+				ParseQuery<ParseObject> query = breedrelation.getQuery();
 				query.whereNotEqualTo("Name", breedName);
-				query.findInBackground(new FindCallback() {
+				query.findInBackground(new FindCallback<ParseObject>() {
 
 					@Override
 					public void done(List<ParseObject> arg0, ParseException e) {
@@ -305,14 +320,15 @@ public class ParseProvider {
 		});
 	}
 
-	public static void getPets(final ParseListener listener, final User user) {
+	public static void getPets(final ParsePetListener listener, final User user) {
 		String systemId = user.getSystemId();
-		ParseQuery innerQuery = new ParseQuery("_User");
+		ParseQuery<ParseObject> innerQuery = new ParseQuery<ParseObject>(
+				"_User");
 		innerQuery.whereEqualTo("objectId", systemId);
-		ParseQuery query = new ParseQuery("Pet");
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Pet");
 		query.whereMatchesQuery("User_ID", innerQuery);
-		query.findInBackground(new FindCallback() {
-
+		query.findInBackground(new FindCallback<ParseObject>() {
+			@Override
 			public void done(List<ParseObject> parsedPets, ParseException e) {
 				ArrayList<Pet> pets = new ArrayList<Pet>();
 				if (e == null) {
@@ -335,7 +351,7 @@ public class ParseProvider {
 	}
 
 	public static void insertPet(final Context context, final Pet auxPet,
-			final ParseListener listener) {
+			final ParsePetListener listener) {
 
 		final ParseObject parsePet = new ParseObject("Pet");
 		parsePet.put("Name", auxPet.getName());
@@ -358,24 +374,24 @@ public class ParseProvider {
 
 			private void saveNewPetUser(final ParseObject parsePet,
 					final Pet auxPet, final Context context) {
-				
+
 				String systemId = auxPet.getOwner().getSystemId();
-				ParseQuery innerQuery = new ParseQuery("_User");
+				ParseQuery<ParseObject> innerQuery = new ParseQuery<ParseObject>(
+						"_User");
 				innerQuery.whereEqualTo("objectId", systemId);
-				innerQuery.findInBackground(new FindCallback() {
+				innerQuery.findInBackground(new FindCallback<ParseObject>() {
 
 					@Override
 					public void done(List<ParseObject> arg0, ParseException e) {
 						if (e == null) {
-							ParseRelation userRelation = parsePet
+							ParseRelation<ParseObject> userRelation = parsePet
 									.getRelation("User_ID");
 							userRelation.add(arg0.get(0));
 							parsePet.saveInBackground();
 							saveNewPetBreed(parsePet, auxPet, context);
-						}else {
-							Log.e(LOG_TAG,
-									"No uset matches inserting new pet "
-											+ e.getMessage());
+						} else {
+							Log.e(LOG_TAG, "No uset matches inserting new pet "
+									+ e.getMessage());
 
 						}
 
@@ -387,14 +403,15 @@ public class ParseProvider {
 			private void saveNewPetBreed(final ParseObject parsePet,
 					final Pet auxPet, final Context context) {
 
-				ParseQuery innerQuery = new ParseQuery("Breed");
+				ParseQuery<ParseObject> innerQuery = new ParseQuery<ParseObject>(
+						"Breed");
 				innerQuery.whereEqualTo("Name", auxPet.getBreed());
-				innerQuery.findInBackground(new FindCallback() {
+				innerQuery.findInBackground(new FindCallback<ParseObject>() {
 
 					@Override
 					public void done(List<ParseObject> arg0, ParseException e) {
 						if (e == null) {
-							ParseRelation breedRelation = parsePet
+							ParseRelation<ParseObject> breedRelation = parsePet
 									.getRelation("Breed_ID");
 							breedRelation.add(arg0.get(0));
 							parsePet.saveInBackground();
@@ -412,38 +429,103 @@ public class ParseProvider {
 
 	}
 
-	public static void getUser(ParseListener parseListener, final User user) {
-		
+	public static void getUser(final ParseUserListener parseListener,
+			final User user) {
+
 		String systemId = user.getSystemId();
-		ParseQuery query = new ParseQuery("_User");
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("_User");
 		query.whereEqualTo("objectId", systemId);
-		query.findInBackground(new FindCallback() {
+		query.findInBackground(new FindCallback<ParseObject>() {
 
 			@Override
 			public void done(List<ParseObject> arg0, ParseException e) {
 				if (e == null) {
 					ParseObject parseUSer = arg0.get(0);
-					
-					User updatedUSer = user;
-					
-					updatedUSer.setName(parseUSer.get("Name").toString());
-					updatedUSer.setLastname(parseUSer.get("LastName").toString());
-					updatedUSer.setCedula(parseUSer.getInt("Cedula"));
-					updatedUSer.setAddress(parseUSer.get("Address").toString());
-					updatedUSer.setEmail(parseUSer.getString("email"));
-					updatedUSer.setGender(parseUSer.getInt("Gender"));
-					updatedUSer.setMobile_telephone(parseUSer.getInt("Telephone_mobile"));
-					updatedUSer.setHouse_telephone(parseUSer.getInt("Telephone_House"));
-					updatedUSer.setAdmin(parseUSer.getBoolean("Admin") ? 1 : 0);
-				}else {
-					Log.e(LOG_TAG,
-							"No user " + e.getMessage());
+
+					User updatedUser = user;
+
+					updatedUser.setName(parseUSer.get("Name").toString());
+					updatedUser.setLastname(parseUSer.get("LastName")
+							.toString());
+					updatedUser.setCedula(parseUSer.getInt("Cedula"));
+					updatedUser.setAddress(parseUSer.get("Address").toString());
+					updatedUser.setEmail(parseUSer.getString("email"));
+					updatedUser.setGender(parseUSer.getInt("Gender"));
+					updatedUser.setMobile_telephone(parseUSer
+							.getLong("Telephone_mobile"));
+					updatedUser.setHouse_telephone(parseUSer
+							.getLong("Telephone_House"));
+					updatedUser.setAdmin(parseUSer.getBoolean("Admin") ? 1 : 0);
+
+					parseListener.onUserQueryFinish(updatedUser, true);
+				} else {
+					Log.e(LOG_TAG, "No user " + e.getMessage());
+					parseListener.onUserQueryFinish(null, false);
 
 				}
 
-		
 			}
 
-});
+		});
+	}
+
+	public static void updateUser(final ParseUserListener listener,
+			final User user) {
+
+		ParseUser parsedUser = ParseUser.getCurrentUser();
+
+		if (parsedUser != null) {
+
+			parsedUser.put("Name", user.getName());
+			parsedUser.put("LastName", user.getLastname());
+			parsedUser.put("email", user.getEmail());
+			parsedUser.put("Gender", user.getGender());
+			parsedUser.put("Telephone_mobile", user.getMobile_telephone());
+			parsedUser.put("Telephone_House", user.getHouse_telephone());
+			parsedUser.put("Address", user.getAddress());
+
+			
+		    parsedUser.saveInBackground(new SaveCallback() {
+				
+				@Override
+				public void done(ParseException e) {
+					if (e != null) {
+						listener.onUserUpdateFinish(user, false);						
+					}else{
+						listener.onUserUpdateFinish(user, true);
+					}
+					
+				}
+			});
+
+
+		} else {
+			Log.d(LOG_TAG, "currentuser null");
+			listener.onUserUpdateFinish(user, false);
+		}
+
+	}
+
+	public static void getCurrentUser(Context context) {
+
+		ParseUser currentUser = ParseUser.getCurrentUser();
+		if (currentUser == null) {
+			ParseUser.logInInBackground(MainController.USER.getUsername(),
+					MainController.USER.getPassword(), new LogInCallback() {
+
+						public void done(ParseUser user, ParseException e) {
+
+							if (user != null) {
+
+							} else {
+								Log.e(LOG_TAG,
+										"Error by getcurrentuser :"
+												+ e.getMessage());
+							}
+						}
+
+					});
+		}
+
 	}
 }

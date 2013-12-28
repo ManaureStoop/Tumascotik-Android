@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo"
+    android:orientation="vertical"
+    android:screenOrientation="portrait" >
+
+    <ScrollView
+        android:id="@+id/scrollView_user_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/image_user_info_avatar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/otro" />
+
+                <TextView
+                    android:id="@+id/text_user_info_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Jose Perez"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tlayout_user_info_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/text_user_info_name_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/user_info_title_name"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/hinttext" />
+
+                <EditText
+                    android:id="@+id/edit_text_user_info_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textPersonName" >
+
+                    <requestFocus />
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tlayout_user_info_lastname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/text_user_info_lastname_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/user_info_title_lastname"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/hinttext" />
+
+                <EditText
+                    android:id="@+id/edit_text_user_info_lastname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textPersonName" >
+
+                    <requestFocus />
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/text_user_info_email_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/user_info_title_email"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/hinttext" />
+
+                <TextView
+                    android:id="@+id/text_user_info_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Boxer" />
+
+                <EditText
+                    android:id="@+id/edittext_user_info_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textEmailAddress" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/text_user_info_phone_local_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/user_info_title_phone_home"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/hinttext" />
+
+                <TextView
+                    android:id="@+id/text_user_info_phone_local"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Macho" />
+
+                <EditText
+                    android:id="@+id/edittext_user_info_phone_local_prefix"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textEmailAddress" />
+
+                <TextView
+                    android:id="@+id/text_user_info_phone_local_separator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <EditText
+                    android:id="@+id/edittext_user_info_phone_local"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textEmailAddress" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/text_user_info_phone_mobile_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/user_info_title_phone_mobile"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/hinttext" />
+
+                <ImageView
+                    android:id="@+id/imageView_alert_user_info_phone_mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/facebook" />
+
+                <TextView
+                    android:id="@+id/text_user_info_phone_mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Macho" />
+
+                <EditText
+                    android:id="@+id/edittext_user_info_phone_mobile_prefix"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textEmailAddress" />
+
+                <TextView
+                    android:id="@+id/text_user_info_phone_mobile_separator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <EditText
+                    android:id="@+id/edittext_user_info_phone_mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textEmailAddress" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/text_user_info_address_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/user_info_title_address"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/hinttext" />
+
+                <ImageView
+                    android:id="@+id/imageView_alert_user_info_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/facebook" />
+
+                <TextView
+                    android:id="@+id/text_user_info_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cachorro" />
+
+                <EditText
+                    android:id="@+id/edittext_user_info_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textMultiLine" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/text_user_info_gender_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/user_info_title_gender"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/hinttext" />
+
+                <TextView
+                    android:id="@+id/text_user_info_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Blah blah" />
+
+                <Spinner
+                    android:id="@+id/spiner_user_info_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/Genders"
+                    android:scrollbars="horizontal"
+                    android:splitMotionEvents="false"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button_user_info_edit_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/user_info_button_edit" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
