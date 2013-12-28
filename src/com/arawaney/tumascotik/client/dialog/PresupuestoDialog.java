@@ -95,8 +95,10 @@ public class PresupuestoDialog extends DialogFragment {
 				Log.d("Entro a create", "titulo: "+title);
 				ParseQuery query = new ParseQuery("Presupuestos");
 				query.whereEqualTo("Peticion", title);
-				query.findInBackground(new FindCallback() {
-				    public void done(List<ParseObject> cList, ParseException e) {
+				query.findInBackground(new FindCallback<ParseObject>() {
+
+					@Override
+					public void done(List<ParseObject> cList, ParseException e) {
 				    	ParseObject object; 
 				    	if (e == null) {
 					    	if (cList.size() != 0){
@@ -123,6 +125,7 @@ public class PresupuestoDialog extends DialogFragment {
 	
 					    	}
 				});
+
 			}
 		}
   }

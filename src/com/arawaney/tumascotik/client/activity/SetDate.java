@@ -180,8 +180,10 @@ public class SetDate extends FragmentActivity {
 		ParseQuery query = new ParseQuery("Citas");
 		query.whereGreaterThan("fechaInicial", fechadiainicio);
 		query.whereLessThan("fechaInicial",fechadiafinal);
-		query.findInBackground(new FindCallback() {
-		    public void done(List<ParseObject> cList, ParseException e) {
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> cList, ParseException e) {
 			    
 		    	if (e == null) {
 		           int i;

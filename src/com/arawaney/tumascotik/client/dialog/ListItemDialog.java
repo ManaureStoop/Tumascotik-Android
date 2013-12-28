@@ -121,8 +121,10 @@ public class ListItemDialog extends DialogFragment {
 		ParseQuery query = new ParseQuery("Citas");
 		query.whereEqualTo("fechaInicial", fechainicio);
 
-		query.findInBackground(new FindCallback() {
-		    public void done(List<ParseObject> cList, ParseException e) {
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> cList, ParseException e) {
 		    	ParseObject object; 
 		    	if (e == null) {
 		    		
