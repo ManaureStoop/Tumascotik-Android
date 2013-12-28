@@ -13,13 +13,33 @@ public class User {
 	private String address;
 	private String email;
 	private int gender;
-	private Integer mobile_telephone;
-	private Integer house_telephone;
+	private Long mobile_telephone;
+	private Long house_telephone;
 	private Integer admin;
 	
 	public final static int GENDER_MAN= 1;
 	public final static int GENDER_WOMAN = 2;
 	
+	public User(User user) {
+		id = user.getId();
+		system_id = user.getSystemId();
+		username = user.getUsername();
+		password = user.getPassword();
+		name = user.getName();
+		lastname = user.getLastname();
+		cedula = user.getCedula();
+		address = user.getAddress();
+		email = user.getEmail();
+		gender = user.getGender();
+		mobile_telephone = user.getMobile_telephone();
+		house_telephone = user.getHouse_telephone();
+		admin = user.getisAdmin();
+	}
+
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public long getId(){
 		return this.id;
 	}
@@ -100,19 +120,19 @@ public class User {
 		this.gender = gender;
 	}
 
-	public Integer getMobile_telephone() {
+	public Long getMobile_telephone() {
 		return mobile_telephone;
 	}
 
-	public void setMobile_telephone(Integer mobile_telephone) {
+	public void setMobile_telephone(Long mobile_telephone) {
 		this.mobile_telephone = mobile_telephone;
 	}
 
-	public Integer getHouse_telephone() {
+	public Long getHouse_telephone() {
 		return house_telephone;
 	}
 
-	public void setHouse_telephone(Integer house_telephone) {
+	public void setHouse_telephone(Long house_telephone) {
 		this.house_telephone = house_telephone;
 	}
 
