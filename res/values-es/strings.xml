@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="Alerta_Precios">ATENCIÓN: El horario elegido puede estar sujeto a aumentos de tarifa debido a que se sale de los horarios normales de trabajo</string>
     <string name="app_name">Tumascotikmenu</string>
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_tumascotik">Tumascotik</string>
     <string name="menu_pedircita"> Pedir Cita </string>
@@ -12,14 +10,8 @@
     <string name="main_mascota">Mascota:</string>
     <string name="button_siguiente">Siguiente</string>
     <string name="main_fecha">Elija fecha:</string>
-    <string name="button_fecha">Fecha</string>
-    <string name="main_motivo">Moivo:</string>
-    <string name="main_date">Elija Fecha</string>
-    <string name="button_hora">Hora</string>
-    <string name="main_porfelija">Por favor elija primero la fecha</string>
-    <string name="main_elijhora">Elija la hora</string>
     <string name="final_enviar">Enviar..</string>
-    <string name="main_settime">Elija un bloque de hora entre los disponibles:</string>
+    <string name="general_choose">--Elija--</string>
 
     <string-array name="horas_array"></string-array>
 
@@ -93,6 +85,9 @@
     <!-- MENU -->
     <string name="menu_my_profile">Mi perfil</string>
     <string name="menu_my_pets">Mis Mascotas</string>
+    <string name="menu_make_appointment">Pedir Cita</string>
+    <string name="menu_view_appointment">Mis Citas</string>
+    <string name="menu_budget">Presupuestos</string>
 
     <!-- PET INFO -->
     <string name="pet_info_button_edit">Editar</string>
@@ -120,6 +115,31 @@
     <string name="user_info_title_phone_home">Teléfono Fijo</string>
     <string name="user_info_title_phone_mobile">Teléfono Celular</string>
     <string name="user_info_user_not_updated">En este momento no es posible actualizar tus datos</string>
+
+    <!-- Set Date -->
+    <string name="set_date_motive_title">Motivo: </string>
+    <string name="set_date_time_title">Hora: </string>
+    <string name="set_date_date_title">Fecha:  </string>
+    <string name="set_date_date_text">Fecha</string>
+    <string name="set_date_time_text">Hora</string>
+    <string name="set_date_time_datefirst_text">Elija Fecha Primero</string>
+    <string name="set_date_pick_time_block">Elija un bloque de hora entre los disponibles:</string>
+    <string name="set_date_pick_checkfields_message1">Disculpe, pero el campo </string>
+    <string name="set_date_pick_checkfields_message3"> se encuentra incompleto.</string>
+    <string name="set_date_pick_checkfields_message4">Disculpe, pero los campos </string>
+    <string name="set_date_pick_checkfields_message5"> se encuentran incompletos.</string>
+    <string name="set_date_price_alert"> El horario elegido puede estar sujeto a aumentos de tarifa debido a que se sale de los horarios normales de trabajo</string>
+    <string name="set_date_dialog_loading_timeblocks">Cargando disponibilidad... </string>
+
+    <!-- Set Request Details -->
+    <string name="set_request_details_comments_title">Comentarios: </string>
+    <string name="set_request_details_motive_title">Motivo: </string>
+    <string name="set_request_details_motive">Motivo</string>
+    <string name="set_request_details_isDeivery_title">A Domicilio: </string>
+    <string name="set_request_details_loading_motive_lists">Cargando Servicios ...</string>
+
+    <!-- Set Request Details -->
+    <string name="send_request_sending">Enviando...</string>
 
     <string-array name="Genders">
         <item>--Elija--</item>

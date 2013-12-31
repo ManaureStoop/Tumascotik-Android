@@ -415,7 +415,7 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 
 		if (species != null) {
 			this.species = species;
-			this.species.add(0, "--Choose--");
+			this.species.add(0, getResources().getString(R.string.general_choose));
 			SpecieAdapter = new ArrayAdapter<String>(this,
 					android.R.layout.simple_spinner_item, this.species);
 		}
@@ -432,7 +432,7 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 
 		if (breed != null) {
 			this.breeds = breed;
-			this.breeds.add(0, "--Choose--");
+			this.breeds.add(0, getResources().getString(R.string.general_choose));
 			BreedAdapter = new ArrayAdapter<String>(this,
 					android.R.layout.simple_spinner_item, this.breeds);
 		}
@@ -450,7 +450,6 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 		if (this.pet != null) {
 			if (pet != null) {
 				pet.setId(this.pet.getId());
-				pet.setSystem_id(this.pet.getSystem_id());
 				this.pet = pet;
 				PetProvider.updatePet(this, this.pet);
 				refreshView();

@@ -11,16 +11,17 @@ import android.os.Message;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
-
 public class DatePickr extends DialogFragment {
 	public final static String EXTRA_MESSAGE = "com.example.pickerapplication.MESSAGE";
 	Handler hDate;
-   
-	
-	public DatePickr(Handler arg_h){
-        hDate = arg_h;      
-    }     
-    
+
+	public DatePickr(Handler arg_h) {
+		hDate = arg_h;
+	}
+
+	public DatePickr() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -29,17 +30,17 @@ public class DatePickr extends DialogFragment {
 		int year = c.get(Calendar.YEAR);
 		int month = c.get(Calendar.MONTH);
 		int day = c.get(Calendar.DAY_OF_MONTH);
-		
-		// Create a new instance of TimePickerDialog and return it
-		DatePickerDialog dpdlog = new DatePickerDialog(getActivity(), callback, year, month, day);
-		return dpdlog;
-		}
 
-	
+		// Create a new instance of TimePickerDialog and return it
+		DatePickerDialog dpdlog = new DatePickerDialog(getActivity(), callback,
+				year, month, day);
+		return dpdlog;
+	}
+
 	private OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
-		
+
 		@Override
-		public void onDateSet(DatePicker view, int year, int month, int day){
+		public void onDateSet(DatePicker view, int year, int month, int day) {
 			// Do something with the time chosen by the user'
 			Message msg = new Message();
 			Bundle data = new Bundle();
@@ -47,7 +48,7 @@ public class DatePickr extends DialogFragment {
 			date[0] = year;
 			date[1] = month;
 			date[2] = day;
-			
+
 			data.putIntArray(EXTRA_MESSAGE, date);
 			msg.setData(data);
 			hDate.sendMessage(msg);

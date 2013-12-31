@@ -28,7 +28,7 @@ public class RequestProvider {
 			ContentValues values = new ContentValues();
 			values.put(RequestEntity.COLUMN_SYSTEM_ID, request.getSystem_id());
 			values.put(RequestEntity.COLUMN_START_DATE, request.getStart_date().getTimeInMillis());
-			values.put(RequestEntity.COLUMN_FINISH_DATE, request.getFinisch_date().getTimeInMillis());
+			values.put(RequestEntity.COLUMN_FINISH_DATE, request.getFinish_date().getTimeInMillis());
 			values.put(RequestEntity.COLUMN_SERVICE, request.getService());
 			values.put(RequestEntity.COLUMN_COMMENT, request.getComment());
 			values.put(RequestEntity.COLUMN_STATUS, request.getStatus());
@@ -70,7 +70,7 @@ public class RequestProvider {
 			values.put(RequestEntity.COLUMN_ID, request.getId());
 			values.put(RequestEntity.COLUMN_SYSTEM_ID, request.getSystem_id());
 			values.put(RequestEntity.COLUMN_START_DATE, request.getStart_date().getTimeInMillis());
-			values.put(RequestEntity.COLUMN_FINISH_DATE, request.getFinisch_date().getTimeInMillis());
+			values.put(RequestEntity.COLUMN_FINISH_DATE, request.getFinish_date().getTimeInMillis());
 			values.put(RequestEntity.COLUMN_SERVICE, request.getService());
 			values.put(RequestEntity.COLUMN_COMMENT, request.getComment());
 			values.put(RequestEntity.COLUMN_STATUS, request.getStatus());
@@ -79,14 +79,14 @@ public class RequestProvider {
 			values.put(RequestEntity.COLUMN_ACTIVE, request.isActive());
 			values.put(RequestEntity.COLUMN_PET_ID, request.getPet().getSystem_id());
 
-			String condition = RequestEntity.COLUMN_ID + " = "
-					+ String.valueOf(request.getId());
+			String condition = RequestEntity.COLUMN_SYSTEM_ID + " = "
+					+"'"+ request.getSystem_id()+"'";
 
 			int row = context.getContentResolver().update(URI_REQUEST, values,
 					condition, null);
 
 			if (row == 1) {
-				Log.i(LOG_TAG, " Request :" + request.getId() + " has bee upId(dated");
+				Log.i(LOG_TAG, " Request :" + request.getId() + " has bee updated");
 				return true;
 			}
 		} catch (Exception e) {
@@ -96,15 +96,15 @@ public class RequestProvider {
 		return false;
 	}
 
-	public static Request readRequest(Context context, long requestID) {
+	public static Request readRequest(Context context, String requestSystemID) {
 		
 
 		if (context == null )
 			return null;
 		
 
-		String condition = RequestEntity.COLUMN_ID + " = "
-				+ String.valueOf(requestID);
+		String condition = RequestEntity.COLUMN_SYSTEM_ID + " = "
+				+"'"+String.valueOf(requestSystemID)+"'";
 		
 		final Cursor cursor = context.getContentResolver().query(URI_REQUEST, null, condition,null, null);
 		
@@ -120,13 +120,13 @@ public class RequestProvider {
 			
 			do {
 				final long id = cursor.getLong(cursor.getColumnIndex(RequestEntity.COLUMN_ID));
-				final long system_id = cursor.getLong(cursor.getColumnIndex(RequestEntity.COLUMN_SYSTEM_ID));			
+				final String system_id = cursor.getString(cursor.getColumnIndex(RequestEntity.COLUMN_SYSTEM_ID));			
 				final long start_date = cursor.getInt(cursor.getColumnIndex(RequestEntity.COLUMN_START_DATE));		
 				final long finish_date = cursor.getInt(cursor.getColumnIndex(RequestEntity.COLUMN_FINISH_DATE));	
 				final String service = cursor.getString(cursor.getColumnIndex(RequestEntity.COLUMN_SERVICE));	
 				final Integer price = cursor.getInt(cursor.getColumnIndex(RequestEntity.COLUMN_PRICE));	
 				final String comment = cursor.getString(cursor.getColumnIndex(RequestEntity.COLUMN_COMMENT));	
-				final String status = cursor.getString(cursor.getColumnIndex(RequestEntity.COLUMN_STATUS));	
+				final int status = cursor.getInt(cursor.getColumnIndex(RequestEntity.COLUMN_STATUS));	
 				final Integer delivery  = cursor.getInt(cursor.getColumnIndex(RequestEntity.COLUMN_DELIVERY));		
 				final Integer is_appointment = cursor.getInt(cursor.getColumnIndex(RequestEntity.COLUMN_DELIVERY));	
 				final Integer active = cursor.getInt(cursor.getColumnIndex(RequestEntity.COLUMN_ACTIVE));	
@@ -140,8 +140,9 @@ public class RequestProvider {
 				
 				request = new Request();
 				request.setId(id);
+				request.setSystem_id(system_id);
 				request.setStart_date(startCalendar);
-				request.setFinisch_date(finishCalendar);
+				request.setFinish_date(finishCalendar);
 				request.setService(service);
 				request.setPrice(price);
 				request.setComment(comment);

@@ -70,7 +70,7 @@ public class Datosmascota  extends Activity  {
 				public void onClick(View v) {
 					 
 					 if (Checkfields()){
-					 Intent i = new Intent(Datosmascota.this, FinalCita.class);
+					 Intent i = new Intent(Datosmascota.this, SendRequest.class);
 			
 					  i.putExtra("nombre", getIntent().getStringExtra("nombre"));
 					  i.putExtra("direccion", getIntent().getStringExtra("direccion"));

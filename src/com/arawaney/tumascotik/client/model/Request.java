@@ -11,11 +11,27 @@ public class Request {
 	private String service;
 	private Integer price;
 	private String comment;
-	private String status;
+	private int status;
 	private Integer delivery;
 	private Integer is_appointment;
 	private Integer active;
 	private Pet pet;
+	
+	public final static int STATUS_PENDING = 4;
+	public final static int STATUS_ACCEPTED = 3;
+	public final static int STATUS_CANCELED = 2;
+	public final static int STATUS_ATTENDED = 1;
+	
+	public final static int ACTIVE = 1;
+	public final static int INACTIVE = 0;
+	
+	public final static int IS_APPOINTMENT = 1;
+	public final static int IS__NOT_APPOINTMENT = 0;
+	
+	public final static int IS_DELIVERY = 1;
+	public final static int IS__NOT_DELIVERY = 0;
+	
+
 	
 	
 	public long getId() {
@@ -36,10 +52,10 @@ public class Request {
 	public void setStart_date(Calendar start_date) {
 		this.start_date = start_date;
 	}
-	public Calendar getFinisch_date() {
+	public Calendar getFinish_date() {
 		return finish_date;
 	}
-	public void setFinisch_date(Calendar finisch_date) {
+	public void setFinish_date(Calendar finisch_date) {
 		this.finish_date = finisch_date;
 	}
 	public String getService() {
@@ -60,10 +76,10 @@ public class Request {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 	public Integer isDelivery() {

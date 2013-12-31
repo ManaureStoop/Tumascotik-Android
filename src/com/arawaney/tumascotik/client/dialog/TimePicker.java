@@ -51,7 +51,7 @@ public class TimePicker extends DialogFragment {
 	
 
 	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	    builder.setTitle(R.string.main_settime);
+	    builder.setTitle(R.string.set_date_pick_time_block);
 	    builder.setIcon(R.drawable.mascotiklogodialog);
 	    builder.setItems(hours, new DialogInterface.OnClickListener() {
 	               public void onClick(DialogInterface dialog, int which) {

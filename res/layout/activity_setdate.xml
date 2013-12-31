@@ -29,7 +29,7 @@
         android:layout_below="@+id/bfechasetd"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:text="@string/main_date" />
+        android:text="@string/set_date_date_text" />
 
     <Button
         android:id="@+id/bhorasetd"
@@ -40,7 +40,7 @@
         android:layout_below="@+id/txtfechasetd"
         android:layout_marginTop="54dp"
         android:background="@color/buttonviolet"
-        android:text="Hora"
+        android:text="@string/set_date_time_title"
         android:textColor="@color/textwhite"
         android:width="100dp" />
 
@@ -51,17 +51,19 @@
         android:layout_below="@+id/bhorasetd"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:text="@string/main_porfelija" />
+        android:text="@string/set_date_time_datefirst_text" />
 
     <TextView
         android:id="@+id/txtalertasetd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/txthorasetd"
-        android:layout_marginTop="24dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/rojoalerta" />
+        android:gravity="center"
+        android:text="@string/set_date_price_alert"
+        android:textColor="@color/rojoalerta"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp" />
 
     <Button
         android:id="@+id/bfechasetd"
@@ -69,10 +71,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="87dp"
+        android:layout_marginTop="47dp"
         android:background="@color/buttonviolet"
-        android:text="@string/button_fecha"
+        android:text="@string/set_date_date_title"
         android:textColor="@color/textwhite"
         android:width="150dp" />
+
+
 
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.arawaney.tumascotik.client.control;
 
 import com.arawaney.tumascotik.client.db.provider.UserProvider;
 import com.arawaney.tumascotik.client.model.Pet;
+import com.arawaney.tumascotik.client.model.Request;
 import com.arawaney.tumascotik.client.model.User;
 
 import android.content.Context;
@@ -12,6 +13,7 @@ public class MainController {
 	Context context;
 	public static User USER;
 	static Pet PET;
+	static Request 	REQUEST;
 
 	public static boolean Initialize(Context context) {
 		Log.d(LOG_TAG, "Initialize");
@@ -39,8 +41,16 @@ public class MainController {
 		return PET;
 	}
 
-	public static void setPET(Pet pET) {
-		PET = pET;
+	public static void setPET(Pet pet) {
+		PET = pet;
+	}
+	
+	public static Request getREQUEST() {
+		return REQUEST;
+	}
+
+	public static void setREQUEST(Request request) {
+		REQUEST = request;
 	}
 
 }

@@ -1,19 +1,11 @@
 package com.arawaney.tumascotik.client.activity;
 
-
-
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import com.arawaney.tumascotik.client.dialog.DatePickr;
-import com.arawaney.tumascotik.client.dialog.TimePicker;
-import com.parse.FindCallback;
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import java.util.Locale;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -22,509 +14,612 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.arawaney.tumascotik.client.R;
 
+import com.arawaney.tumascotik.client.R;
+import com.arawaney.tumascotik.client.backend.ParseProvider;
+import com.arawaney.tumascotik.client.control.MainController;
+import com.arawaney.tumascotik.client.dialog.DatePickr;
+import com.arawaney.tumascotik.client.dialog.TimePicker;
+import com.arawaney.tumascotik.client.model.Request;
+import com.arawaney.tumascotik.client.util.CalendarUtil;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 public class SetDate extends FragmentActivity {
-	int size;
-	int size2;
-	Date fechainicio;
-	Button fecha;
+	private static final String LOG_TAG = "Tumascotik-Client-SetDateActivity";
+	int numberOfScheduledAppointments;
+	int numberOfCreatedTimeBlocks;
+	Date initialDate;
+	Button dateButton;
 	Button siguiente;
 	Button cancelar;
-	Button hora;
-	TextView elijahora;
-	TextView tDate;
+	Button timeButton;
+	TextView pickedTime;
+	TextView pickedDate;
 	TextView alerta;
 	public int year;
 	public int month;
 	public int day;
 	public int hour;
 	public int minute;
-	String[] bloques;
-	int[] preciocaros;
-	Date[]fechasinicio;
-	Date[]fechasfinal;
-	Date fechadiainicio;
-	Date fechadiafinal;
-	int[] minutoi;
-	int[] minutof;
-	int[] horai;
-	int[] horaf;
+	String[] timeBlocks;
+	int[] expensiveBlocks;
+	Date[] initialScheduledDates;
+	Date[] finalScheduledDates;
+	Date dayInitialDate;
+	Date dayFinalDate;
+	int[] minutei;
+	int[] minutef;
+	int[] houri;
+	int[] hourf;
 	int ind;
-	
+
+	Request request;
+
 	Handler hDate = new Handler() {
 		@Override
-		public void handleMessage(Message msg){
-		
-		int[] date = msg.getData().getIntArray(DatePickr.EXTRA_MESSAGE);
-		year = date[0];
-		month = date[1];
-		day = date[2];
-		
-		String y = String.valueOf(year);
-		String mo = String.valueOf(month + 1);
-		String d = String.valueOf(day);
-		
-		tDate.setText(d + " / " + mo + " / " + y);
-		fechadiainicio = new GregorianCalendar(year,month,day,0, 0).getTime();
-		fechadiafinal  = new GregorianCalendar(year,month,day,23,59).getTime();
-		
-		sethours();
-		hora.setClickable(true);
-		hora.setEnabled(true);
+		public void handleMessage(Message msg) {
+
+			int[] date = msg.getData().getIntArray(DatePickr.EXTRA_MESSAGE);
+			year = date[0];
+			month = date[1];
+			day = date[2];
+
+			Calendar pickedCalendar = Calendar.getInstance();
+			pickedCalendar.set(year, month, day);
+
+			pickedDate.setText(CalendarUtil.getDateFormated(pickedCalendar,
+					"dd/MM/yyyy"));
+
+			dayInitialDate = new GregorianCalendar(year, month, day, 0, 0)
+					.getTime();
+			dayFinalDate = new GregorianCalendar(year, month, day, 23, 59)
+					.getTime();
+
+			getScheduledTimeBlocks();
+
 		}
 	};
 
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		requestWindowFeature(Window.FEATURE_NO_TITLE); 
-		
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setdate);
-		Parse.initialize(this, "wf9TGHsYeTz8od557fQ9o9pRel5BNlOT9oZ4CpbH",
-			    "2gKGXq41TDWhacnkA1YNH07mTKEI59bA7JlORu51");
-		
-		fecha = (Button) findViewById(R.id.bfechasetd);
-		siguiente = (Button) findViewById(R.id.bsigsetd);
-		hora = (Button) findViewById(R.id.bhorasetd);
-		hora.setEnabled(false);
-		hora.setClickable(false);
-		elijahora =(TextView) findViewById(R.id.txthorasetd);
-		elijahora.setText(R.string.main_porfelija);
-		tDate = (TextView) findViewById(R.id.txtfechasetd);
-		alerta = (TextView) findViewById(R.id.txtalertasetd);
-		alerta.setGravity(Gravity.CENTER);
-	
-		fecha.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
 
-				showDatePickerDialog(v);	
-				
-			}
-		});
-	
-		 hora.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-			    writehours(); 
-				DialogFragment newFragment = new TimePicker(bloques,preciocaros,size2);
-				newFragment.show(getSupportFragmentManager(), "hora");
-				
-			}
-		});
-	siguiente.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-				  if(Checkfields())	 {
-					Intent i = new Intent(SetDate.this,Pedircita.class);
-					  i.putExtra("horai", horai[ind]);
-					  i.putExtra("horaf", horaf[ind]);
-					  i.putExtra("minutoi",minutoi[ind]);
-					  i.putExtra("minutof", minutof[ind]);
-					  i.putExtra("preciocaro", preciocaros[ind]);
+		ParseProvider.initializeParse(this);
 
-					  i.putExtra("ano",year);
-					  i.putExtra("mes",month);
-					  i.putExtra("dia",day);
-					  i.putExtra("motivos", getIntent().getStringExtra("motivos"));
-					  startActivityForResult(i, 2);
-					  }
+		setRequest();
 
-				}
-			});
-	cancelar = (Button) findViewById(R.id.bcancsetd);
-	cancelar.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			Intent returnIntent = new Intent();
-			setResult(RESULT_CANCELED, returnIntent);        
-			finish();
-			
-		}
-	});
+		loadViews();
+
+		loadButtons();
 
 	}
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-		  if (requestCode == 2) {
+	private void setRequest() {
+		request = new Request();
+		request.setPet(MainController.getPET());
+		request.setStatus(Request.STATUS_PENDING);
+		request.setActive(Request.ACTIVE);
+		request.setIs_appointment(Request.IS_APPOINTMENT);
+	}
 
-		     if(resultCode == RESULT_OK){      
-		           // It means client pressed Anterior button. We dont do anything  
-		     }
-		     if (resultCode == RESULT_CANCELED) {    
-		    	 //It means client pressed cancelar or a request was made. we want to go menu activity.
-		    	 SetDate.this.finish();
-		     }
-		  }
-		}//onActivityResult
+	private void loadButtons() {
+		dateButton.setOnClickListener(new OnClickListener() {
 
-	public void sethours() {
-		
-		final ProgressDialog progressDialog = ProgressDialog.show(SetDate.this, "", "Cargando disponibilidad...");
-		
-		ParseQuery query = new ParseQuery("Citas");
-		query.whereGreaterThan("fechaInicial", fechadiainicio);
-		query.whereLessThan("fechaInicial",fechadiafinal);
+			@Override
+			public void onClick(View v) {
+
+				showDatePickerDialog(v);
+
+			}
+		});
+
+		timeButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				writehours();
+				DialogFragment newFragment = new TimePicker(timeBlocks,
+						expensiveBlocks, numberOfCreatedTimeBlocks);
+				newFragment.show(getSupportFragmentManager(), "hora");
+
+			}
+		});
+		siguiente.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (Checkfields()) {
+					Intent i = new Intent(SetDate.this, SetRequestDetails.class);
+					startActivity(i);
+				}
+
+			}
+		});
+		cancelar.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent returnIntent = new Intent();
+				setResult(RESULT_CANCELED, returnIntent);
+				finish();
+
+			}
+		});
+	}
+
+	private void loadViews() {
+		dateButton = (Button) findViewById(R.id.bfechasetd);
+		siguiente = (Button) findViewById(R.id.bsigsetd);
+		cancelar = (Button) findViewById(R.id.bcancsetd);
+		timeButton = (Button) findViewById(R.id.bhorasetd);
+		timeButton.setEnabled(false);
+		timeButton.setClickable(false);
+		pickedTime = (TextView) findViewById(R.id.txthorasetd);
+		pickedDate = (TextView) findViewById(R.id.txtfechasetd);
+		alerta = (TextView) findViewById(R.id.txtalertasetd);
+		alerta.setVisibility(View.GONE);
+
+	}
+
+	public void getScheduledTimeBlocks() {
+
+		final ProgressDialog progressDialog = ProgressDialog.show(
+				SetDate.this,
+				"",
+				getResources().getString(
+						R.string.set_date_dialog_loading_timeblocks));
+
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Request");
+		query.whereGreaterThan("Initial_Date", dayInitialDate);
+		query.whereLessThan("Culmination_Date", dayFinalDate);
 		query.findInBackground(new FindCallback<ParseObject>() {
 
 			@Override
 			public void done(List<ParseObject> cList, ParseException e) {
-			    
-		    	if (e == null) {
-		           int i;
-		           ParseObject parseobject;
-		           size = cList.size();
-		           bloques = new String[20];
-		           preciocaros = new int[20];
-		           minutoi = new int[20];
-		           minutof= new int[20];
-		           horai= new int[20];
-		           horaf= new int[20];
-		           
-		           
-		           if (size!= 0){
-		        	 fechasinicio = new Date [size];
-		        	 fechasfinal = new Date [size];
-			           for(i=0;i<size;i++){
-			        	   parseobject = cList.get(i);
-			        	   fechasinicio[i] = parseobject.getDate("fechaInicial");
-			        	   fechasfinal[i] = parseobject.getDate("fechaFinal");
-			        	  
-			           }
-		           }
-		           for(i=0;i<size;i++){
-		        	   Log.d("EPAAA", String.valueOf(fechasinicio[i].toString()));
-		        	   Log.d("EPAAA", String.valueOf(fechasfinal[i].toString()));
-		        	  
-		           }
-		            progressDialog.dismiss(); 
-			       	hora.setClickable(true);
-			    	hora.setEnabled(true );
-			    	elijahora.setText(R.string.main_elijhora);
-		        } else {
-		           Log.d("ERRORRRR", "Error: " + e.getMessage());
-		        }
-		    }
-		   
+
+				if (e == null) {
+					int i;
+					ParseObject parseobject;
+					numberOfScheduledAppointments = cList.size();
+					timeBlocks = new String[20];
+					expensiveBlocks = new int[20];
+					minutei = new int[20];
+					minutef = new int[20];
+					houri = new int[20];
+					hourf = new int[20];
+
+					if (numberOfScheduledAppointments > 0) {
+						initialScheduledDates = new Date[numberOfScheduledAppointments];
+						finalScheduledDates = new Date[numberOfScheduledAppointments];
+						for (i = 0; i < numberOfScheduledAppointments; i++) {
+							parseobject = cList.get(i);
+							initialScheduledDates[i] = parseobject
+									.getDate("Initial_Date");
+							finalScheduledDates[i] = parseobject
+									.getDate("Culmination_Date");
+
+						}
+					}
+					for (i = 0; i < numberOfScheduledAppointments; i++) {
+						Log.d("TEST", String.valueOf(initialScheduledDates[i]
+								.toString()));
+						Log.d("TEST", String.valueOf(finalScheduledDates[i]
+								.toString()));
+
+					}
+					progressDialog.dismiss();
+					enableTimeButton();
+				} else {
+					Log.d(LOG_TAG,
+							"Error loading scheduled time blocks: "
+									+ e.getMessage());
+				}
+			}
+
+			private void enableTimeButton() {
+				timeButton.setClickable(true);
+				timeButton.setEnabled(true);
+				pickedTime.setText(R.string.set_date_time_text);
+			}
+
 		});
-	   	
-	    
-}
 
+	}
 
-	
 	public void writehours() {
 		int i;
 		int j = 0;
-	
+
 		long min;
-		boolean flag = false;
-		boolean flag2= false;
-		boolean searmo = false;
+		boolean isBlockBetween = false;
+		boolean appointmentAtFirstBLock = false;
+		boolean blockCreated = false;
 		boolean block = false;
-		//Setting Hour Limitations
-		Date fechabase = new GregorianCalendar(year,month,day,0,0).getTime();
-		Date fechabasen = new GregorianCalendar(year,month,day,0,0).getTime();
-		Date iniciohorario = new GregorianCalendar(year,month,day,7,30).getTime();
-		Date finhorario = new GregorianCalendar(year,month,day,18,0).getTime();
-	    Date fechatope = new GregorianCalendar(year,month,day,23,30).getTime();		
-	    Date mediodia =  new GregorianCalendar(year,month,day,12,0).getTime();
-	    Date despuesdalmuerzo =  new GregorianCalendar(year,month,day,13,30).getTime();
-	   //Possible end of hour-block
-	    Date trans;
-	    
-	    // While the times doesnt exceeds the last hour-block
-	    while(fechabase.before(fechatope)){	
-	    	trans = new Date(fechabase.getTime()+(90*60*1000));//Added 1.5 Hours
-	        min = 60*60*1000;
-	        searmo = false;
-	        block = false;
-	     // If there is an activity or appointment already in the first hour block
-	     //the list will start  at the end of this hour-block
-	        for(i=0;i<size;i++){
-	        	
-	        	if(trans.after(fechasfinal[i])&& fechabase.before(fechasfinal[i])){
-		    		flag2=true;
-		    		break;
-		    	}
-	        }
-	        
-	        if(flag2){
-	        	fechabasen = fechasfinal[i];
-	        	flag2 = false;
-	        	Log.d("AJA01", "AQUI01");
-	        }
-		  // If the activity or appointment starts inside the lunch block 
-		  //the hour block will start  at the end of the lunch block
-	      /*else if(trans.after(despuesdalmuerzo)&& fechabase.before(despuesdalmuerzo)){
-	    		fechabasen = despuesdalmuerzo;	
-	    		Log.d("AJA02", "AQUI02");
-	    	}*/
-	       
-	    	else{
-	        
-	        	
-	        	//Check if any activity gets in the  way
-	    	  for(i=0;i<size;i++){
-	        	 if ((fechasinicio[i].before(trans))&&(fechasinicio[i].after(fechabase)||fechasinicio[i].equals(fechabase))){
-	        		 Log.d("AJA03", "AQUI03");
-	        		 flag = true;
-	        		// If difference between block start and next activity is more than one hour
-	        		if(fechasinicio[i].getTime() - fechabase.getTime() >= (60*60*1000)){ 
-	        			    Log.d("AJA04", "AQUI04");
-	        			    min = fechasinicio[i].getTime() - fechabase.getTime();
-		        			GregorianCalendar cal1 = new GregorianCalendar();
-		        			cal1.setTime(fechabase);
-		        			GregorianCalendar cal2 = new GregorianCalendar();
-		        			cal2.setTime(fechasinicio[i]);
-		        			//If the hour block is outside  the normal workschedule it muss notify the user
-		        			if((fechabase.after(finhorario)||fechabase.equals(finhorario))||(fechabase.before(iniciohorario))||((fechabase.before(despuesdalmuerzo))&&(fechabase.after(mediodia)||fechabase.equals(mediodia)))){
-		        				preciocaros[j]= 1;
-		        			}
-		        			else{
-		        				preciocaros[j]= 0;
-		        			}
-	        				bloques[j] =android.text.format.DateFormat.format("h:mmaa", fechabase)+" - "+android.text.format.DateFormat.format("h:mmaa", fechasinicio[i]);
-   
-	    	        		   minutoi[j] =cal1.get(Calendar.MINUTE) ;
-	    			           minutof[j]= cal2.get(Calendar.MINUTE);
-	    			           horai[j]= cal1.get(Calendar.HOUR_OF_DAY);
-	    			           horaf[j]= cal2.get(Calendar.HOUR_OF_DAY);
-	
-		        			Log.d("AJA05", bloques[j]);
-		        			j++;
-		        			searmo = true;
-		        		}
-	        		else{
-	        		block = true;
-	        		}
-	        		fechabasen = fechasfinal[i];	
-	        	 }
-	        		   
-	        				    		
-	    	  }
-	    	  /*
-	    	 // Check if the Lunch time gets in the way
-	    	// If block goes in between the lunch time
-	    	  if(trans.after(mediodia)&& (fechabase.before(mediodia)||fechabase.equals(mediodia))){ 
-	        			flag = true;
-	        			Log.d("AJA06", "AQUI06");
-	        		   // If difference is more than one hour
-	        			if(mediodia.getTime() - fechabase.getTime() >= (60*60*1000)){
-	        				Log.d("AJA07", "AQUI07");
-	        		   // If there was an activity on the way and the new block was created 
-	        			if (searmo){
-	        				if (mediodia.getTime() - fechabase.getTime() < min){
-	        					j--;
-	        					GregorianCalendar cal1 = new GregorianCalendar();
-		    	        		cal1.setTime(fechabase);
-		    	        		GregorianCalendar cal2 = new GregorianCalendar();
-		    	        		cal2.setTime(mediodia);
-		    	        			
-		    	        		bloques[j] = "                     "+String.valueOf(cal1.get(Calendar.HOUR_OF_DAY))+":"+String.valueOf(cal1.get(Calendar.MINUTE))+" - "+ String.valueOf(cal2.get(Calendar.HOUR_OF_DAY))+":"+String.valueOf(cal2.get(Calendar.MINUTE));
-		    			           minutoi[j] =cal1.get(Calendar.MINUTE) ;
-		    			           minutof[j]= cal2.get(Calendar.MINUTE);
-		    			           horai[j]= cal1.get(Calendar.HOUR_OF_DAY);
-		    			           horaf[j]= cal2.get(Calendar.HOUR_OF_DAY);       			
-		    	        		Log.d("AJA08", bloques[j]);
-		    	        		j++;
-	        				}
-	        			  }
-	        			  else {
-	        				// If there wasnt an activity on the way
-	        				  if(!block){
-	        				  GregorianCalendar cal1 = new GregorianCalendar();
-		    	        		cal1.setTime(fechabase);
-		    	        		GregorianCalendar cal2 = new GregorianCalendar();
-		    	        		cal2.setTime(mediodia);
-		    	        			
-		    	        		bloques[j] = "                     "+String.valueOf(cal1.get(Calendar.HOUR_OF_DAY))+":"+String.valueOf(cal1.get(Calendar.MINUTE))+" - "+ String.valueOf(cal2.get(Calendar.HOUR_OF_DAY))+":"+String.valueOf(cal2.get(Calendar.MINUTE));
-		    			           minutoi[j] =cal1.get(Calendar.MINUTE) ;
-		    			           minutof[j]= cal2.get(Calendar.MINUTE);
-		    			           horai[j]= cal1.get(Calendar.HOUR_OF_DAY);
-		    			           horaf[j]= cal2.get(Calendar.HOUR_OF_DAY);       			
-		    	        		Log.d("AJA09", bloques[j]);
-		    	        		j++;}
-	        			  }
-	        			  }
-	        			else{
-	          				if (searmo)
-	          					j--;
-	          				
-	          			}
-	          			
-	        			fechabasen = despuesdalmuerzo;	
-	        		}
-	        		*/
-	    	  // Check if the Last hour-block possible time gets in the way
-	
-	    	  if((trans.after(fechatope)&& (fechabase.before(fechatope)||fechabase.equals(fechatope)))){ 
-      			flag = true;
-      		//// If difference is more than one hour
-      			if(fechatope.getTime() - fechabase.getTime() >= (60*60*1000)){
-      				 if (searmo){
-	      				if (fechatope.getTime() - fechabase.getTime() < min){
-	      					j--;
-	      					GregorianCalendar cal1 = new GregorianCalendar();
-		    	        		cal1.setTime(fechabase);
-		    	        		GregorianCalendar cal2 = new GregorianCalendar();
-		    	        		cal2.setTime(fechatope);
-		    	        		
-			        			//If the hour block is outside  the normal workschedule it muss notify the user
-		    	       			if((fechabase.after(finhorario)||fechabase.equals(finhorario))||(fechabase.before(iniciohorario))||((fechabase.before(despuesdalmuerzo))&&(fechabase.after(mediodia)||fechabase.equals(mediodia)))){
-			        				preciocaros[j]= 1;
-			        			}
-			        			else{
-			        				preciocaros[j]= 0;
-			        			}
-		        				bloques[j] =android.text.format.DateFormat.format("h:mmaa", fechabase)+" - "+android.text.format.DateFormat.format("h:mmaa", fechatope);
 
-		    			           
-		    	        		
-		    	        		   minutoi[j] =cal1.get(Calendar.MINUTE) ;
-		    			           minutof[j]= cal2.get(Calendar.MINUTE);
-		    			           horai[j]= cal1.get(Calendar.HOUR_OF_DAY);
-		    			           horaf[j]= cal2.get(Calendar.HOUR_OF_DAY);       			
-		    	        		Log.d("AJA09", bloques[j]);
-		    	        		j++;
-	      				}
-      				 }
-      				 else{
-      					 if(!block){
-      					GregorianCalendar cal1 = new GregorianCalendar();
-    	        		cal1.setTime(fechabase);
-    	        		GregorianCalendar cal2 = new GregorianCalendar();
-    	        		cal2.setTime(fechatope);
-    	        			
-	        			//If the hour block is outside  the normal workschedule it muss notify the user
-    	       			if((fechabase.after(finhorario)||fechabase.equals(finhorario))||(fechabase.before(iniciohorario))||((fechabase.before(despuesdalmuerzo))&&(fechabase.after(mediodia)||fechabase.equals(mediodia)))){
-	        				preciocaros[j]= 1;
-	        			}
-	        			else{
-	        				preciocaros[j]= 0;
-	        			}
-        				bloques[j] =android.text.format.DateFormat.format("h:mmaa", fechabase)+" - "+android.text.format.DateFormat.format("h:mmaa", fechatope);
- 
-    	        		
-    	        		   minutoi[j] =cal1.get(Calendar.MINUTE) ;
-    			           minutof[j]= cal2.get(Calendar.MINUTE);
-    			           horai[j]= cal1.get(Calendar.HOUR_OF_DAY);
-    			           horaf[j]= cal2.get(Calendar.HOUR_OF_DAY);       			
-    	        		Log.d("AJA10", bloques[j]);
-    	        		j++;
-      				 }
-      				 	}
-      				
-      			}
-      			else{
-      				if (searmo){
-      					j--;
-      				}
-      			}
-      			fechabasen = fechatope;	
-      		}
-	        // IF nothing interfiers in the new block.		
-	        if (!flag){
-	        		GregorianCalendar cal1 = new GregorianCalendar();
-	        		cal1.setTime(fechabase);
-	        		GregorianCalendar cal2 = new GregorianCalendar();
-	        		cal2.setTime(trans);
-	        			
-        			//If the hour block is outside  the normal workschedule it muss notify the user
-	       			if((fechabase.after(finhorario)||fechabase.equals(finhorario))||(fechabase.before(iniciohorario))||((fechabase.before(despuesdalmuerzo))&&(fechabase.after(mediodia)||fechabase.equals(mediodia)))){        				
-        				preciocaros[j]= 1;
-        			}
-        			else{
-        				preciocaros[j]= 0;
-        			}
-    				bloques[j] =android.text.format.DateFormat.format("h:mmaa", fechabase)+" - "+android.text.format.DateFormat.format("h:mmaa", trans);
+		// Setting Hour Limitations
+		Date cursorDate = new GregorianCalendar(year, month, day, 0, 0)
+				.getTime();
+		Date cursorDateEn = new GregorianCalendar(year, month, day, 0, 0)
+				.getTime();
+		Date beginningWorkingDay = new GregorianCalendar(year, month, day, 7,
+				30).getTime();
+		Date endWorkingDay = new GregorianCalendar(year, month, day, 18, 0)
+				.getTime();
+		Date maximumDate = new GregorianCalendar(year, month, day, 23, 30)
+				.getTime();
+		Date midDay = new GregorianCalendar(year, month, day, 12, 0).getTime();
+		Date afterLunch = new GregorianCalendar(year, month, day, 13, 30)
+				.getTime();
 
-			           minutoi[j] =cal1.get(Calendar.MINUTE) ;
-			           minutof[j]= cal2.get(Calendar.MINUTE);
-			           horai[j]= cal1.get(Calendar.HOUR_OF_DAY);
-			           horaf[j]= cal2.get(Calendar.HOUR_OF_DAY);       			
-	        		
-			           Log.d("AJA11", bloques[j]);
-	        		j++;
-	        		fechabasen = trans;
-	        }
-	    }
-	      
-	      fechabase = fechabasen;
-	      flag = false;
-	    }
-	    
-		
-	    size2 = j;
-		
-	}
-	
-	public void onUserSelectValue(int index) {
-		elijahora.setText(bloques[index]);
-		ind = index;
-		if(preciocaros[index]==1)
-			alerta.setText(R.string.Alerta_Precios);
-		else
-			alerta.setText("");
+		// Possible end of hour-block
+		Date auxFinalDate;
+
+		// While the times doesnt exceeds the last hour-block
+		while (cursorDate.before(maximumDate)) {
+			auxFinalDate = new Date(cursorDate.getTime() + (90 * 60 * 1000));// Added
+																				// 1.5
+																				// Hours
+			min = 60 * 60 * 1000; // minimum block is 1 hour
+			blockCreated = false;
+			block = false;
+			// If there is an activity or appointment already in the first hour
+			// block
+			// the list will start at the end of this hour-block
+			for (i = 0; i < numberOfScheduledAppointments; i++) {
+				
+				if (auxFinalDate.after(finalScheduledDates[i])
+						&& cursorDate.before(finalScheduledDates[i])) {
+					Log.d(LOG_TAG, "Test true raro");
+					appointmentAtFirstBLock = true;
+					break;
+				}
+			}
+
+			if (appointmentAtFirstBLock) {
+				cursorDateEn = finalScheduledDates[i];
+				appointmentAtFirstBLock = false;
+				Log.d(LOG_TAG + " ALGORITH ",
+						"There is a time block at the beginning of the day");
+			}
+			// If the activity or appointment starts inside the lunch block
+			// the hour block will start at the end of the lunch block
+			/*
+			 * else if(trans.after(despuesdalmuerzo)&&
+			 * fechabase.before(despuesdalmuerzo)){ fechabasen =
+			 * despuesdalmuerzo; Log.d("AJA02", "AQUI02"); }
+			 */
+
+			else {
+
+				// Check if any activity gets in the way
+				for (i = 0; i < numberOfScheduledAppointments; i++) {
+					if ((initialScheduledDates[i].before(auxFinalDate))
+							&& (initialScheduledDates[i].after(cursorDate) || initialScheduledDates[i]
+									.equals(cursorDate))) {
+						Log.d(LOG_TAG + " ALGORITH ",
+								"A previews Time Block gets in the way");
+						isBlockBetween = true;
+						// If difference between block start and next activity
+						// is more than one hour
+						if (initialScheduledDates[i].getTime()
+								- cursorDate.getTime() >= (60 * 60 * 1000)) {
+							Log.d(LOG_TAG + " ALGORITH ",
+									"Time between begginings more than minimum");
+							min = initialScheduledDates[i].getTime()
+									- cursorDate.getTime();
+							GregorianCalendar cal1 = new GregorianCalendar();
+							cal1.setTime(cursorDate);
+							GregorianCalendar cal2 = new GregorianCalendar();
+							cal2.setTime(initialScheduledDates[i]);
+
+							// If the hour block is outside the normal
+							// workschedule it muss notify the user
+							if ((cursorDate.after(endWorkingDay) || cursorDate
+									.equals(endWorkingDay))
+									|| (cursorDate.before(beginningWorkingDay))
+									|| ((cursorDate.before(afterLunch)) && (cursorDate
+											.after(midDay) || cursorDate
+											.equals(midDay)))) {
+								expensiveBlocks[j] = 1;
+							} else {
+								expensiveBlocks[j] = 0;
+							}
+
+							timeBlocks[j] = android.text.format.DateFormat
+									.format("h:mmaa", cursorDate)
+									+ " - "
+									+ android.text.format.DateFormat.format(
+											"h:mmaa", initialScheduledDates[i]);
+
+							minutei[j] = cal1.get(Calendar.MINUTE);
+							minutef[j] = cal2.get(Calendar.MINUTE);
+							houri[j] = cal1.get(Calendar.HOUR_OF_DAY);
+							hourf[j] = cal2.get(Calendar.HOUR_OF_DAY);
+
+							Log.d(LOG_TAG + " ALGORITH ", "TimeBlock created: "
+									+ timeBlocks[j]);
+							j++;
+							blockCreated = true;
+						} else {
+							block = true;
+						}
+						cursorDateEn = finalScheduledDates[i];
+					}
+
+				}
+				/*
+				 * // Check if the Lunch time gets in the way // If block goes
+				 * in between the lunch time if(trans.after(mediodia)&&
+				 * (fechabase.before(mediodia)||fechabase.equals(mediodia))){
+				 * flag = true; Log.d("AJA06", "AQUI06"); // If difference is
+				 * more than one hour if(mediodia.getTime() -
+				 * fechabase.getTime() >= (60*60*1000)){ Log.d("AJA07",
+				 * "AQUI07"); // If there was an activity on the way and the new
+				 * block was created if (searmo){ if (mediodia.getTime() -
+				 * fechabase.getTime() < min){ j--; GregorianCalendar cal1 = new
+				 * GregorianCalendar(); cal1.setTime(fechabase);
+				 * GregorianCalendar cal2 = new GregorianCalendar();
+				 * cal2.setTime(mediodia);
+				 * 
+				 * bloques[j] =
+				 * "                     "+String.valueOf(cal1.get(Calendar
+				 * .HOUR_OF_DAY
+				 * ))+":"+String.valueOf(cal1.get(Calendar.MINUTE))+" - "+
+				 * String
+				 * .valueOf(cal2.get(Calendar.HOUR_OF_DAY))+":"+String.valueOf
+				 * (cal2.get(Calendar.MINUTE)); minutoi[j]
+				 * =cal1.get(Calendar.MINUTE) ; minutof[j]=
+				 * cal2.get(Calendar.MINUTE); horai[j]=
+				 * cal1.get(Calendar.HOUR_OF_DAY); horaf[j]=
+				 * cal2.get(Calendar.HOUR_OF_DAY); Log.d("AJA08", bloques[j]);
+				 * j++; } } else { // If there wasnt an activity on the way
+				 * if(!block){ GregorianCalendar cal1 = new GregorianCalendar();
+				 * cal1.setTime(fechabase); GregorianCalendar cal2 = new
+				 * GregorianCalendar(); cal2.setTime(mediodia);
+				 * 
+				 * bloques[j] =
+				 * "                     "+String.valueOf(cal1.get(Calendar
+				 * .HOUR_OF_DAY
+				 * ))+":"+String.valueOf(cal1.get(Calendar.MINUTE))+" - "+
+				 * String
+				 * .valueOf(cal2.get(Calendar.HOUR_OF_DAY))+":"+String.valueOf
+				 * (cal2.get(Calendar.MINUTE)); minutoi[j]
+				 * =cal1.get(Calendar.MINUTE) ; minutof[j]=
+				 * cal2.get(Calendar.MINUTE); horai[j]=
+				 * cal1.get(Calendar.HOUR_OF_DAY); horaf[j]=
+				 * cal2.get(Calendar.HOUR_OF_DAY); Log.d("AJA09", bloques[j]);
+				 * j++;} } } else{ if (searmo) j--;
+				 * 
+				 * }
+				 * 
+				 * fechabasen = despuesdalmuerzo; }
+				 */
+				// Check if the Last hour-block possible time gets in the way
+
+				if ((auxFinalDate.after(maximumDate) && (cursorDate
+						.before(maximumDate) || cursorDate.equals(maximumDate)))) {
+					isBlockBetween = true;
+					// // If difference is more than one hour
+					if (maximumDate.getTime() - cursorDate.getTime() >= (60 * 60 * 1000)) {
+						if (blockCreated) {
+							if (maximumDate.getTime() - cursorDate.getTime() < min) {
+								j--;
+								GregorianCalendar cal1 = new GregorianCalendar();
+								cal1.setTime(cursorDate);
+								GregorianCalendar cal2 = new GregorianCalendar();
+								cal2.setTime(maximumDate);
+
+								// If the hour block is outside the normal
+								// workschedule it muss notify the user
+								if ((cursorDate.after(endWorkingDay) || cursorDate
+										.equals(endWorkingDay))
+										|| (cursorDate
+												.before(beginningWorkingDay))
+										|| ((cursorDate.before(afterLunch)) && (cursorDate
+												.after(midDay) || cursorDate
+												.equals(midDay)))) {
+									expensiveBlocks[j] = 1;
+								} else {
+									expensiveBlocks[j] = 0;
+								}
+								timeBlocks[j] = android.text.format.DateFormat
+										.format("h:mmaa", cursorDate)
+										+ " - "
+										+ android.text.format.DateFormat
+												.format("h:mmaa", maximumDate);
+
+								minutei[j] = cal1.get(Calendar.MINUTE);
+								minutef[j] = cal2.get(Calendar.MINUTE);
+								houri[j] = cal1.get(Calendar.HOUR_OF_DAY);
+								hourf[j] = cal2.get(Calendar.HOUR_OF_DAY);
+								Log.d("AJA09", timeBlocks[j]);
+								j++;
+							}
+						} else {
+							if (!block) {
+								GregorianCalendar cal1 = new GregorianCalendar();
+								cal1.setTime(cursorDate);
+								GregorianCalendar cal2 = new GregorianCalendar();
+								cal2.setTime(maximumDate);
+
+								// If the hour block is outside the normal
+								// workschedule it muss notify the user
+								if ((cursorDate.after(endWorkingDay) || cursorDate
+										.equals(endWorkingDay))
+										|| (cursorDate
+												.before(beginningWorkingDay))
+										|| ((cursorDate.before(afterLunch)) && (cursorDate
+												.after(midDay) || cursorDate
+												.equals(midDay)))) {
+									expensiveBlocks[j] = 1;
+								} else {
+									expensiveBlocks[j] = 0;
+								}
+								timeBlocks[j] = android.text.format.DateFormat
+										.format("h:mmaa", cursorDate)
+										+ " - "
+										+ android.text.format.DateFormat
+												.format("h:mmaa", maximumDate);
+
+								minutei[j] = cal1.get(Calendar.MINUTE);
+								minutef[j] = cal2.get(Calendar.MINUTE);
+								houri[j] = cal1.get(Calendar.HOUR_OF_DAY);
+								hourf[j] = cal2.get(Calendar.HOUR_OF_DAY);
+								Log.d("AJA10", timeBlocks[j]);
+								j++;
+							}
+						}
+
+					} else {
+						if (blockCreated) {
+							j--;
+						}
+					}
+					cursorDateEn = maximumDate;
+				}
+				// IF nothing interfiers in the new block.
+				if (!isBlockBetween) {
+					GregorianCalendar cal1 = new GregorianCalendar();
+					cal1.setTime(cursorDate);
+					GregorianCalendar cal2 = new GregorianCalendar();
+					cal2.setTime(auxFinalDate);
+
+					// If the hour block is outside the normal workschedule it
+					// muss notify the user
+					if ((cursorDate.after(endWorkingDay) || cursorDate
+							.equals(endWorkingDay))
+							|| (cursorDate.before(beginningWorkingDay))
+							|| ((cursorDate.before(afterLunch)) && (cursorDate
+									.after(midDay) || cursorDate.equals(midDay)))) {
+						expensiveBlocks[j] = 1;
+					} else {
+						expensiveBlocks[j] = 0;
+					}
+					timeBlocks[j] = android.text.format.DateFormat.format(
+							"h:mmaa", cursorDate)
+							+ " - "
+							+ android.text.format.DateFormat.format("h:mmaa",
+									auxFinalDate);
+
+					minutei[j] = cal1.get(Calendar.MINUTE);
+					minutef[j] = cal2.get(Calendar.MINUTE);
+					houri[j] = cal1.get(Calendar.HOUR_OF_DAY);
+					hourf[j] = cal2.get(Calendar.HOUR_OF_DAY);
+
+					Log.d("AJA11", timeBlocks[j]);
+					j++;
+					cursorDateEn = auxFinalDate;
+				}
+			}
+
+			cursorDate = cursorDateEn;
+			isBlockBetween = false;
 		}
-	//Function to show the Date Picker
+
+		numberOfCreatedTimeBlocks = j;
+
+	}
+
+	public void onUserSelectValue(int index) {
+		pickedTime.setText(timeBlocks[index]);
+		ind = index;
+		setRequestDates();
+		if (expensiveBlocks[index] == 1)
+			alerta.setVisibility(View.VISIBLE);
+		else
+			alerta.setVisibility(View.GONE);
+	}
+
+	private void setRequestDates() {
+
+		Calendar start_date = Calendar.getInstance();
+		Calendar finish_date = Calendar.getInstance();
+
+		start_date.set(year, month, day, houri[ind], minutei[ind], 0);
+		finish_date.set(year, month, day, hourf[ind], minutef[ind], 0);
+
+		request.setStart_date(start_date);
+		request.setFinish_date(finish_date);
+
+		MainController.setREQUEST(request);
+
+	}
+
 	public void showDatePickerDialog(View v) {
-	DialogFragment newFragment = new DatePickr(hDate);
-    newFragment.show(getSupportFragmentManager(), "datePicker");
- 
-    }
-	
+		DialogFragment newFragment = new DatePickr(hDate);
+		newFragment.show(getSupportFragmentManager(), "datePicker");
+
+	}
+
 	@Override
-	
-	//Function to reset button properties whenever the programm goes on pause.
+	// Function to reset button properties whenever the programm goes on pause.
 	protected void onPause() {
 		super.onPause();
 	}
-	boolean Checkfields(){
-		String opciona1="Disculpe, pero el campo ";
-		String opcion2="";
-		String opciona3=" se encuentra incompleto.";
-		String opcionb1="Disculpe, pero los campos ";
-		String opcionb3=" se encuentran incompletos.";
+
+	boolean Checkfields() {
+
 		boolean ready = true;
+
+		String messagePiece1 = getResources().getString(
+				R.string.set_date_pick_checkfields_message1);
+		String messagePiece2 = "";
+		String messagePiece3 = getResources().getString(
+				R.string.set_date_pick_checkfields_message3);
+		String messagePiece4 = getResources().getString(
+				R.string.set_date_pick_checkfields_message4);
+		String messagePiece5 = getResources().getString(
+				R.string.set_date_pick_checkfields_message5);
+
 		int conteo = 0;
-		if(tDate.getText().equals("Elija Fecha" )){
+		if (pickedDate.getText().equals(
+				getResources().getString(R.string.set_date_date_text))) {
 			conteo++;
-			opcion2 = opcion2+" Fecha,";
+			messagePiece2 = messagePiece2
+					+ getResources().getString(R.string.set_date_date_text)
+					+ ",";
 			ready = false;
-			Log.d("Entroo1o","");
 		}
-		if(elijahora.getText().equals("Por favor elija primero la fecha")){
+		if (pickedTime.getText()
+				.equals(getResources().getString(
+						R.string.set_date_time_datefirst_text))
+				|| pickedTime.getText().equals(
+						getResources().getString(R.string.set_date_time_text))) {
 			conteo++;
-			opcion2 = opcion2+" Hora,";
+			messagePiece2 = messagePiece2
+					+ getResources().getString(R.string.set_date_time_text)
+					+ ",";
 			ready = false;
-			Log.d("Entroo2o","");
 		}
-		if (!ready){
-			 if (conteo > 1){
-				 Toast toast = Toast.makeText(SetDate.this, opcionb1+opcion2+opcionb3 , 15000);
-		    	 toast.setGravity(Gravity.CENTER, 0, 0);    	
-		    	 toast.show();}
-			 else {
-				 Toast toast = Toast.makeText(SetDate.this, opciona1+opcion2+opciona3 , 15000);
-		    	 toast.setGravity(Gravity.CENTER, 0, 0);    	
-		    	 toast.show();
-			 }
+		if (!ready) {
+			if (conteo > 1) {
+				Toast toast = Toast.makeText(SetDate.this, messagePiece4 + " "
+						+ messagePiece2 + " " + messagePiece5,
+						Toast.LENGTH_LONG);
+				toast.setGravity(Gravity.CENTER, 0, 0);
+				toast.show();
+			} else {
+				Toast toast = Toast.makeText(SetDate.this, messagePiece1 + " "
+						+ messagePiece2 + " " + messagePiece3,
+						Toast.LENGTH_LONG);
+				toast.setGravity(Gravity.CENTER, 0, 0);
+				toast.show();
+			}
 		}
 		return ready;
 	}

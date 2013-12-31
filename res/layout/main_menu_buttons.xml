@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_buttons_menu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/pdrcitamenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/ic_yellow_button"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="@string/menu_make_appointment"
+        android:textColor="@color/text_white"
+        android:textSize="@dimen/big_oval_buttons" />
+
+    <TextView
+        android:id="@+id/bvercitasmenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/ic_magenta_button"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="@string/menu_view_appointment"
+        android:textColor="@color/text_white"
+        android:textSize="@dimen/big_oval_buttons" />
+
+    <TextView
+        android:id="@+id/bpedirpresmenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/ic_cyan_button"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="@string/menu_budget"
+        android:textColor="@color/text_white"
+        android:textSize="@dimen/big_oval_buttons" />
+
+</LinearLayout>

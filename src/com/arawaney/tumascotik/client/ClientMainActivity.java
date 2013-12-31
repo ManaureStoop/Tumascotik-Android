@@ -6,26 +6,36 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import com.arawaney.tumascotik.client.activity.Pedircita;
+import com.arawaney.tumascotik.client.activity.SetRequestDetails;
+import com.arawaney.tumascotik.client.activity.PetInfoActivity;
 import com.arawaney.tumascotik.client.activity.PetPicker;
 import com.arawaney.tumascotik.client.activity.Presupuesto;
 import com.arawaney.tumascotik.client.activity.SetDate;
+import com.arawaney.tumascotik.client.activity.UserInfoActivity;
 import com.arawaney.tumascotik.client.activity.VerCitas;
 import com.arawaney.tumascotik.client.backend.ParseProvider;
 import com.arawaney.tumascotik.client.control.MainController;
 import com.arawaney.tumascotik.client.db.CitationDB;
 import com.arawaney.tumascotik.client.db.provider.PetProvider;
+import com.arawaney.tumascotik.client.db.provider.RequestProvider;
 import com.arawaney.tumascotik.client.dialog.ConnectionDialog;
 import com.arawaney.tumascotik.client.dialog.SelectFragmentDialog;
-import com.arawaney.tumascotik.client.listener.ParseListener;
+import com.arawaney.tumascotik.client.listener.ParsePetListener;
+import com.arawaney.tumascotik.client.listener.ParseRequestListener;
+import com.arawaney.tumascotik.client.listener.ParseUserListener;
 import com.arawaney.tumascotik.client.model.Pet;
+import com.arawaney.tumascotik.client.model.Request;
+import com.arawaney.tumascotik.client.model.User;
+import com.arawaney.tumascotik.client.util.CalendarUtil;
 import com.arawaney.tumascotik.client.util.NetworkUtil;
 //import com.arawaney.tumascotik.client.R
 import com.parse.FindCallback;
+import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -46,8 +56,10 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.annotation.TargetApi;
 import android.app.DialogFragment;
@@ -63,15 +75,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 
-public class ClientMainActivity extends FragmentActivity implements ParseListener {
+public class ClientMainActivity extends FragmentActivity implements
+		ParsePetListener, ParseUserListener, ParseRequestListener {
 	Date fechainicio;
 	ProgressDialog progressDialog;
 	SharedPreferences savedpendingappoint;
 	int pendingApointments;
-	
+
 	private final String LOG_TAG = "Tumascotik-Client-Main Menu";
 
-	// To know if the function "resetrequest" is already running. If so it can
+	// To know if the function "reset request" is already running. If so it can
 	// be called again.
 	boolean bussy;
 	// To know if the refreshed was called from the logo button or was made
@@ -83,23 +96,18 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 	// Log in views
 	EditText text_username;
 	EditText text_password;
-	Button button_login;
+	TextView button_login;
 	// Main menu views
-	Button pedirc;
-	Button vercit;
-	Button pedirpres;
+	TextView pedirc;
+	TextView vercit;
+	TextView pedirpres;
 	// Header view
 	Button logorefresh;
 	// Footer views
-	Button youtube;
-	Button facebook;
-	Button twitter;
-	Button emergencia;
-	
-	//Navigation Drawer
-    private String[] navigationMenuTitles;
-   // private  mDrawerLayout;
-    private ListView mDrawerList;
+	ImageView youtube;
+	ImageView facebook;
+    ImageView twitter;
+    ImageView emergencia;
 
 	MainController mainController;
 
@@ -116,28 +124,34 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 
 		loadViews();
 		loadButtons();
-	
-		if (MainController.Initialize(this)) {
-			setMainMenu();
-			checkingInternetConnections();
-			loadPets();
 
-			
+		if (MainController.Initialize(this)) {
+
+			setMainMenu();
+			if (checkingInternetConnections()) {
+				ParseProvider.getCurrentUser(this);
+				updatePets();
+				updateRequests();
+			}
+
 		} else {
 			setLogIn();
 			checkingInternetConnections();
 
 		}
 
-
-
 		// reset_DataBase_SharedP();
 
 	}
 
-	private void loadPets() {
-		ParseProvider.getPets(this, MainController.USER);
+	private void updateRequests() {
+		ParseProvider.getRequests(this, this);
 		
+	}
+
+	private void updatePets() {
+		ParseProvider.getPets(this, MainController.USER);
+
 	}
 
 	private void setLogIn() {
@@ -147,8 +161,6 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 	}
 
 	private void setMainMenu() {
-		Log.d(LOG_TAG, "set main menu");
-
 		login_layout.setVisibility(View.GONE);
 		main_buttons_layout.setVisibility(View.VISIBLE);
 
@@ -157,30 +169,34 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 		getNumberOfPendingAppointments(savedpendingappoint);
 
 	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-	        case R.id.menu_mypets:
-	            openPetPicker();
-	            return true;
-	        case R.id.menu_profile:
-	        	openMyProfile();
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+		// Handle item selection
+		switch (item.getItemId()) {
+		case R.id.menu_mypets:
+			openPetPicker(PetPicker.MODE_EDIT_PET);
+			return true;
+		case R.id.menu_profile:
+			openMyProfile(UserInfoActivity.MODE_INFO_LIST);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
-	private void openMyProfile() {
-		
-		
+	private void openMyProfile(int viewMode) {
+		UserInfoActivity.viewMode = viewMode;
+		Intent i = new Intent(ClientMainActivity.this, UserInfoActivity.class);
+		startActivity(i);
+
 	}
 
-	private void openPetPicker() {
+	private void openPetPicker(int functionMode) {
+		PetPicker.functionMode = functionMode;
 		Intent i = new Intent(ClientMainActivity.this, PetPicker.class);
 		startActivity(i);
-		
+
 	}
 
 	private void loadButtons() {
@@ -189,8 +205,20 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 			@Override
 			public void onClick(View v) {
 
-				Intent i = new Intent(ClientMainActivity.this, SetDate.class);
-				startActivity(i);
+				if (userDataIsComplete()) {
+					openPetPicker(PetPicker.MODE_MAKE_APPOINTMENT);
+				} else {
+					openMyProfile(UserInfoActivity.MODE_EDIT_LIST);
+				}
+
+			}
+
+			private boolean userDataIsComplete() {
+				if (MainController.USER.getAddress() != null
+						&& MainController.USER.getMobile_telephone() != null) {
+					return true;
+				} else
+					return false;
 			}
 		});
 
@@ -206,7 +234,8 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(ClientMainActivity.this, Presupuesto.class);
+				Intent i = new Intent(ClientMainActivity.this,
+						Presupuesto.class);
 				startActivity(i);
 			}
 		});
@@ -243,8 +272,9 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 			public void onClick(View v) {
 
 				if (pendingApointments != 0) {
-					progressDialog = ProgressDialog.show(ClientMainActivity.this,
-							"Tumascotik", "Actualizando citas...");
+					progressDialog = ProgressDialog.show(
+							ClientMainActivity.this, "Tumascotik",
+							"Actualizando citas...");
 					calledfromlogobuton = true;
 					loadPendingObjects();
 				}
@@ -269,27 +299,28 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 				String username = text_username.getText().toString();
 				String password = text_password.getText().toString();
 
-				ParseProvider.logIn(username, password, ClientMainActivity.this, ClientMainActivity.this);
-				
+				ParseProvider.logIn(username, password,
+						ClientMainActivity.this, ClientMainActivity.this);
 
 			}
 		});
 	}
 
 	private void loadViews() {
-		main_buttons_layout = (LinearLayout) findViewById(R.id.main_menu_buttons);
-		login_layout = (LinearLayout) findViewById(R.id.log_in_menu);
+		main_buttons_layout = (LinearLayout) findViewById(R.id.main_buttons_menu);
+		login_layout = (LinearLayout) findViewById(R.id.log_in_main_menu);		
+		
 		text_password = (EditText) findViewById(R.id.text_login_passw);
 		text_username = (EditText) findViewById(R.id.text_login_username);
-		button_login = (Button) findViewById(R.id.button_login);
-		pedirc = (Button) findViewById(R.id.pdrcitamenu);
-		vercit = (Button) findViewById(R.id.bvercitasmenu);
-		pedirpres = (Button) findViewById(R.id.bpedirpresmenu);
-		facebook = (Button) findViewById(R.id.bfacebookmenu);
-		twitter = (Button) findViewById(R.id.btwittermenu);
-		youtube = (Button) findViewById(R.id.byoutubemenu);
+		button_login = (TextView) findViewById(R.id.button_login);
+		pedirc = (TextView) findViewById(R.id.pdrcitamenu);
+		vercit = (TextView) findViewById(R.id.bvercitasmenu);
+		pedirpres = (TextView) findViewById(R.id.bpedirpresmenu);
+		facebook = (ImageView) findViewById(R.id.bfacebookmenu);
+		twitter = (ImageView) findViewById(R.id.btwittermenu);
+		youtube = (ImageView) findViewById(R.id.byoutubemenu);
 		logorefresh = (Button) findViewById(R.id.blogorefreshmenu);
-		emergencia = (Button) findViewById(R.id.bemergenciamenu);
+		emergencia = (ImageView) findViewById(R.id.bemergenciamenu);
 
 	}
 
@@ -301,8 +332,7 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.activity_menu,
-				(android.view.Menu) menu);
+		inflater.inflate(R.menu.activity_menu, (android.view.Menu) menu);
 		return true;
 	}
 
@@ -357,7 +387,9 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 		final int in = ind;
 		ParseQuery query = new ParseQuery("Citas");
 		query.whereEqualTo("fechaInicial", fechainicio);
-		query.findInBackground(new FindCallback() {
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
 			public void done(List<ParseObject> cList, ParseException e) {
 				ParseObject object;
 				if (e == null) {
@@ -416,7 +448,6 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 
 				}
 			}
-
 		});
 
 	}
@@ -454,7 +485,7 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 			toasttext = "Su veterinario no puede atender a " + petsname;
 			notificationtitle = "Cita para " + petsname + " rechazada";
 			notificationcontent = "Disculpe, por favor elija una nueva cita";
-			tapclass = Pedircita.class;
+			tapclass = SetRequestDetails.class;
 
 		}
 
@@ -483,7 +514,7 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 		Intent resultIntent = new Intent(this, tapclass);
 		resultIntent.putExtra("seleccion", "ACEPTADAS");
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-		stackBuilder.addParentStack(Pedircita.class);
+		stackBuilder.addParentStack(SetRequestDetails.class);
 		stackBuilder.addNextIntent(resultIntent);
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,
 				PendingIntent.FLAG_UPDATE_CURRENT);
@@ -593,7 +624,8 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 		else
 			select = "PENDIENTES";
 
-		Intent vercitasIntent = new Intent(ClientMainActivity.this, VerCitas.class);
+		Intent vercitasIntent = new Intent(ClientMainActivity.this,
+				VerCitas.class);
 		vercitasIntent.putExtra("seleccion", select);
 		startActivity(vercitasIntent);
 
@@ -625,7 +657,7 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 		return intent;
 	}
 
-	public void checkingInternetConnections() {
+	public boolean checkingInternetConnections() {
 
 		if (NetworkUtil.ConnectedToInternet(this)) {
 			ParseProvider.initializeParse(this);
@@ -639,6 +671,7 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 			text_password.setEnabled(true);
 			text_username.setEnabled(true);
 			button_login.setEnabled(true);
+			return true;
 
 		}
 
@@ -654,6 +687,7 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 			button_login.setEnabled(false);
 			DialogFragment newFragment = new ConnectionDialog();
 			newFragment.show(getFragmentManager(), "connections");
+			return false;
 
 		}
 
@@ -661,67 +695,114 @@ public class ClientMainActivity extends FragmentActivity implements ParseListene
 
 	@Override
 	public void OnLoginResponse() {
-	mainController.Initialize(this);
+		mainController.Initialize(this);
 		if (mainController.isActive()) {
 			setMainMenu();
+			updatePets();
 		} else {
 			text_username.setText("Error haciendo login");
 		}
-		
+
 	}
 
 	@Override
 	public void onSpecieQueryFinished(ArrayList<String> species) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void onBreedQueryFinished(ArrayList<String> breed) {		
+	public void onBreedQueryFinished(ArrayList<String> breed) {
 	}
-
-//	@Override
-//	public void onPropertiesQueryFinished(ArrayList<String> properties) {
-//		// TODO Auto-generated method stub
-//		
-//	}
 
 	@Override
 	public void onPetQueryFinished(Pet pet) {
 		if (pet != null) {
-	PetProvider.updatePet(this, pet);
-}		
+			Pet savedPet = PetProvider.readPet(this, pet.getSystem_id());
+			pet.setId(savedPet.getId());
+			PetProvider.updatePet(this, pet);
+		}
 	}
 
 	@Override
 	public void OnPetUpdateFinished(boolean b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onGetAllPets(ArrayList<Pet> pets) {
-if (pets != null) {
-	for (Pet pet : pets) {
-		Log.d(LOG_TAG, pet.getName());
-		
-		if(PetProvider.readPet(this, pet.getSystem_id())== null){
-			PetProvider.insertPet(this, pet);
-		}else
-			PetProvider.updatePet(this, pet);
-	}
-}		
+		if (pets != null) {
+			for (Pet pet : pets) {
+				Log.d(LOG_TAG, pet.getName());
+				Pet savedPet = PetProvider.readPet(this, pet.getSystem_id());
+				if (savedPet == null) {
+					PetProvider.insertPet(this, pet);
+				} else{
+					pet.setId(savedPet.getId());
+					PetProvider.updatePet(this, pet);
+				}
+					
+			}
+		}
 	}
 
 	@Override
 	public void onPetInserted(String objectId) {
 		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onUserUpdateFinish(User updatedUSer, boolean updated) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onUserQueryFinish(User updatedUSer, boolean updated) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void OnRequestInserted(boolean inserted, String systemId) {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void onUSerUpdateFinish() {
-		// TODO Auto-generated method stub
+	public void OnAllRequestsQueryFinished(ArrayList<Request> requests) {
+		if (requests != null) {
+			for (Request request : requests) {
+
+				Log.d(LOG_TAG, "1Request COmment: "+request.getComment());
+				Log.d(LOG_TAG, "1Request isDelivery : "+request.isDelivery());
+				Log.d(LOG_TAG, "1Request StartDAte : "+CalendarUtil.getDateFormated(request.getStart_date(), "dd/MM/yyyy hh:mm"));
+				Log.d(LOG_TAG, "1Request : "+request.getSystem_id());
+				Request savedRequest = RequestProvider.readRequest(this, request.getSystem_id());
+				if (savedRequest == null) {
+					RequestProvider.insertRequest(this, request);
+				} else{
+					request.setId(savedRequest.getId());
+					RequestProvider.updateRequest(this, request);
+				}
+					
+			}
+		}
+	}
+
+	@Override
+	public void onRequestQueryFInished(Request request) {
+		if (request != null) {
+			Log.d(LOG_TAG, "2Request Status "+request.getStatus());
+			Log.d(LOG_TAG, "2Request 2Service : "+request.getService());
+			
+			Request savedRequest = RequestProvider.readRequest(this, request.getSystem_id());
+			request.setId(savedRequest.getId());
+			RequestProvider.updateRequest(this, request);
+		}
 		
 	}
+
 }

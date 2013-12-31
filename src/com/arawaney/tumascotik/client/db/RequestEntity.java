@@ -38,7 +38,7 @@ public class RequestEntity {
 			+ COLUMN_IS_APPOINTMENT 
 			+ " INTEGER, " 
 			+ COLUMN_STATUS 
-			+ " TEXT, " 
+			+ " INTEGER, " 
 			+ COLUMN_DELIVERY 
 			+ " INTEGER, " 
 			+ COLUMN_ACTIVE

@@ -21,7 +21,7 @@
         <activity
             android:name="com.arawaney.tumascotik.client.ClientMainActivity"
             android:label="Tumascotik Client"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="sensorPortrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,34 +29,34 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.arawaney.tumascotik.client.activity.FinalCita"
+            android:name="com.arawaney.tumascotik.client.activity.SendRequest"
             android:label="FinalCita"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="sensorPortrait" >
         </activity>
         <activity
-            android:name="com.arawaney.tumascotik.client.activity.Pedircita"
+            android:name="com.arawaney.tumascotik.client.activity.SetRequestDetails"
             android:label="Pedircita"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="sensorPortrait" >
         </activity>
         <activity
             android:name="com.arawaney.tumascotik.client.activity.SetDate"
             android:label="SetDate"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="sensorPortrait" >
         </activity>
         <activity
             android:name="com.arawaney.tumascotik.client.activity.VerCitas"
             android:label="VerCitas"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="sensorPortrait" >
         </activity>
         <activity
             android:name="com.arawaney.tumascotik.client.activity.Presupuesto"
             android:label="Presupuesto"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="sensorPortrait" >
         </activity>
         <activity
             android:name="com.arawaney.tumascotik.client.activity.Datosmascota"
             android:label="Datosmascota"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="sensorPortrait" >
         </activity>
         <activity
             android:name="com.arawaney.tumascotik.client.activity.PetInfoActivity"

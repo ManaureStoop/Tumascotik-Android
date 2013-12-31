@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-      <dimen name="log_in_widh">200dp</dimen>
+      <dimen name="log_in_widh">300dp</dimen>
+       <dimen name="big_oval_buttons">23sp</dimen>
+        <dimen name="log_in">25sp</dimen>
+         <dimen name="pet_names_blue_bckg">29sp</dimen>
+          <dimen name="pet_names_gray_bckg">25sp</dimen>
+           <dimen name="profile_data">15sp</dimen>
+           <dimen name="blue_text">24sp</dimen>
 </resources>

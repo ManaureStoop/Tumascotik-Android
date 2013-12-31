@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="Alerta_Precios">ATENCIÓN: El horario elegido puede estar sujeto a aumentos de tarifa debido a que se sale de los horarios normales de trabajo</string>
     <string name="app_name">Tumascotikmenu</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
@@ -11,35 +10,19 @@
     <string name="main_telf">Teléfono:</string>
     <string name="main_mascota">Mascota:</string>
     <string name="button_siguiente">Siguiente</string>
-    <string name="main_fecha">Elija fecha:</string>
-    <string name="button_fecha">Fecha</string>
-    <string name="main_motivo">Moivo:</string>
-    <string name="main_date">Elija Fecha</string>
-    <string name="button_hora">Hora</string>
-    <string name="main_porfelija">Por favor elija primero la fecha</string>
-    <string name="main_elijhora">Elija la hora</string>
     <string name="final_enviar">Enviar..</string>
-    <string name="main_settime">Elija un bloque de hora entre los disponibles:</string>
+    <string name="general_choose">--Choose--</string>
 
     <string-array name="horas_array"></string-array>
 
     <string name="verCitas">¿Qué citas deseas ver?</string>
     <string name="log_in_username_hint">username</string>
     <string name="log_in_passw_hint">password</string>
-    <string name="log_in">Login</string>
+    <string name="log_in">Log In</string>
 
     <string-array name="Citas">
         <item>Accepted</item>
         <item>Pending</item>
-    </string-array>
-    <string-array name="Motivos">
-        <item>--Choose--</item>
-        <item>Bath</item>
-        <item>Peluqueria</item>
-        <item>Consulta</item>
-        <item>Emergencia</item>
-        <item>Vacunación</item>
-        <item>Desparasitación</item>
     </string-array>
     <string-array name="Razas">
         <item>--Elija--</item>
@@ -93,6 +76,9 @@
     <!-- MENU -->
     <string name="menu_my_profile">My profile</string>
     <string name="menu_my_pets">My pets</string>
+    <string name="menu_make_appointment">Make Appointment</string>
+    <string name="menu_view_appointment">My Appointments</string>
+    <string name="menu_budget">Budgets</string>
 
     <!-- Pet Info -->
     <string name="pet_info_button_edit">Edit</string>
@@ -105,10 +91,9 @@
     <string name="pet_info_title_comment">Comments</string>
     <string name="pet_info_loading_lists">Loading lists ...</string>
     <string name="pet_info_loading_breed_lists">Loading Breeds ...</string>
-    <string name="pet_info_loading_specie_lists">Loadin Species ...</string>
+    <string name="pet_info_loading_specie_lists">Loading Species ...</string>
     <string name="pet_info_pet_not_updated">It is not possible to update the your pet at the moment</string>
     <string name="pet_info_pet_not_inserted">It is not possible to insert your pet at the moment</string>
-    
 
     <!-- User Info -->
     <string name="user_info_button_edit">Edit</string>
@@ -121,6 +106,30 @@
     <string name="user_info_title_phone_home">Phone Number</string>
     <string name="user_info_title_phone_mobile">Cellphone</string>
     <string name="user_info_user_not_updated">It is not possible to update your information at the moment</string>
+
+    <!-- Set Date -->
+    <string name="set_date_time_title">Time: </string>
+    <string name="set_date_date_title">Date: </string>
+    <string name="set_date_date_text">Date</string>
+    <string name="set_date_time_text">Time</string>
+    <string name="set_date_time_datefirst_text">Pick Date First</string>
+    <string name="set_date_pick_time_block">Pick a Time BLock :</string>
+    <string name="set_date_pick_checkfields_message1">Sorry, but the field </string>
+    <string name="set_date_pick_checkfields_message3"> is incomplete.</string>
+    <string name="set_date_pick_checkfields_message4">Sorry, but the fields </string>
+    <string name="set_date_pick_checkfields_message5"> are incomplete.</string>
+    <string name="set_date_price_alert">The choosen time block price can be higher due to the time </string>
+    <string name="set_date_dialog_loading_timeblocks">Loading... </string>
+
+    <!-- Set Request Details -->
+    <string name="set_request_details_comments_title">Comments: </string>
+    <string name="set_request_details_motive_title">Motive: </string>
+    <string name="set_request_details_motive">Motive</string>
+    <string name="set_request_details_isDeivery_title">Delivery: </string>
+    <string name="set_request_details_loading_motive_lists">Loading Services ...</string>
+
+    <!-- Set Request Details -->
+    <string name="send_request_sending">Sending...</string>
 
     <string-array name="Genders">
         <item>--Choose--</item>

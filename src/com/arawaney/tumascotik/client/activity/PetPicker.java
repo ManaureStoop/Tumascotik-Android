@@ -32,7 +32,11 @@ public class PetPicker extends Activity {
 	View addPetView;
 	private LayoutInflater inflater;
 	ItemPetGridAdapter adapter;
-
+	public static int functionMode;
+	
+	public static final int MODE_MAKE_APPOINTMENT = 1;
+	public static final int MODE_EDIT_PET = 2;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -107,9 +111,16 @@ public class PetPicker extends Activity {
 			
 			}
 				MainController.setPET(pets.get(position));
-				PetInfoActivity.viewMode = PetInfoActivity.MODE_INFO_LIST;
-				Intent i = new Intent(PetPicker.this, PetInfoActivity.class);
-				startActivity(i);
+				if (functionMode == MODE_EDIT_PET) {
+					PetInfoActivity.viewMode = PetInfoActivity.MODE_INFO_LIST;
+					Intent i = new Intent(PetPicker.this, PetInfoActivity.class);
+					startActivity(i);
+				}else if (functionMode == MODE_MAKE_APPOINTMENT) {
+					Intent i = new Intent(PetPicker.this, SetDate.class);
+					startActivity(i);
+				}
+				
+				
 				
 			}
 		});

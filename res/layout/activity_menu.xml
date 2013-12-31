@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/fondo"
+    android:background="@drawable/background"
     android:orientation="vertical"
     android:screenOrientation="portrait"
     tools:context=".ClientMainActivity" >
@@ -11,6 +11,7 @@
         android:id="@+id/blogorefreshmenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:background="@drawable/butonlogorefresh" />
 
@@ -23,47 +24,62 @@
         <include
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            layout="@layout/main_menu" />
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            layout="@layout/main_menu_buttons" />
 
         <include
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            layout="@layout/log_in_menu" />
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            layout="@layout/log_in_main" />
 
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content" 
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp">
 
-        <Button
-            android:id="@+id/bemergenciamenu"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/buttonemergencia" />
-
-        <Button
-            android:id="@+id/bfacebookmenu"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/buttonfacebook" />
-
-        <Button
+        <ImageView
             android:id="@+id/btwittermenu"
-            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/buttontwitter" />
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:clickable="true"
+            android:src="@drawable/ic_twitter" />
 
-        <Button
+        <ImageView
+            android:id="@+id/bfacebookmenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="18dp"
+            android:layout_toLeftOf="@+id/btwittermenu"
+            android:clickable="true"
+            android:src="@drawable/ic_facebook" />
+
+        <ImageView
             android:id="@+id/byoutubemenu"
-            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/buttonyoutube" />
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="18dp"
+            android:layout_toRightOf="@+id/btwittermenu"
+            android:clickable="true"
+            android:src="@drawable/ic_youtube" />
 
-    </LinearLayout>
-    
-     </LinearLayout>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/bemergenciamenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:layout_marginBottom="3dp"
+        android:src="@drawable/ic_call_vet" />
+
+</LinearLayout>
