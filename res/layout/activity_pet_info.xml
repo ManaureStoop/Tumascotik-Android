@@ -2,14 +2,54 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo"
+    android:background="@drawable/background"
     android:orientation="vertical"
     android:screenOrientation="portrait" >
+
+    <ImageView
+        android:id="@+id/image_pet_info_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_cat" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/edit_text_pet_info_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/text_pet_info_name"
+            android:layout_alignBottom="@+id/text_pet_info_name"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/ic_pet_name_label"
+            android:ems="10"
+            android:gravity="center_horizontal"
+            android:inputType="textPersonName"
+            android:textColor="@color/text_white" />
+
+        <TextView
+            android:id="@+id/text_pet_info_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ic_pet_name_label"
+            android:gravity="center_horizontal"
+            android:text="Pancho"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/text_white" />
+    </RelativeLayout>
 
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="@dimen/padding_scroll_edit_profile"
+         android:paddingRight="@dimen/padding_scroll_edit_profile" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -18,38 +58,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <ImageView
-                    android:id="@+id/image_pet_info_avatar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/otro" />
-
-                <TextView
-                    android:id="@+id/text_pet_info_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="20dp"
-                    android:text="Pancho"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                <EditText
-                    android:id="@+id/edit_text_pet_info_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="20dp"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp" >
 
                 <TextView
                     android:id="@+id/text_pet_info_specie_title"
@@ -57,20 +67,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="@string/pet_info_title_specie"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/hinttext" />
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
 
                 <TextView
                     android:id="@+id/text_pet_info_specie"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Perro" />
+                    android:layout_gravity="bottom"
+                    android:text="Perro"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/blue_text" />
 
                 <Spinner
                     android:id="@+id/spiner_pet_info_specie"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/ic_profile_edit"
                     android:scrollbars="horizontal"
                     android:splitMotionEvents="false"
                     android:textAlignment="center" />
@@ -78,7 +92,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp" >
 
                 <TextView
                     android:id="@+id/text_pet_info_breed_title"
@@ -87,19 +102,24 @@
                     android:layout_marginRight="10dp"
                     android:text="@string/pet_info_title_breed"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/hinttext" />
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
 
                 <TextView
                     android:id="@+id/text_pet_info_breed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Boxer" />
+                    android:layout_gravity="bottom"
+                    android:text="Boxer"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/blue_text" />
 
                 <Spinner
                     android:id="@+id/spiner_pet_info_breed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/ic_profile_edit"
                     android:scrollbars="horizontal"
                     android:splitMotionEvents="false"
                     android:textAlignment="center" />
@@ -107,7 +127,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp" >
 
                 <TextView
                     android:id="@+id/text_pet_info_gender_title"
@@ -116,58 +137,34 @@
                     android:layout_marginRight="10dp"
                     android:text="@string/pet_info_title_gender"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/hinttext" />
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
 
                 <TextView
                     android:id="@+id/text_pet_info_gender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Macho" />
+                    android:layout_gravity="bottom"
+                    android:text="Macho"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/blue_text" />
 
                 <Spinner
                     android:id="@+id/spiner_pet_info_gender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/ic_profile_edit"
                     android:entries="@array/Genders"
                     android:scrollbars="horizontal"
                     android:splitMotionEvents="false"
                     android:textAlignment="center" />
             </LinearLayout>
 
-<!--             <LinearLayout -->
-<!--                 android:layout_width="match_parent" -->
-<!--                 android:layout_height="wrap_content" > -->
-
-<!--                 <TextView -->
-<!--                     android:id="@+id/text_pet_info_properties_title" -->
-<!--                     android:layout_width="wrap_content" -->
-<!--                     android:layout_height="wrap_content" -->
-<!--                     android:layout_marginRight="10dp" -->
-<!--                     android:text="@string/pet_info_title_properties" -->
-<!--                     android:textAppearance="?android:attr/textAppearanceMedium" -->
-<!--                     android:textColor="@color/hinttext" /> -->
-
-<!--                 <TextView -->
-<!--                     android:id="@+id/text_pet_info_properties" -->
-<!--                     android:layout_width="wrap_content" -->
-<!--                     android:layout_height="wrap_content" -->
-<!--                     android:text="Pelo Largo- Grande" /> -->
-
-<!--                 <Spinner -->
-<!--                     android:id="@+id/spiner_pet_info_properties" -->
-<!--                     android:layout_width="0dip" -->
-<!--                     android:layout_height="wrap_content" -->
-<!--                     android:layout_weight="1" -->
-<!--                     android:entries="@array/Genders" -->
-<!--                     android:scrollbars="horizontal" -->
-<!--                     android:splitMotionEvents="false" -->
-<!--                     android:textAlignment="center" /> -->
-<!--             </LinearLayout> -->
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp" >
 
                 <TextView
                     android:id="@+id/text_pet_info_puppy_title"
@@ -176,19 +173,24 @@
                     android:layout_marginRight="10dp"
                     android:text="@string/pet_info_title_puppy"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/hinttext" />
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
 
                 <TextView
                     android:id="@+id/text_pet_info_puppy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cachorro" />
+                    android:layout_gravity="bottom"
+                    android:text="Cachorro"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/blue_text" />
 
                 <Spinner
                     android:id="@+id/spiner_pet_info_puppy"
-                    android:layout_width="0dip"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/ic_profile_edit"
                     android:entries="@array/Age"
                     android:scrollbars="horizontal"
                     android:splitMotionEvents="false"
@@ -197,7 +199,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp" >
 
                 <TextView
                     android:id="@+id/text_pet_info_comment_title"
@@ -206,28 +209,34 @@
                     android:layout_marginRight="10dp"
                     android:text="@string/pet_info_title_comment"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/hinttext" />
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
 
                 <TextView
                     android:id="@+id/text_pet_info_comment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Blah blah" />
+                    android:layout_gravity="bottom"
+                    android:text="Blah blah"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/blue_text" />
 
                 <EditText
                     android:id="@+id/edit_text_pet_info_comment"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
                     android:ems="10" />
             </LinearLayout>
 
-            <Button
+            <ImageView
+                android:layout_marginTop="10dp"
                 android:id="@+id/button_pet_info_edit_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/pet_info_button_edit"
+                android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_gravity="center" />
+                android:src="@drawable/ic_edit_button" />
         </LinearLayout>
     </ScrollView>
 

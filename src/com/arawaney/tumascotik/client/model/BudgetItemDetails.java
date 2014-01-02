@@ -11,24 +11,16 @@ public void setTitle(String title) {
 	this.title = title;
 }
 
-public void setPrice(int pric) {
-	this.price =pric ;
+public void setPrice(int price) {
+	this.price =price ;
 }
 public int getPrice() {
 	return price;
 }
 
-public int getImageNumber() {
-	return imageNumber;
-}
-public void setImageNumber(int imageNumber) {
-	this.imageNumber = imageNumber;
-}
-
 
 private String title ;
 private int price;
-private int imageNumber;
 
 
 }

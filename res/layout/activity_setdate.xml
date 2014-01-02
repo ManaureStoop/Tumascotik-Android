@@ -2,68 +2,51 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-	android:background="@drawable/fondo"
+    android:background="@drawable/background"
     android:screenOrientation="portrait" >
-
-    <Button
-        android:id="@+id/bsigsetd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bcancsetd"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:text="Siguiente" />
-
-    <Button
-        android:id="@+id/bcancsetd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:text="Cancelar" />
-
-    <TextView
-        android:id="@+id/txtfechasetd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/bfechasetd"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:text="@string/set_date_date_text" />
-
-    <Button
-        android:id="@+id/bhorasetd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bfechasetd"
-        android:layout_alignRight="@+id/bfechasetd"
-        android:layout_below="@+id/txtfechasetd"
-        android:layout_marginTop="54dp"
-        android:background="@color/buttonviolet"
-        android:text="@string/set_date_time_title"
-        android:textColor="@color/textwhite"
-        android:width="100dp" />
-
-    <TextView
-        android:id="@+id/txthorasetd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/bhorasetd"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:text="@string/set_date_time_datefirst_text" />
 
     <TextView
         android:id="@+id/txtalertasetd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txthorasetd"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="@string/set_date_price_alert"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/rojoalerta"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp" />
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/bcancsetd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/bsigsetd"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/ic_cancel" />
+
+    <ImageView
+        android:id="@+id/bsigsetd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="14dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/ic_foward" />
+
+    <Button
+        android:id="@+id/bhorasetd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/bfechasetd"
+        android:layout_centerVertical="true"
+        android:background="@drawable/ic_yellow_button"
+        android:text="@string/set_date_time_title"
+        android:textColor="@color/text_white"
+        android:textSize="@dimen/big_oval_buttons" />
 
     <Button
         android:id="@+id/bfechasetd"
@@ -71,12 +54,32 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="47dp"
-        android:background="@color/buttonviolet"
+        android:layout_marginTop="78dp"
+        android:background="@drawable/ic_yellow_button"
         android:text="@string/set_date_date_title"
-        android:textColor="@color/textwhite"
-        android:width="150dp" />
+        android:textColor="@color/text_white"
+        android:textSize="@dimen/big_oval_buttons" />
 
+    <TextView
+        android:id="@+id/txtfechasetd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bfechasetd"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:text="@string/set_date_date_text"
+        android:textColor="@color/text_edit_profiles"
+        android:textSize="@dimen/profile_data" />
 
+    <TextView
+        android:id="@+id/txthorasetd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bhorasetd"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:text="@string/set_date_time_datefirst_text"
+        android:textColor="@color/text_edit_profiles"
+        android:textSize="@dimen/profile_data" />
 
 </RelativeLayout>

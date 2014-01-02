@@ -6,6 +6,6 @@ import android.net.ConnectivityManager;
 public class BitMapUtil {
 	
 	public static int getImageId(Context context, String imageName) {
-	    return context.getResources().getIdentifier("drawable/" + imageName.toLowerCase(), null, context.getPackageName());
+	    return context.getResources().getIdentifier("drawable/ic_" + imageName.toLowerCase(), null, context.getPackageName());
 	}
 }

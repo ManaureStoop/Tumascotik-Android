@@ -1,6 +1,6 @@
 package com.arawaney.tumascotik.client.dialog;
 
-import com.arawaney.tumascotik.client.activity.Presupuesto;
+import com.arawaney.tumascotik.client.activity.Budget;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -21,7 +21,7 @@ public class PresupuestoDeleteallDialog extends DialogFragment  {
 	 // Add the buttons
 	    builder.setPositiveButton("Borrar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	Presupuesto callingActivity = (Presupuesto) getActivity();
+            	Budget callingActivity = (Budget) getActivity();
 	    		callingActivity.DeleteAll();
 	               }
 	           });

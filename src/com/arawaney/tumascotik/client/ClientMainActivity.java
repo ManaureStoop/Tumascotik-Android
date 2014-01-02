@@ -9,7 +9,7 @@ import java.util.TimeZone;
 import com.arawaney.tumascotik.client.activity.SetRequestDetails;
 import com.arawaney.tumascotik.client.activity.PetInfoActivity;
 import com.arawaney.tumascotik.client.activity.PetPicker;
-import com.arawaney.tumascotik.client.activity.Presupuesto;
+import com.arawaney.tumascotik.client.activity.Budget;
 import com.arawaney.tumascotik.client.activity.SetDate;
 import com.arawaney.tumascotik.client.activity.UserInfoActivity;
 import com.arawaney.tumascotik.client.activity.VerCitas;
@@ -27,6 +27,7 @@ import com.arawaney.tumascotik.client.model.Pet;
 import com.arawaney.tumascotik.client.model.Request;
 import com.arawaney.tumascotik.client.model.User;
 import com.arawaney.tumascotik.client.util.CalendarUtil;
+import com.arawaney.tumascotik.client.util.FontUtil;
 import com.arawaney.tumascotik.client.util.NetworkUtil;
 //import com.arawaney.tumascotik.client.R
 import com.parse.FindCallback;
@@ -235,7 +236,7 @@ public class ClientMainActivity extends FragmentActivity implements
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(ClientMainActivity.this,
-						Presupuesto.class);
+						Budget.class);
 				startActivity(i);
 			}
 		});
@@ -321,7 +322,20 @@ public class ClientMainActivity extends FragmentActivity implements
 		youtube = (ImageView) findViewById(R.id.byoutubemenu);
 		logorefresh = (Button) findViewById(R.id.blogorefreshmenu);
 		emergencia = (ImageView) findViewById(R.id.bemergenciamenu);
+		
+		setFonts();
 
+	}
+
+	private void setFonts() {
+		
+		text_password.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
+		text_username.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
+		button_login.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		pedirc.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		vercit.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		pedirpres.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		
 	}
 
 	private void getNumberOfPendingAppointments(SharedPreferences settings) {

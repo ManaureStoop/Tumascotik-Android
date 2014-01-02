@@ -49,7 +49,7 @@
             android:screenOrientation="sensorPortrait" >
         </activity>
         <activity
-            android:name="com.arawaney.tumascotik.client.activity.Presupuesto"
+            android:name="com.arawaney.tumascotik.client.activity.Budget"
             android:label="Presupuesto"
             android:screenOrientation="sensorPortrait" >
         </activity>

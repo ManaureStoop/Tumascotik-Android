@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 
 public class BudgetItemListBaseAdapter extends BaseAdapter {
-	private static ArrayList<BudgetItemDetails> BudgetitemDetailsrrayList;
+	private static ArrayList<BudgetItemDetails> budgetList;
 	Context contxt;
 	private LayoutInflater l_Inflater;
 	
@@ -26,17 +26,17 @@ public class BudgetItemListBaseAdapter extends BaseAdapter {
 	
 
 	public BudgetItemListBaseAdapter(Context context, ArrayList<BudgetItemDetails> results) {
-		BudgetitemDetailsrrayList = results;
+		budgetList = results;
 		l_Inflater = LayoutInflater.from(context);
 		contxt = context;
 	}
 
 	public int getCount() {
-		return BudgetitemDetailsrrayList.size();
+		return budgetList.size();
 	}
 
 	public Object getItem(int position) {
-		return BudgetitemDetailsrrayList.get(position);
+		return budgetList.get(position);
 	}
 
 	public long getItemId(int position) {
@@ -46,22 +46,21 @@ public class BudgetItemListBaseAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder2 holder;
 		if (convertView == null) {
-			convertView = l_Inflater.inflate(R.layout.budget_items_details, null);
+			convertView = l_Inflater.inflate(R.layout.item_budget_view, null);
 			holder = new ViewHolder2();
 			
-			holder.itemImage = (ImageView) convertView.findViewById(R.id.ivmotivebudget);
-			holder.txt_itemPrice = (TextView) convertView.findViewById(R.id.price);
+			holder.itemServiceName = (TextView) convertView.findViewById(R.id.budget_item_service);
+			holder.txt_itemPrice = (TextView) convertView.findViewById(R.id.budget_item_price);
 			
 
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder2) convertView.getTag();
 		}
-		String path = new String( String.valueOf(BudgetitemDetailsrrayList.get(position).getTitle()));
-		Log.d("path",path.toLowerCase());
-		holder.itemImage.setImageResource(getImageId(contxt, path));
+
+		holder.itemServiceName.setText(budgetList.get(position).getTitle());
 		
-		String price = new String(String.valueOf(BudgetitemDetailsrrayList.get(position).getPrice())+" Bs");
+		String price = new String(" Bs."+String.valueOf(budgetList.get(position).getPrice()));
 		if(price.equals("0 Bs"))
 			holder.txt_itemPrice.setText("");
 		else
@@ -70,11 +69,9 @@ public class BudgetItemListBaseAdapter extends BaseAdapter {
 		return convertView;
 	}
 	
-	public static int getImageId(Context context, String imageName) {
-	    return context.getResources().getIdentifier("drawable/" + imageName.toLowerCase(), null, context.getPackageName());
-	}
+	
 	static class ViewHolder2 {
-		ImageView itemImage;
+		TextView itemServiceName;
 		TextView txt_itemPrice;
 
 	}

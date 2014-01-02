@@ -80,7 +80,7 @@
     </string-array>
 
     <!-- PET PICKER -->
-    <string name="pet_picker_title">Aquí están tus mascotas</string>
+    <string name="pet_picker_title">Elije una mascota...</string>
 
     <!-- MENU -->
     <string name="menu_my_profile">Mi perfil</string>
@@ -117,7 +117,6 @@
     <string name="user_info_user_not_updated">En este momento no es posible actualizar tus datos</string>
 
     <!-- Set Date -->
-    <string name="set_date_motive_title">Motivo: </string>
     <string name="set_date_time_title">Hora: </string>
     <string name="set_date_date_title">Fecha:  </string>
     <string name="set_date_date_text">Fecha</string>
@@ -138,8 +137,20 @@
     <string name="set_request_details_isDeivery_title">A Domicilio: </string>
     <string name="set_request_details_loading_motive_lists">Cargando Servicios ...</string>
 
-    <!-- Set Request Details -->
+    <!-- Send Request -->
     <string name="send_request_sending">Enviando...</string>
+    <string name="send_request_details_title">Resumen</string>
+    <string name="send_request_details_text_1">Estimado/a </string>
+    <string name="send_request_details_text_2">,\n la cita para </string>
+    <string name="send_request_details_text_3"> se pautará para el día : \n</string>
+
+    <!-- Request View -->
+    <string name="request_view_title">Cita para : </string>
+    <string name="request_view_day">Dia: </string>
+    <string name="request_view_time">Hora: </string>
+
+    <!-- Budget -->
+    <string name="budget_total_title">Total</string>
 
     <string-array name="Genders">
         <item>--Elija--</item>

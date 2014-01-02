@@ -38,6 +38,7 @@ import com.arawaney.tumascotik.client.listener.ParsePetListener;
 import com.arawaney.tumascotik.client.listener.ParseUserListener;
 import com.arawaney.tumascotik.client.model.Pet;
 import com.arawaney.tumascotik.client.model.User;
+import com.arawaney.tumascotik.client.util.FontUtil;
 import com.arawaney.tumascotik.client.util.NetworkUtil;
 
 public class UserInfoActivity extends Activity implements ParseUserListener {
@@ -69,7 +70,7 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 
 	Spinner edituserGender;
 
-	Button saveEditButton;
+	ImageView saveEditButton;
 
 	User user;
 	User auxUser;
@@ -143,13 +144,37 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 		nameLayout = (LinearLayout) findViewById(R.id.tlayout_user_info_name);
 		lastnameLayout = (LinearLayout) findViewById(R.id.tlayout_user_info_lastname);
 
-		saveEditButton = (Button) findViewById(R.id.button_user_info_edit_save);
+		saveEditButton = (ImageView) findViewById(R.id.button_user_info_edit_save);
 
 		GenderAdapter = ArrayAdapter.createFromResource(this,
 				R.array.User_Genders, android.R.layout.simple_spinner_item);
 		genders = Arrays.asList(getResources().getStringArray(
 				R.array.User_Genders));
+		
+		setFonts();
 
+	}
+
+	private void setFonts() {
+		
+		userCompleteName.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
+		userEmail.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		userGender.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		userPhoneLocal.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		userPhoneMobile.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		userPhoneLocalSeparator.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		userPhoneMobileSeparator.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		userAddress.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+
+		edituserName.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		edituserLastName.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		edituserEmail.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		edituserPhoneLocal.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		edituserPhoneMobile.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		edituserPhoneLocalPrefix.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		edituserPhoneMobilePrefix.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		edituserAddress.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		
 	}
 
 	private void loadButton() {
@@ -311,8 +336,8 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 					.toString().subSequence(0, 3));
 
 		}
-		saveEditButton.setText(getResources().getString(
-				R.string.user_info_button_save));
+//		saveEditButton.setText(getResources().getString(
+//				R.string.user_info_button_save));
 
 	}
 
@@ -368,8 +393,8 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 
 		}
 
-		saveEditButton.setText(getResources().getString(
-				R.string.user_info_button_edit));
+//		saveEditButton.setText(getResources().getString(
+//				R.string.user_info_button_edit));
 
 	}
 

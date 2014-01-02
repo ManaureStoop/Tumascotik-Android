@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -15,7 +17,9 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -23,18 +27,22 @@ import com.arawaney.tumascotik.client.ClientMainActivity;
 import com.arawaney.tumascotik.client.R;
 import com.arawaney.tumascotik.client.backend.ParseProvider;
 import com.arawaney.tumascotik.client.control.MainController;
+import com.arawaney.tumascotik.client.dialog.MotivePicker;
+import com.arawaney.tumascotik.client.dialog.TimePicker;
 import com.arawaney.tumascotik.client.listener.ParseServiceListener;
 import com.arawaney.tumascotik.client.model.Request;
+import com.arawaney.tumascotik.client.util.FontUtil;
 import com.arawaney.tumascotik.client.util.NetworkUtil;
 
-public class SetRequestDetails extends Activity implements ParseServiceListener {
+public class SetRequestDetails extends FragmentActivity implements ParseServiceListener {
 	private static final String LOG_TAG = "Tumascotik-Client-SetRequesDetailsActivity";
 
 	EditText comments;
-	Spinner motive;
+	Button motive;
+	TextView motiveText;
 	ToggleButton isDelivery;
-	Button siguiente;
-	Button cancelar;
+	ImageView siguiente;
+	ImageView cancelar;
 	
 	private ProgressDialog progressDialog;
 	
@@ -56,7 +64,7 @@ public class SetRequestDetails extends Activity implements ParseServiceListener 
 	}
 
 	private void loadButtons() {
-		siguiente = (Button) findViewById(R.id.bsigpedirc);
+		siguiente = (ImageView) findViewById(R.id.bsigpedirc);
 
 		siguiente.setOnClickListener(new OnClickListener() {
 
@@ -75,7 +83,7 @@ public class SetRequestDetails extends Activity implements ParseServiceListener 
 			private void saveRequest() {
 				Request request = MainController.getREQUEST();
 				
-				request.setService(motive.getSelectedItem().toString());
+				request.setService(motiveText.getText().toString());
 				
 				
 				if (comments.getText()!=null) {
@@ -94,7 +102,7 @@ public class SetRequestDetails extends Activity implements ParseServiceListener 
 			}
 		});
 
-		cancelar = (Button) findViewById(R.id.bcancpedirc);
+		cancelar = (ImageView) findViewById(R.id.bcancpedirc);
 		cancelar.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -105,14 +113,36 @@ public class SetRequestDetails extends Activity implements ParseServiceListener 
 
 			}
 		});
+		motive.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				DialogFragment newFragment = new MotivePicker(motives, motives.size());
+				newFragment.show(getSupportFragmentManager(), "motives");
+				
+			}
+		});
+	}
+	
+	public void onUserSelectValue(int index) {
+		motiveText.setText(motives.get(index));
 	}
 
 	private void loadViews() {
 		comments = (EditText) findViewById(R.id.editText_setrequestdetails_comments);
-		motive = (Spinner) findViewById(R.id.spinner_setrequestdetails_requestmotive);
+		motive = (Button) findViewById(R.id.button_set_requestdetails_motive);
+		motiveText = (TextView) findViewById(R.id.text_motive);
 		isDelivery = (ToggleButton) findViewById(R.id.toggleButton_setrequestdetails_isdelivetry);
+		setFonts();
 	}
 	
+	private void setFonts() {
+		comments.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
+		motive.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		motiveText.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		
+	}
+
 	private void downloadMotitveLists() {
 		if (NetworkUtil.ConnectedToInternet(this)) {
 
@@ -156,7 +186,7 @@ public class SetRequestDetails extends Activity implements ParseServiceListener 
 				R.string.set_date_pick_checkfields_message5);
 
 		int conteo = 0;
-		if (motive.getSelectedItem().toString().equals(getResources().getString(R.string.general_choose))) {
+		if (motive.getText().toString().equals(getResources().getString(R.string.general_choose))) {
 			conteo++;
 			messagePiece2 = messagePiece2
 					+ getResources().getString(R.string.set_request_details_motive)
@@ -189,7 +219,7 @@ public class SetRequestDetails extends Activity implements ParseServiceListener 
 			this.motives.add(0, getResources().getString(R.string.general_choose));
 			MotivesAdapter = new ArrayAdapter<String>(this,
 					android.R.layout.simple_spinner_item, this.motives);
-			motive.setAdapter(MotivesAdapter);
+		
 			progressDialog.dismiss();
 		}
 }

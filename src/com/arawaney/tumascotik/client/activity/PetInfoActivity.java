@@ -16,6 +16,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import com.arawaney.tumascotik.client.db.provider.PetProvider;
 import com.arawaney.tumascotik.client.listener.ParsePetListener;
 import com.arawaney.tumascotik.client.model.Pet;
 import com.arawaney.tumascotik.client.util.BitMapUtil;
+import com.arawaney.tumascotik.client.util.FontUtil;
 import com.arawaney.tumascotik.client.util.NetworkUtil;
 
 public class PetInfoActivity extends Activity implements ParsePetListener {
@@ -49,7 +51,7 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 	Spinner editPetPuppy;
 	EditText editPetComments;
 
-	Button saveEditButton;
+	ImageView saveEditButton;
 
 	Pet pet;
 	Pet auxPet;
@@ -204,15 +206,33 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 		editPetPuppy = (Spinner) findViewById(R.id.spiner_pet_info_puppy);
 		editPetComments = (EditText) findViewById(R.id.edit_text_pet_info_comment);
 
-		saveEditButton = (Button) findViewById(R.id.button_pet_info_edit_save);
+		saveEditButton = (ImageView) findViewById(R.id.button_pet_info_edit_save);
 		
 		GenderAdapter = ArrayAdapter.createFromResource(this, R.array.Genders,
 				android.R.layout.simple_spinner_item);
 		genders = Arrays.asList(getResources().getStringArray(R.array.Genders));
+		
 		AgeAdapter = ArrayAdapter.createFromResource(this, R.array.Age,
 				android.R.layout.simple_spinner_item);
 		ages = Arrays.asList(getResources().getStringArray(R.array.Age));
+		
+		setFonts();
+		
 
+	}
+	
+	private void setFonts() {
+		
+		petName.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
+		petSpecie.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		petBreed.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		petGEnder.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		petPuppy.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		petComments.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		editpetName.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		editPetComments.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+
+		
 	}
 
 	private void loadButton() {
@@ -334,8 +354,8 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 		petAvatar.setImageResource(BitMapUtil.getImageId(this, path));
 
 
-		saveEditButton.setText(getResources().getString(
-				R.string.pet_info_button_save));
+//		saveEditButton.setText(getResources().getString(
+//				R.string.pet_info_button_save));
 
 	}
 
@@ -390,8 +410,8 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 		}
 		petAvatar.setImageResource(BitMapUtil.getImageId(this, path));
 
-		saveEditButton.setText(getResources().getString(
-				R.string.pet_info_button_edit));
+//		saveEditButton.setText(getResources().getString(
+//				R.string.pet_info_button_edit));
 
 	}
 

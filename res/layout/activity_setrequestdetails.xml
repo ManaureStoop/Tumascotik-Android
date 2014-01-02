@@ -1,96 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo"
-    android:paddingTop="100dp"
-    android:orientation="vertical" >
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    >
+
+    <ImageView
+        android:id="@+id/bcancpedirc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="14dp"
+        android:layout_marginLeft="14dp"
+        android:clickable="true"
+        android:src="@drawable/ic_cancel" />
+
+    <ImageView
+        android:id="@+id/bsigpedirc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/bcancpedirc"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:clickable="true"
+        android:src="@drawable/ic_foward" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton_setrequestdetails_isdelivetry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView1"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_marginLeft="26dp"
+        android:layout_toRightOf="@+id/bcancpedirc" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bsigpedirc"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="44dp"
+        android:text="@string/set_request_details_isDeivery_title"
+        android:textColor="@color/text_yellow"
+        android:textSize="@dimen/blue_text" />
+
+    <Button
+        android:id="@+id/button_set_requestdetails_motive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/text_motive"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="17dp"
+        android:background="@drawable/ic_yellow_button"
+        android:text="@string/set_request_details_motive_title"
+        android:textColor="@color/text_white" 
+        android:textSize="@dimen/big_oval_buttons"/>
+
+    <TextView
+        android:id="@+id/text_motive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="74dp"
+        android:text="@string/set_request_details_motive"
+        android:textColor="@color/text_edit_profiles" 
+        android:textSize="@dimen/user_edit_text"/>
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/textView_motive_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:layout_weight="1"
-            android:text="@string/set_request_details_motive_title"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/hinttext" />
-
-        <Spinner
-            android:id="@+id/spinner_setrequestdetails_requestmotive"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:paddingRight="20dp"
-            android:paddingTop="15dp"
-            android:scrollbars="horizontal"
-            android:splitMotionEvents="false"
-            android:textAlignment="center" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="60dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" >
 
         <TextView
             android:id="@+id/textView_setrequestdetails_comment_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/set_request_details_comments_title"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textColor="@color/text_yellow"
+            android:textSize="@dimen/blue_text" />
 
         <EditText
             android:id="@+id/editText_setrequestdetails_comments"
-            android:layout_width="0dp"
-            android:layout_height="150dp"
-            android:layout_weight="1"
-            android:textColor="@color/hinttext"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/set_request_details_isDeivery_title"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:layout_gravity="bottom"
+            android:textColor="@color/text_edit_profiles"
+            android:textSize="@dimen/user_edit_text"
+            android:inputType="textMultiLine" >
 
-        <ToggleButton
-            android:layout_marginLeft="50dp"
-            android:id="@+id/toggleButton_setrequestdetails_isdelivetry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-           />
-
+            <requestFocus />
+        </EditText>
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-         >
-
-        <Button
-            android:id="@+id/bcancpedirc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cancelar" />
-
-        <Button
-            android:id="@+id/bsigpedirc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/button_siguiente" />
-    </LinearLayout>
-
-    </LinearLayout>
+</RelativeLayout>

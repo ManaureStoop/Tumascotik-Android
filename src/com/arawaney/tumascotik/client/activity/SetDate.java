@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ import com.arawaney.tumascotik.client.dialog.DatePickr;
 import com.arawaney.tumascotik.client.dialog.TimePicker;
 import com.arawaney.tumascotik.client.model.Request;
 import com.arawaney.tumascotik.client.util.CalendarUtil;
+import com.arawaney.tumascotik.client.util.FontUtil;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -43,8 +45,8 @@ public class SetDate extends FragmentActivity {
 	int numberOfCreatedTimeBlocks;
 	Date initialDate;
 	Button dateButton;
-	Button siguiente;
-	Button cancelar;
+	ImageView siguiente;
+	ImageView cancelar;
 	Button timeButton;
 	TextView pickedTime;
 	TextView pickedDate;
@@ -164,8 +166,8 @@ public class SetDate extends FragmentActivity {
 
 	private void loadViews() {
 		dateButton = (Button) findViewById(R.id.bfechasetd);
-		siguiente = (Button) findViewById(R.id.bsigsetd);
-		cancelar = (Button) findViewById(R.id.bcancsetd);
+		siguiente = (ImageView) findViewById(R.id.bsigsetd);
+		cancelar = (ImageView) findViewById(R.id.bcancsetd);
 		timeButton = (Button) findViewById(R.id.bhorasetd);
 		timeButton.setEnabled(false);
 		timeButton.setClickable(false);
@@ -173,7 +175,18 @@ public class SetDate extends FragmentActivity {
 		pickedDate = (TextView) findViewById(R.id.txtfechasetd);
 		alerta = (TextView) findViewById(R.id.txtalertasetd);
 		alerta.setVisibility(View.GONE);
+		
+		setFonts();
 
+	}
+
+	private void setFonts() {
+		dateButton.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		timeButton.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		pickedTime.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
+		pickedDate.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
+		alerta.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
+		
 	}
 
 	public void getScheduledTimeBlocks() {

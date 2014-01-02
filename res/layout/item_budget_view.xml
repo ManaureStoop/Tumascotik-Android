@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/budget_item_service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:text="Peluquería"
+        android:textColor="@color/text_blue"
+        android:textSize="@dimen/blue_text" />
+
+    <TextView
+        android:id="@+id/budget_item_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/budget_item_service"
+        android:layout_below="@+id/budget_item_service"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_pet_name_label_appointment"
+        android:gravity="center"
+        android:text="BsF. 500"
+        android:textColor="@color/text_edit_profiles"
+        android:textSize="@dimen/profile_data" />
+
+</RelativeLayout>

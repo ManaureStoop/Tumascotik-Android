@@ -202,13 +202,12 @@ public class PetProvider {
 				pet.setComment(comment);
 				pet.setBreed(breed);
 				pet.setPet_properties(pet_properties);
+				Log.d(LOG_TAG, "specieee: "+specie);
 				pet.setSpecie(specie);
 				pet.setGender(gender);
 				pet.setPuppy(puppy);
 				
 				User owner = UserProvider.readUser(context);
-				Log.d(LOG_TAG, owner.getName());
-				Log.d(LOG_TAG, owner.getSystemId());
 				pet.setOwner(owner);
 				
 				pets.add(pet);

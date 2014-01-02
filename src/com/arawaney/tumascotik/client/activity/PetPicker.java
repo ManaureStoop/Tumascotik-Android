@@ -23,12 +23,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridLayout;
 import android.widget.GridView;
+import android.widget.ListView;
 
 public class PetPicker extends Activity {
 	private final String LOG_TAG = "Tumascotik-Client-Pet Picker";
 	
 	ArrayList<Pet> pets;
-	GridView petGRidView;
+	ListView petGRidView;
 	View addPetView;
 	private LayoutInflater inflater;
 	ItemPetGridAdapter adapter;
@@ -50,9 +51,10 @@ public class PetPicker extends Activity {
 
 
 	private void loadViews() {
-		petGRidView = (GridView) findViewById(R.id.grid_pet_picker);
+		petGRidView = (ListView) findViewById(R.id.grid_pet_picker);
 		inflater = (LayoutInflater) getSystemService(this.LAYOUT_INFLATER_SERVICE);
 		addPetView = inflater.inflate(R.layout.add_pet_view, null);
+		
 	}
 	
 	private void loadPets() {

@@ -21,6 +21,8 @@ import com.arawaney.tumascotik.client.control.MainController;
 import com.arawaney.tumascotik.client.db.provider.RequestProvider;
 import com.arawaney.tumascotik.client.listener.ParseRequestListener;
 import com.arawaney.tumascotik.client.model.Request;
+import com.arawaney.tumascotik.client.util.CalendarUtil;
+import com.arawaney.tumascotik.client.util.FontUtil;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -83,12 +85,18 @@ public class SendRequest extends Activity implements ParseRequestListener {
 		ParseProvider.sendRequest(this,this, request);
 	}
 	private void setResume() {
-		final String nombre = MainController.USER.getName();
-		final String mascota = MainController.getPET().getName();
-		final String motivo = request.getService();
+		final String userName = MainController.USER.getName();
+		final String petName = MainController.getPET().getName();
+		final String date = CalendarUtil.getDateFormated(request.getStart_date(), "dd , mm yyyy");
 	
 		resumen = (TextView) findViewById(R.id.txtresumnfinal);
-		String resum = nombre+mascota+motivo;
+		resumen.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		String text1 = getResources().getString(R.string.send_request_details_text_1);
+		String text2 = getResources().getString(R.string.send_request_details_text_2);
+		String text3 = getResources().getString(R.string.send_request_details_text_3);
+		
+		
+		String resum = text1+userName+text2+petName+text3+date;
 		resumen.setText(resum);
 	}
 

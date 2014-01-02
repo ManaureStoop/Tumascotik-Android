@@ -23,17 +23,18 @@ import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import com.arawaney.tumascotik.client.R;
 
 
-public class Presupuesto extends  FragmentActivity {
-	Button volver;
-	Button agregar;
-	Button hacerp;
-	Button deleteall;
+public class Budget extends  FragmentActivity {
+	
+	ImageView agregar;
+	ImageView hacerp;
+	ImageView deleteall;
 	ListView listpresup;
 	TextView totalprice;
 	Boolean flagclick;
@@ -43,11 +44,10 @@ public class Presupuesto extends  FragmentActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE); 
 		
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_presupuesto);	
-		volver = (Button) findViewById(R.id.bvolpresp);
-		agregar = (Button) findViewById(R.id.bagregpresp);
-		hacerp = (Button) findViewById(R.id.bhacerpedidopresp);
-		deleteall = (Button) findViewById(R.id.bdeleteallpresp);
+		setContentView(R.layout.activity_budget);	
+		agregar = (ImageView) findViewById(R.id.bagregpresp);
+		hacerp = (ImageView) findViewById(R.id.bhacerpedidopresp);
+		deleteall = (ImageView) findViewById(R.id.bdeleteallpresp);
 		totalprice = (TextView) findViewById(R.id.txttotal);
 		
 
@@ -69,19 +69,13 @@ public class Presupuesto extends  FragmentActivity {
 					newFragment.show(getSupportFragmentManager(), "presupitem");
 	        	}  }
 	        });
-		volver.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-			finish();	
-			}
-		});
 		
 		agregar.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				BudgetDB db = new BudgetDB(Presupuesto.this);
-				DialogFragment newFragment = new PresupuestoDialog(Presupuesto.this);
+				BudgetDB db = new BudgetDB(Budget.this);
+				DialogFragment newFragment = new PresupuestoDialog(Budget.this);
 				newFragment.show(getSupportFragmentManager(), "presup");	
 				
 			}
@@ -169,10 +163,10 @@ private ArrayList<BudgetItemDetails> SetupList(){
 
 public void MakeAppointment(String des){
 	
-	Intent pedirIntent = new Intent(Presupuesto.this, SetDate.class);
+	Intent pedirIntent = new Intent(Budget.this, SetDate.class);
 	pedirIntent.putExtra("motivos", motivos);
 	startActivity(pedirIntent);
-	BudgetDB db = new BudgetDB(Presupuesto.this);
+	BudgetDB db = new BudgetDB(Budget.this);
   	db.open();
   	db.deleteAll();
   	db.close();
@@ -180,7 +174,7 @@ public void MakeAppointment(String des){
 }
 public void DeleteAll(){
 	
-	BudgetDB db = new BudgetDB(Presupuesto.this);
+	BudgetDB db = new BudgetDB(Budget.this);
 	db.open();
 	db.deleteAll();
 	db.close();

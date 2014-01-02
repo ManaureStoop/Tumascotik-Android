@@ -2,14 +2,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo"
+    android:background="@drawable/background"
     android:orientation="vertical"
     android:screenOrientation="portrait" >
+
+    <ImageView
+        android:id="@+id/image_user_info_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_dog" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/text_user_info_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ic_pet_name_label"
+            android:gravity="center"
+            android:text="Jose Perez"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/pet_names_blue_bckg" />
+    </RelativeLayout>
 
     <ScrollView
         android:id="@+id/scrollView_user_info"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp" 
+        android:paddingLeft="@dimen/padding_scroll_edit_profile"
+         android:paddingRight="@dimen/padding_scroll_edit_profile">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -17,32 +44,10 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <ImageView
-                    android:id="@+id/image_user_info_avatar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/otro" />
-
-                <TextView
-                    android:id="@+id/text_user_info_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Jose Perez"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/tlayout_user_info_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp" >
 
                 <TextView
                     android:id="@+id/text_user_info_name_title"
@@ -50,16 +55,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="@string/user_info_title_name"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/hinttext" />
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
 
                 <EditText
                     android:id="@+id/edit_text_user_info_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textPersonName" >
+                    android:layout_gravity="bottom"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" >
 
                     <requestFocus />
                 </EditText>
@@ -68,7 +74,8 @@
             <LinearLayout
                 android:id="@+id/tlayout_user_info_lastname"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp" >
 
                 <TextView
                     android:id="@+id/text_user_info_lastname_title"
@@ -76,24 +83,23 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="@string/user_info_title_lastname"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/hinttext" />
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
 
                 <EditText
                     android:id="@+id/edit_text_user_info_lastname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textPersonName" >
-
-                    <requestFocus />
-                </EditText>
+                    android:layout_gravity="bottom"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp" >
 
                 <TextView
                     android:id="@+id/text_user_info_email_title"
@@ -101,27 +107,32 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="@string/user_info_title_email"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/hinttext" />
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
 
                 <TextView
                     android:id="@+id/text_user_info_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Boxer" />
+                    android:layout_gravity="bottom"
+                    android:text="Boxer"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
 
                 <EditText
                     android:id="@+id/edittext_user_info_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textEmailAddress" />
+                    android:layout_gravity="bottom"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp" >
 
                 <TextView
                     android:id="@+id/text_user_info_phone_local_title"
@@ -129,41 +140,51 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="@string/user_info_title_phone_home"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/hinttext" />
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
 
                 <TextView
                     android:id="@+id/text_user_info_phone_local"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Macho" />
+                    android:layout_gravity="bottom"
+                    android:text="Macho"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
 
                 <EditText
                     android:id="@+id/edittext_user_info_phone_local_prefix"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="textEmailAddress" />
+                    android:layout_gravity="bottom"
+      
+                    android:inputType="phone"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
 
                 <TextView
                     android:id="@+id/text_user_info_phone_local_separator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
                     android:text="-"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
 
                 <EditText
                     android:id="@+id/edittext_user_info_phone_local"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textEmailAddress" />
+                    android:layout_gravity="bottom"
+                    android:inputType="phone"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp" >
 
                 <TextView
                     android:id="@+id/text_user_info_phone_mobile_title"
@@ -171,8 +192,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="@string/user_info_title_phone_mobile"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/hinttext" />
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
 
                 <ImageView
                     android:id="@+id/imageView_alert_user_info_phone_mobile"
@@ -184,34 +205,43 @@
                     android:id="@+id/text_user_info_phone_mobile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Macho" />
+                    android:layout_gravity="bottom"
+                    android:text="Macho"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
 
                 <EditText
                     android:id="@+id/edittext_user_info_phone_mobile_prefix"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="textEmailAddress" />
+                    android:layout_gravity="bottom"
+                    android:inputType="phone"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
 
                 <TextView
                     android:id="@+id/text_user_info_phone_mobile_separator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
                     android:text="-"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
 
                 <EditText
                     android:id="@+id/edittext_user_info_phone_mobile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textEmailAddress" />
+                    android:layout_gravity="bottom"
+                    android:inputType="phone"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp" >
 
                 <TextView
                     android:id="@+id/text_user_info_address_title"
@@ -219,8 +249,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="@string/user_info_title_address"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/hinttext" />
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
 
                 <ImageView
                     android:id="@+id/imageView_alert_user_info_address"
@@ -232,20 +262,25 @@
                     android:id="@+id/text_user_info_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cachorro" />
+                    android:layout_gravity="bottom"
+                    android:text="Cachorro"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
 
                 <EditText
                     android:id="@+id/edittext_user_info_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textMultiLine" />
+                    android:layout_gravity="bottom"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp" >
 
                 <TextView
                     android:id="@+id/text_user_info_gender_title"
@@ -253,33 +288,39 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="@string/user_info_title_gender"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/hinttext" />
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
 
                 <TextView
                     android:id="@+id/text_user_info_gender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Blah blah" />
+                    android:layout_gravity="bottom"
+                    android:text="Blah blah"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
 
                 <Spinner
                     android:id="@+id/spiner_user_info_gender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_gravity="bottom"
                     android:entries="@array/Genders"
                     android:scrollbars="horizontal"
                     android:splitMotionEvents="false"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:background="@drawable/ic_profile_edit" />
             </LinearLayout>
 
-            <Button
+            <ImageView
                 android:id="@+id/button_user_info_edit_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:clickable="true"
                 android:gravity="center"
-                android:text="@string/user_info_button_edit" />
+                android:src="@drawable/ic_edit_button" />
         </LinearLayout>
     </ScrollView>
 

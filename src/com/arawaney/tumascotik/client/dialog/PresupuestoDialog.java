@@ -3,7 +3,7 @@ package com.arawaney.tumascotik.client.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.arawaney.tumascotik.client.activity.Presupuesto;
+import com.arawaney.tumascotik.client.activity.Budget;
 import com.arawaney.tumascotik.client.db.BudgetDB;
 import com.arawaney.tumascotik.client.R;
 
@@ -112,7 +112,7 @@ public class PresupuestoDialog extends DialogFragment {
 									    Log.d("IGUALES", "match!");
 									    progressDialog.dismiss();
 								    	looking = false;
-						            	Presupuesto callingActivity = (Presupuesto) thiscontxt;
+						            	Budget callingActivity = (Budget) thiscontxt;
 							            callingActivity.Refresh();
 								    	}
 					    	}

@@ -3,6 +3,7 @@ package com.arawaney.tumascotik.client.adapter;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,9 +51,7 @@ public class ItemPetGridAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		  if (footerView != null && position == getCount()-1) {
-		        return footerView;
-		    }
+
 		ViewHolder holder;
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.item_pet_view, null);
@@ -60,14 +59,34 @@ public class ItemPetGridAdapter extends BaseAdapter {
 			
 			holder.petName = (TextView) convertView.findViewById(R.id.pet_item_textv_pet_name);
 			holder.petAvatar = (ImageView) convertView.findViewById(R.id.pet_item_imagev_pet_avatar);
+			
 
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
-		}
+			//If view used to add pet
+			
+			if (holder == null) {
+				convertView = inflater.inflate(R.layout.item_pet_view, null);
+				holder =  new ViewHolder();
+				holder.petName = (TextView) convertView.findViewById(R.id.pet_item_textv_pet_name);
+				holder.petAvatar = (ImageView) convertView.findViewById(R.id.pet_item_imagev_pet_avatar);
+				convertView.setTag(holder);
+			}
+			
+		}	
+		
+		if (footerView != null && position == getCount()-1) {
+	        return footerView;
+	    }
+	
 		String path = new String( String.valueOf(itemsPet.get(position).getSpecie()));
+		holder.petName.setTypeface(FontUtil.getTypeface(contxt, FontUtil.ROBOTO_THIN));
 		holder.petName.setText(itemsPet.get(position).getName());
 		holder.petAvatar.setImageResource(BitMapUtil.getImageId(contxt, path));
+		
+		
+		
 		return convertView;
 	}
 	

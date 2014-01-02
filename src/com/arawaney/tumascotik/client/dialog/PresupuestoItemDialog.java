@@ -19,7 +19,7 @@ import android.provider.CalendarContract.Events;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 
-import com.arawaney.tumascotik.client.activity.Presupuesto;
+import com.arawaney.tumascotik.client.activity.Budget;
 import com.arawaney.tumascotik.client.db.BudgetDB;
 import com.arawaney.tumascotik.client.R;
 
@@ -62,7 +62,7 @@ public class PresupuestoItemDialog extends DialogFragment {
 	    builder.setNegativeButton("Eliminar de lista", new DialogInterface.OnClickListener() {
 	               public void onClick(DialogInterface dialog, int id) {    	   
 	            	   EraseDataBase();
-		               Presupuesto callingActivity = (Presupuesto) getActivity();
+		               Budget callingActivity = (Budget) getActivity();
 		               callingActivity.Refresh();
 	               }
 	           });

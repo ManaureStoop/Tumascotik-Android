@@ -1,6 +1,6 @@
 package com.arawaney.tumascotik.client.dialog;
 
-import com.arawaney.tumascotik.client.activity.Presupuesto;
+import com.arawaney.tumascotik.client.activity.Budget;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -36,7 +36,7 @@ public class PresupuestoAlertDialog extends DialogFragment {
 	 // Add the buttons
 	    builder.setPositiveButton("Pedir Cita", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	Presupuesto callingActivity = (Presupuesto) getActivity();
+            	Budget callingActivity = (Budget) getActivity();
 	    		callingActivity.MakeAppointment("Si");
 	               }
 	           });

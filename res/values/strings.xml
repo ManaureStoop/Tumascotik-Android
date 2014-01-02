@@ -71,7 +71,7 @@
     </string-array>
 
     <!-- PET PICKER -->
-    <string name="pet_picker_title">There are your pets</string>
+    <string name="pet_picker_title">Pick a pet...</string>
 
     <!-- MENU -->
     <string name="menu_my_profile">My profile</string>
@@ -128,8 +128,20 @@
     <string name="set_request_details_isDeivery_title">Delivery: </string>
     <string name="set_request_details_loading_motive_lists">Loading Services ...</string>
 
-    <!-- Set Request Details -->
+    <!-- Send Request -->
     <string name="send_request_sending">Sending...</string>
+    <string name="send_request_details_title">Details</string>
+    <string name="send_request_details_text_1">Dear </string>
+    <string name="send_request_details_text_2">,\n the appointment for </string>
+    <string name="send_request_details_text_3"> will be scheduled for the  : \n</string>
+
+    <!-- Request View -->
+    <string name="request_view_title">Appointment for : </string>
+    <string name="request_view_day">Day: </string>
+    <string name="request_view_time">Time: </string>
+
+    <!-- Budget -->
+    <string name="budget_total_title">Total</string>
 
     <string-array name="Genders">
         <item>--Choose--</item>
