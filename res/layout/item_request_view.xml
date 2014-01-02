@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:padding="2dp" >
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -30,7 +31,7 @@
                 android:textSize="@dimen/request_item_title" />
 
             <TextView
-                android:id="@+id/textView_request_view_title_motive"
+                android:id="@+id/textView_request_view_title_service"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
@@ -87,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="PENDING"
+            android:text="PENDINNNG"
             android:textColor="@color/request_status_pending" 
             android:textStyle="bold"/>
     </LinearLayout>

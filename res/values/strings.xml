@@ -139,6 +139,8 @@
     <string name="request_view_title">Appointment for : </string>
     <string name="request_view_day">Day: </string>
     <string name="request_view_time">Time: </string>
+    <string name="request_view_dialog_conector">for</string>
+    <string name="request_view_dialog_cancel_button">Cancel Appointment</string>
 
     <!-- Budget -->
     <string name="budget_total_title">Total</string>
@@ -157,6 +159,12 @@
         <item>--Choose--</item>
         <item>Male</item>
         <item>Female</item>
+    </string-array>
+    <string-array name="Status">
+        <item>ATTENDED</item>
+        <item>CANCELED</item>
+        <item>ACCEPTED</item>
+        <item>PENDING</item>
     </string-array>
 
 </resources>

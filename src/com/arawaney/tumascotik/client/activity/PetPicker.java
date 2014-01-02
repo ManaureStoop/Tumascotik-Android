@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.arawaney.tumascotik.client.ClientMainActivity;
 import com.arawaney.tumascotik.client.R;
-import com.arawaney.tumascotik.client.adapter.ItemListBaseAdapter;
+import com.arawaney.tumascotik.client.adapter.ViewRequestBaseAdapter;
 import com.arawaney.tumascotik.client.adapter.ItemPetGridAdapter;
 import com.arawaney.tumascotik.client.control.MainController;
 import com.arawaney.tumascotik.client.db.provider.PetProvider;

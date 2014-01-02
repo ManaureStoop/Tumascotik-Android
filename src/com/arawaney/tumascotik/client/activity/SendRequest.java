@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arawaney.tumascotik.client.ClientMainActivity;
@@ -29,8 +30,8 @@ import com.parse.ParseObject;
 public class SendRequest extends Activity implements ParseRequestListener {
 	private static final String LOG_TAG = "Tumascotik-Client-SendRequestActivity";
 	
-	Button enviar;
-	Button cancelar;
+	ImageView enviar;
+	ImageView cancelar;
 	TextView resumen;
 	Request request;
 	private ProgressDialog progressDialog;
@@ -43,8 +44,6 @@ public class SendRequest extends Activity implements ParseRequestListener {
 		setContentView(R.layout.activity_final);
 		
 		request = MainController.getREQUEST();
-		
-		
 
 		setResume();
 		
@@ -52,7 +51,7 @@ public class SendRequest extends Activity implements ParseRequestListener {
 	}
 
 	private void loadButtons() {
-		enviar = (Button) findViewById(R.id.benviarfinal);
+		enviar = (ImageView) findViewById(R.id.benviarfinal);
 
 		enviar.setOnClickListener(new OnClickListener() {
 
@@ -66,7 +65,7 @@ public class SendRequest extends Activity implements ParseRequestListener {
 			
 		});
 
-		cancelar = (Button) findViewById(R.id.bcancfinal);
+		cancelar = (ImageView) findViewById(R.id.bcancfinal);
 		cancelar.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -87,7 +86,7 @@ public class SendRequest extends Activity implements ParseRequestListener {
 	private void setResume() {
 		final String userName = MainController.USER.getName();
 		final String petName = MainController.getPET().getName();
-		final String date = CalendarUtil.getDateFormated(request.getStart_date(), "dd , mm yyyy");
+		final String date = CalendarUtil.getDateFormated(request.getStart_date(), "dd , MM yyyy");
 	
 		resumen = (TextView) findViewById(R.id.txtresumnfinal);
 		resumen.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
@@ -96,7 +95,7 @@ public class SendRequest extends Activity implements ParseRequestListener {
 		String text3 = getResources().getString(R.string.send_request_details_text_3);
 		
 		
-		String resum = text1+userName+text2+petName+text3+date;
+		String resum = text1+" "+userName+text2+" "+petName+" "+text3+" "+date;
 		resumen.setText(resum);
 	}
 
@@ -130,6 +129,12 @@ public class SendRequest extends Activity implements ParseRequestListener {
 
 	@Override
 	public void onRequestQueryFInished(Request request) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onCanceledQueryFinished(boolean canceled) {
 		// TODO Auto-generated method stub
 		
 	}

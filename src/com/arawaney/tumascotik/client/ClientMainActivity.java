@@ -12,14 +12,13 @@ import com.arawaney.tumascotik.client.activity.PetPicker;
 import com.arawaney.tumascotik.client.activity.Budget;
 import com.arawaney.tumascotik.client.activity.SetDate;
 import com.arawaney.tumascotik.client.activity.UserInfoActivity;
-import com.arawaney.tumascotik.client.activity.VerCitas;
+import com.arawaney.tumascotik.client.activity.ViewRequests;
 import com.arawaney.tumascotik.client.backend.ParseProvider;
 import com.arawaney.tumascotik.client.control.MainController;
 import com.arawaney.tumascotik.client.db.CitationDB;
 import com.arawaney.tumascotik.client.db.provider.PetProvider;
 import com.arawaney.tumascotik.client.db.provider.RequestProvider;
 import com.arawaney.tumascotik.client.dialog.ConnectionDialog;
-import com.arawaney.tumascotik.client.dialog.SelectFragmentDialog;
 import com.arawaney.tumascotik.client.listener.ParsePetListener;
 import com.arawaney.tumascotik.client.listener.ParseRequestListener;
 import com.arawaney.tumascotik.client.listener.ParseUserListener;
@@ -99,9 +98,9 @@ public class ClientMainActivity extends FragmentActivity implements
 	EditText text_password;
 	TextView button_login;
 	// Main menu views
-	TextView pedirc;
-	TextView vercit;
-	TextView pedirpres;
+	TextView makeRequest;
+	TextView viewRequest;
+	TextView makeBudget;
 	// Header view
 	Button logorefresh;
 	// Footer views
@@ -201,7 +200,7 @@ public class ClientMainActivity extends FragmentActivity implements
 	}
 
 	private void loadButtons() {
-		pedirc.setOnClickListener(new OnClickListener() {
+		makeRequest.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -223,15 +222,18 @@ public class ClientMainActivity extends FragmentActivity implements
 			}
 		});
 
-		vercit.setOnClickListener(new OnClickListener() {
+		viewRequest.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				showAppointmentFragmentDialog(v);
+				Intent vercitasIntent = new Intent(ClientMainActivity.this,
+						ViewRequests.class);
+				
+				startActivity(vercitasIntent);
 			}
 		});
-		pedirpres.setOnClickListener(new OnClickListener() {
+		makeBudget.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -314,9 +316,9 @@ public class ClientMainActivity extends FragmentActivity implements
 		text_password = (EditText) findViewById(R.id.text_login_passw);
 		text_username = (EditText) findViewById(R.id.text_login_username);
 		button_login = (TextView) findViewById(R.id.button_login);
-		pedirc = (TextView) findViewById(R.id.pdrcitamenu);
-		vercit = (TextView) findViewById(R.id.bvercitasmenu);
-		pedirpres = (TextView) findViewById(R.id.bpedirpresmenu);
+		makeRequest = (TextView) findViewById(R.id.pdrcitamenu);
+		viewRequest = (TextView) findViewById(R.id.bvercitasmenu);
+		makeBudget = (TextView) findViewById(R.id.bpedirpresmenu);
 		facebook = (ImageView) findViewById(R.id.bfacebookmenu);
 		twitter = (ImageView) findViewById(R.id.btwittermenu);
 		youtube = (ImageView) findViewById(R.id.byoutubemenu);
@@ -332,9 +334,9 @@ public class ClientMainActivity extends FragmentActivity implements
 		text_password.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
 		text_username.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
 		button_login.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		pedirc.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		vercit.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		pedirpres.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		makeRequest.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		viewRequest.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		makeBudget.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
 		
 	}
 
@@ -493,7 +495,7 @@ public class ClientMainActivity extends FragmentActivity implements
 			toasttext = "Cita para " + petsname + " con Tumascotik Aceptada!";
 			notificationtitle = "Cita para " + petsname + " aceptada";
 			notificationcontent = "La cita fue agregada en su Agenda";
-			tapclass = VerCitas.class;
+			tapclass = ViewRequests.class;
 
 		} else {
 			toasttext = "Su veterinario no puede atender a " + petsname;
@@ -624,27 +626,6 @@ public class ClientMainActivity extends FragmentActivity implements
 
 	}
 
-	public void showAppointmentFragmentDialog(View v) {
-
-		DialogFragment newFragment = new SelectFragmentDialog();
-		newFragment.show(getFragmentManager(), "appointment");
-
-	}
-
-	public void appointmentCall(int selection) {
-		String select;
-		if (selection == 0)
-			select = "ACEPTADAS";
-		else
-			select = "PENDIENTES";
-
-		Intent vercitasIntent = new Intent(ClientMainActivity.this,
-				VerCitas.class);
-		vercitasIntent.putExtra("seleccion", select);
-		startActivity(vercitasIntent);
-
-	}
-
 	public static Intent getOpenFacebookIntent(Context context) {
 
 		try {
@@ -676,12 +657,12 @@ public class ClientMainActivity extends FragmentActivity implements
 		if (NetworkUtil.ConnectedToInternet(this)) {
 			ParseProvider.initializeParse(this);
 			// loadPendingObjects();
-			pedirc.setEnabled(true);
+			makeRequest.setEnabled(true);
 			twitter.setEnabled(true);
 			facebook.setEnabled(true);
 			youtube.setEnabled(true);
 			logorefresh.setEnabled(true);
-			pedirpres.setEnabled(true);
+			makeBudget.setEnabled(true);
 			text_password.setEnabled(true);
 			text_username.setEnabled(true);
 			button_login.setEnabled(true);
@@ -690,12 +671,12 @@ public class ClientMainActivity extends FragmentActivity implements
 		}
 
 		else {
-			pedirc.setEnabled(false);
+			makeRequest.setEnabled(false);
 			twitter.setEnabled(false);
 			facebook.setEnabled(false);
 			youtube.setEnabled(false);
 			logorefresh.setEnabled(false);
-			pedirpres.setEnabled(false);
+			makeBudget.setEnabled(false);
 			text_password.setEnabled(false);
 			text_username.setEnabled(false);
 			button_login.setEnabled(false);
@@ -787,22 +768,33 @@ public class ClientMainActivity extends FragmentActivity implements
 
 	@Override
 	public void OnAllRequestsQueryFinished(ArrayList<Request> requests) {
-		if (requests != null) {
-			for (Request request : requests) {
+		if (requests != null ) {
+			if (!requests.isEmpty()) {
+				for (Request request : requests) {
 
-				Log.d(LOG_TAG, "1Request COmment: "+request.getComment());
-				Log.d(LOG_TAG, "1Request isDelivery : "+request.isDelivery());
-				Log.d(LOG_TAG, "1Request StartDAte : "+CalendarUtil.getDateFormated(request.getStart_date(), "dd/MM/yyyy hh:mm"));
-				Log.d(LOG_TAG, "1Request : "+request.getSystem_id());
-				Request savedRequest = RequestProvider.readRequest(this, request.getSystem_id());
-				if (savedRequest == null) {
-					RequestProvider.insertRequest(this, request);
-				} else{
-					request.setId(savedRequest.getId());
-					RequestProvider.updateRequest(this, request);
-				}
+					Log.d(LOG_TAG, "1Request COmment: " + request.getComment());
+					Log.d(LOG_TAG,
+							"1Request isDelivery : " + request.isDelivery());
+					Log.d(LOG_TAG,
+							"1Request StartDAte : "
+									+ CalendarUtil.getDateFormated(
+											request.getStart_date(),
+											"dd/MM/yyyy hh:mm"));
 					
+					Log.d(LOG_TAG, "1Request : " + request.getSystem_id());
+					Request savedRequest = RequestProvider.readRequest(this,
+							request.getSystem_id());
+					if (savedRequest == null) {
+						RequestProvider.insertRequest(this, request);
+					} else {
+						request.setId(savedRequest.getId());
+						RequestProvider.updateRequest(this, request);
+					}
+
+				}
+				
 			}
+			
 		}
 	}
 
@@ -811,11 +803,25 @@ public class ClientMainActivity extends FragmentActivity implements
 		if (request != null) {
 			Log.d(LOG_TAG, "2Request Status "+request.getStatus());
 			Log.d(LOG_TAG, "2Request 2Service : "+request.getService());
+			Log.d(LOG_TAG, "1Request COmment: " + request.getComment());
+			Log.d(LOG_TAG,
+					"1Request isDelivery : " + request.isDelivery());
+			Log.d(LOG_TAG,
+					"1Request StartDAte : "
+							+ CalendarUtil.getDateFormated(
+									request.getStart_date(),
+									"dd/MM/yyyy hh:mm"));
 			
 			Request savedRequest = RequestProvider.readRequest(this, request.getSystem_id());
 			request.setId(savedRequest.getId());
 			RequestProvider.updateRequest(this, request);
 		}
+		
+	}
+
+	@Override
+	public void onCanceledQueryFinished(boolean canceled) {
+		// TODO Auto-generated method stub
 		
 	}
 

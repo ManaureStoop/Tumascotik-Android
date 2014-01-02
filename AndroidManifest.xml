@@ -44,7 +44,7 @@
             android:screenOrientation="sensorPortrait" >
         </activity>
         <activity
-            android:name="com.arawaney.tumascotik.client.activity.VerCitas"
+            android:name="com.arawaney.tumascotik.client.activity.ViewRequests"
             android:label="VerCitas"
             android:screenOrientation="sensorPortrait" >
         </activity>

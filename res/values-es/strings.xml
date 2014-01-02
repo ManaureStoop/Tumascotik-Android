@@ -148,6 +148,8 @@
     <string name="request_view_title">Cita para : </string>
     <string name="request_view_day">Dia: </string>
     <string name="request_view_time">Hora: </string>
+    <string name="request_view_dialog_conector">para</string>
+        <string name="request_view_dialog_cancel_button">Cancelar Cita</string>
 
     <!-- Budget -->
     <string name="budget_total_title">Total</string>
@@ -166,6 +168,12 @@
         <item>--Choose--</item>
         <item>Hombre</item>
         <item>Mujer</item>
+    </string-array>
+    <string-array name="Status">
+        <item>ATENDIDA</item>
+        <item>CANCELADA</item>
+        <item>ACEPTADA</item>
+        <item>PENDIENTE</item>
     </string-array>
 
 </resources>

@@ -1,11 +1,14 @@
 package com.arawaney.tumascotik.client.backend;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.UnsupportedCallbackException;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -817,6 +820,8 @@ public class ParseProvider {
 						request.setPet(pet);
 
 						request.setSystem_id(parsedRequest.getObjectId());
+						
+					
 
 						ParseRelation<ParseObject> statusRelation = parsedRequest
 								.getRelation("Status_ID");
@@ -897,6 +902,30 @@ public class ParseProvider {
 			}
 
 		}
+
+	}
+
+	public static void cancelRequest(Context context,
+			final ParseRequestListener listener, Request request) {
+
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Request");
+		query.whereMatches("objectId", request.getSystem_id());
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> parsedRequest, ParseException e) {
+				if (e == null) {
+					parsedRequest.get(0).put("Status", Request.STATUS_CANCELED);
+					parsedRequest.get(0).saveInBackground();
+					listener.onCanceledQueryFinished(true);
+				}
+				else{
+					Log.d(LOG_TAG, "Error getting request to cancel : "+e.getMessage());
+					listener.onCanceledQueryFinished(false);
+
+				}
+			}
+		});
 
 	}
 }

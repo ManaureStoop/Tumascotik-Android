@@ -1,14 +1,18 @@
 package com.arawaney.tumascotik.client.dialog;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 import com.arawaney.tumascotik.client.R;
 
-
-import com.arawaney.tumascotik.client.activity.VerCitas;
+import com.arawaney.tumascotik.client.activity.ViewRequests;
+import com.arawaney.tumascotik.client.backend.ParseProvider;
 import com.arawaney.tumascotik.client.db.CitationDB;
+import com.arawaney.tumascotik.client.db.provider.RequestProvider;
+import com.arawaney.tumascotik.client.listener.ParseRequestListener;
+import com.arawaney.tumascotik.client.model.Request;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -21,6 +25,7 @@ import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -32,125 +37,116 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 
 @SuppressLint("ValidFragment")
-public class ListItemDialog extends DialogFragment {
-	
-	String nombre;
-	String motivo;
-	Date fechainicio;
-	Date fechafinal;
-	Date fechainicio2;
-	String stats;
-	
-	public ListItemDialog(){};
-	
-	public ListItemDialog(String name, String motive, Date initialdate, Date finaldate, String status ){
-		nombre = name;
-		motivo =motive;
-		fechainicio=initialdate;
-		fechafinal = finaldate;
-        stats = status;
-    }     
-    
-	
-	
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-	
+public class ListItemDialog extends DialogFragment implements
+		ParseRequestListener {
 
-	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	    builder.setTitle(motivo+" para "+nombre);
-	    builder.setIcon(R.drawable.mascotiklogodialog);
-	 // Add the buttons
-	    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-	               public void onClick(DialogInterface dialog, int id) {
-	                   dialog.cancel();
-	               }
-	           });
-	    if (stats.equals("ACEPTADAS")){
-	    builder.setNegativeButton("Cancelar Cita", new DialogInterface.OnClickListener() {
-	               public void onClick(DialogInterface dialog, int id) {
-	            	   EraseSharedPref();
-	            	   UpdateParse();
-	            	   EraseDataBase();
-	            	   deleteCalendar(fechainicio.getTime(),fechafinal.getTime(),"Cita con Tumascotik para "+nombre);
-		               VerCitas callingActivity = (VerCitas) getActivity();
-		               callingActivity.Refresh();
-	               }
-	           });}
-	    return builder.create();
+	String petName;
+	String service;
+	Date initialDate;
+	Date finalDate;
+	Date fechainicio2;
+	int status;
+	Request request;
+
+	Context context;
+
+	public ListItemDialog() {
+	};
+
+	public ListItemDialog(Request request, Context context) {
+
+		petName = request.getPet().getName();
+		service = request.getService();
+		initialDate = request.getStart_date().getTime();
+		finalDate = request.getFinish_date().getTime();
+		status = request.getStatus();
+		this.request = request;
+
+		this.context = context;
 	}
 
-	void EraseSharedPref(){
-		int i;
-		int j;
-		int index = 0;
-		int ind = 0;
-		//Loads every object pending 
-		SharedPreferences settings = getActivity().getSharedPreferences("TUMASC", 0);
-		index = settings.getInt("index",0);
-		
-		for(i=0;i<index;i++){
-			fechainicio2 = new GregorianCalendar(settings.getInt("a�o"+i,0),settings.getInt("mes"+i,0),settings.getInt("dia"+i,0),settings.getInt("horai"+i,0),settings.getInt("minutoi"+i,0)).getTime();
-			Log.d("FECHA1",fechainicio.toString());
-			Log.d("FECHA2",fechainicio2.toString());
-			if (fechainicio2.compareTo(fechainicio) == 0){
-			 ind = i;
-		
-		SharedPreferences reqst = getActivity().getSharedPreferences("TUMASC", 0);
-		SharedPreferences.Editor editor = reqst.edit();
-		for(i=ind;i<(index-1);i++){
-			j = i+1;
-			editor.putInt("a�o"+i,reqst.getInt("a�o"+j,0) );
-			editor.putInt("mes"+i,reqst.getInt("mes"+j,0) );
-			editor.putInt("dia"+i,reqst.getInt("dia"+j,0) );
-			editor.putInt("horai"+i,reqst.getInt("horai"+j,0) );
-			editor.putInt("minutoi"+i,reqst.getInt("minutoi"+j,0) );
-		}
-		index--;
-		editor.putInt("index",index);
-		editor.commit();
-		}
-		}
-		}
-	
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-    
-	void UpdateParse(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		String connector = context.getResources().getString(
+				R.string.request_view_dialog_conector);
+		builder.setTitle(service + " " + connector + " " + petName);
+		builder.setIcon(R.drawable.mascotiklogodialog);
+		// Add the buttons
+		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+		if (status == Request.STATUS_ACCEPTED) {
+			String cancel = context.getResources().getString(
+					R.string.request_view_dialog_cancel_button);
+			builder.setNegativeButton(cancel,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
 
-		Parse.initialize(getActivity(), "wf9TGHsYeTz8od557fQ9o9pRel5BNlOT9oZ4CpbH",
-			    "2gKGXq41TDWhacnkA1YNH07mTKEI59bA7JlORu51");
+							cancelRequestParse();
+							EraseDataBase();
+							deleteCalendar(initialDate.getTime(),
+									finalDate.getTime(),
+									"Cita con Tumascotik para " + petName);
+							ViewRequests callingActivity = (ViewRequests) getActivity();
+							callingActivity.Refresh();
+						}
+
+					});
+		}
+		return builder.create();
+	}
+
+	private void cancelRequestParse() {
+
+		ParseProvider.cancelRequest(context, this, request);
+
+	}
+
+	void UpdateParse() {
+
+		Parse.initialize(getActivity(),
+				"wf9TGHsYeTz8od557fQ9o9pRel5BNlOT9oZ4CpbH",
+				"2gKGXq41TDWhacnkA1YNH07mTKEI59bA7JlORu51");
 		ParseQuery query = new ParseQuery("Citas");
-		query.whereEqualTo("fechaInicial", fechainicio);
+		query.whereEqualTo("fechaInicial", initialDate);
 
 		query.findInBackground(new FindCallback<ParseObject>() {
 
 			@Override
 			public void done(List<ParseObject> cList, ParseException e) {
-		    	ParseObject object; 
-		    	if (e == null) {
-		    		
-			    	if (cList.size() != 0){
-			    		
-			    		 object = cList.get(0);
-		    			 object.put("aceptado", 5);
-		    			 object.put("nuevo", 0);
-		    	    	 object.saveInBackground();
-			    }
-			    	}else{
-			    		Log.d("EXCEPCION PARSE", e.toString());
-			    	}
-	 }});
-		
+				ParseObject object;
+				if (e == null) {
+
+					if (cList.size() != 0) {
+
+						object = cList.get(0);
+						object.put("aceptado", 5);
+						object.put("nuevo", 0);
+						object.saveInBackground();
+					}
+				} else {
+					Log.d("EXCEPCION PARSE", e.toString());
+				}
+			}
+		});
+
 	}
-	void EraseDataBase(){
+
+	void EraseDataBase() {
 		CitationDB db = new CitationDB(getActivity());
-  	  	db.open();
-  	  	db.delete(String.valueOf(fechainicio.getTime()));
-  	  	db.close();
+		db.open();
+		db.delete(String.valueOf(initialDate.getTime()));
+		db.close();
 	}
-	private void deleteCalendar(long startQueryUTC, long endQueryUTC, String title){
+
+	private void deleteCalendar(long startQueryUTC, long endQueryUTC,
+			String title) {
 		// URI Builder
 		Uri.Builder eventsUriBuilder = CalendarContract.Instances.CONTENT_URI
-		            .buildUpon();
+				.buildUpon();
 		ContentUris.appendId(eventsUriBuilder, startQueryUTC);
 		ContentUris.appendId(eventsUriBuilder, endQueryUTC);
 		Uri eventsDeleteUri = eventsUriBuilder.build();
@@ -160,7 +156,9 @@ public class ListItemDialog extends DialogFragment {
 		ContentResolver cr = getActivity().getContentResolver();
 
 		try {
-			Cursor c = cr.query(eventsDeleteUri, new String[] {CalendarContract.Instances.EVENT_ID}, null, null, null);
+			Cursor c = cr.query(eventsDeleteUri,
+					new String[] { CalendarContract.Instances.EVENT_ID }, null,
+					null, null);
 			c.moveToFirst();
 			long eventID = c.getLong(0);
 			c.close();
@@ -169,14 +167,39 @@ public class ListItemDialog extends DialogFragment {
 			cr.delete(deleteUri, null, null);
 		}
 
-		catch(Exception e){
+		catch (Exception e) {
 
-		Log.d("DELETE", "ERROR");
-
-		}
-
+			Log.d("DELETE", "ERROR");
 
 		}
-	
+
+	}
+
+	@Override
+	public void OnRequestInserted(boolean inserted, String systemId) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void OnAllRequestsQueryFinished(ArrayList<Request> requests) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onRequestQueryFInished(Request request) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onCanceledQueryFinished(boolean canceled) {
+		deleteRequestFromDataBase();
+	}
+
+	private void deleteRequestFromDataBase() {
+		RequestProvider.removeRequest(context, request.getId());
+	}
+
 }
-

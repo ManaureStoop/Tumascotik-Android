@@ -15,8 +15,9 @@ public interface ParseRequestListener {
 
 	public void onRequestQueryFInished(Request request);
 	
+	public void onCanceledQueryFinished(boolean canceled);
+	
 
 }
-
 
 
