@@ -11,6 +11,7 @@ import android.util.Log;
 import com.arawaney.tumascotik.client.db.BreedEntity;
 import com.arawaney.tumascotik.client.db.TumascotikProvider;
 import com.arawaney.tumascotik.client.model.Breed;
+import com.arawaney.tumascotik.client.model.PetPropertie;
 import com.arawaney.tumascotik.client.model.Specie;
 
 public class BreedProvider {
@@ -33,14 +34,27 @@ public class BreedProvider {
 					values.put(BreedEntity.COLUMN_SPECIE_ID, breed.getSpecie()
 							.getSystem_id());
 
-				}else {
-					Log.d(LOG_TAG, "Specie object null inserting: "+ breed.getName());
+				} else {
+					Log.d(LOG_TAG,
+							"Specie object null inserting: " + breed.getName());
 				}
-			}else {
-				Log.d(LOG_TAG, "Specie name null inserting: "+ breed.getName());
+			} else {
+				Log.d(LOG_TAG, "Specie id null inserting: " + breed.getName());
 			}
-			values.put(BreedEntity.COLUMN_SPECIE_ID, breed.getSpecie()
-					.getSystem_id());
+
+			if (breed.getPetPropertie() != null) {
+				if (breed.getPetPropertie().getSystem_id() != null) {
+					values.put(BreedEntity.COLUMN_PETPROPERTIE_ID, breed
+							.getPetPropertie().getSystem_id());
+
+				} else {
+					Log.d(LOG_TAG, "Pet Propertie object null inserting: "
+							+ breed.getName());
+				}
+			} else {
+				Log.d(LOG_TAG,
+						"Pet Propertie id null inserting: " + breed.getName());
+			}
 
 			final Uri result = context.getContentResolver().insert(URI_BREED,
 					values);
@@ -80,11 +94,26 @@ public class BreedProvider {
 					values.put(BreedEntity.COLUMN_SPECIE_ID, breed.getSpecie()
 							.getSystem_id());
 
-				}else {
-					Log.d(LOG_TAG, "Specie object null inserting: "+ breed.getName());
+				} else {
+					Log.d(LOG_TAG,
+							"Specie object null inserting: " + breed.getName());
 				}
-			}else {
-				Log.d(LOG_TAG, "Specie name null inserting: "+ breed.getName());
+			} else {
+				Log.d(LOG_TAG, "Specie id null inserting: " + breed.getName());
+			}
+
+			if (breed.getPetPropertie() != null) {
+				if (breed.getPetPropertie().getSystem_id() != null) {
+					values.put(BreedEntity.COLUMN_PETPROPERTIE_ID, breed
+							.getPetPropertie().getSystem_id());
+
+				} else {
+					Log.d(LOG_TAG, "Pet Propertie object null inserting: "
+							+ breed.getName());
+				}
+			} else {
+				Log.d(LOG_TAG,
+						"Pet Propertie id null inserting: " + breed.getName());
 			}
 
 			String condition = BreedEntity.COLUMN_SYSTEM_ID + " = " + "'"
@@ -139,17 +168,32 @@ public class BreedProvider {
 					breed.setId(id);
 					breed.setSystem_id(system_id);
 					breed.setName(name);
-					
+
 					String specie_id = cursor.getString(cursor
 							.getColumnIndex(BreedEntity.COLUMN_SPECIE_ID));
-					
-					final Specie specie = SpecieProvider.readSpecie(context, specie_id);
-					 if (specie!= null) {
-						 breed.setSpecie(specie);
-					}else {
-						Log.d(LOG_TAG, "SPecie null reading in local DB for : "+breed.getName());
+
+					final Specie specie = SpecieProvider.readSpecie(context,
+							specie_id);
+					if (specie != null) {
+						breed.setSpecie(specie);
+					} else {
+						Log.d(LOG_TAG, "SPecie null reading in local DB for : "
+								+ breed.getName());
 					}
-					
+
+					String petpropertie_id = cursor
+							.getString(cursor
+									.getColumnIndex(BreedEntity.COLUMN_PETPROPERTIE_ID));
+
+					final PetPropertie petPropertie = PetPropertieProvider
+							.readPetPropertie(context, petpropertie_id);
+					if (petPropertie != null) {
+						breed.setPetPropertie(petPropertie);
+					} else {
+						Log.d(LOG_TAG,
+								"PetPropertie null reading in local DB for : "
+										+ breed.getName());
+					}
 
 				} while (cursor.moveToNext());
 			}
@@ -198,14 +242,29 @@ public class BreedProvider {
 					breed.setName(name);
 					String specie_id = cursor.getString(cursor
 							.getColumnIndex(BreedEntity.COLUMN_SPECIE_ID));
-					
-					final Specie specie = SpecieProvider.readSpecie(context, specie_id);
-					 if (specie!= null) {
-						 breed.setSpecie(specie);
-					}else {
-						Log.d(LOG_TAG, "SPecie null reading in local DB for : "+breed.getName());
+
+					final Specie specie = SpecieProvider.readSpecie(context,
+							specie_id);
+					if (specie != null) {
+						breed.setSpecie(specie);
+					} else {
+						Log.d(LOG_TAG, "SPecie null reading in local DB for : "
+								+ breed.getName());
 					}
-					
+
+					String petpropertie_id = cursor
+							.getString(cursor
+									.getColumnIndex(BreedEntity.COLUMN_PETPROPERTIE_ID));
+
+					final PetPropertie petPropertie = PetPropertieProvider
+							.readPetPropertie(context, petpropertie_id);
+					if (petPropertie != null) {
+						breed.setPetPropertie(petPropertie);
+					} else {
+						Log.d(LOG_TAG,
+								"PetPropertie null reading in local DB for : "
+										+ breed.getName());
+					}
 
 					breeds.add(breed);
 

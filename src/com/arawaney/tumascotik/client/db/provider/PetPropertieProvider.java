@@ -28,19 +28,7 @@ public class PetPropertieProvider {
 			ContentValues values = new ContentValues();
 			values.put(PetPropertieEntity.COLUMN_SYSTEM_ID, petPropertie.getSystem_id());
 			values.put(PetPropertieEntity.COLUMN_NAME, petPropertie.getName());
-			if (petPropertie.getBreed() != null) {
-				if (petPropertie.getBreed().getSystem_id() != null) {
-					values.put(PetPropertieEntity.COLUMN_BREED_ID, petPropertie.getBreed()
-							.getSystem_id());
 
-				}else {
-					Log.d(LOG_TAG, "Breed object null inserting: "+ petPropertie.getName());
-				}
-			}else {
-				Log.d(LOG_TAG, "Breed name null inserting: "+ petPropertie.getName());
-			}
-			values.put(PetPropertieEntity.COLUMN_BREED_ID, petPropertie.getBreed()
-					.getSystem_id());
 
 			final Uri result = context.getContentResolver().insert(URI_PETPROPERTIE,
 					values);
@@ -75,17 +63,7 @@ public class PetPropertieProvider {
 			values.put(PetPropertieEntity.COLUMN_ID, petPropertie.getId());
 			values.put(PetPropertieEntity.COLUMN_SYSTEM_ID, petPropertie.getSystem_id());
 			values.put(PetPropertieEntity.COLUMN_NAME, petPropertie.getName());
-			if (petPropertie.getBreed() != null) {
-				if (petPropertie.getBreed().getSystem_id() != null) {
-					values.put(PetPropertieEntity.COLUMN_BREED_ID, petPropertie.getBreed()
-							.getSystem_id());
 
-				}else {
-					Log.d(LOG_TAG, "Breed object null inserting: "+ petPropertie.getName());
-				}
-			}else {
-				Log.d(LOG_TAG, "Breed name null inserting: "+ petPropertie.getName());
-			}
 
 			String condition = PetPropertieEntity.COLUMN_SYSTEM_ID + " = " + "'"
 					+ String.valueOf(petPropertie.getSystem_id()) + "'";
@@ -140,16 +118,6 @@ public class PetPropertieProvider {
 					petPropertie.setSystem_id(system_id);
 					petPropertie.setName(name);
 					
-					String breed_id = cursor.getString(cursor
-							.getColumnIndex(PetPropertieEntity.COLUMN_BREED_ID));
-					
-					final Breed breed = BreedProvider.readBreed(context, breed_id);
-					 if (breed!= null) {
-						 petPropertie.setBreed(breed);
-					}else {
-						Log.d(LOG_TAG, "Breed null reading in local DB for : "+petPropertie.getName());
-					}
-					
 
 				} while (cursor.moveToNext());
 			}
@@ -162,6 +130,8 @@ public class PetPropertieProvider {
 		}
 		return petPropertie;
 	}
+	
+	
 
 	public static ArrayList<PetPropertie> readPetProperties(Context context) {
 
@@ -196,16 +166,6 @@ public class PetPropertieProvider {
 					petPropertie.setId(id);
 					petPropertie.setSystem_id(system_id);
 					petPropertie.setName(name);
-					String breed_id = cursor.getString(cursor
-							.getColumnIndex(PetPropertieEntity.COLUMN_BREED_ID));
-					
-					final Breed breed = BreedProvider.readBreed(context, breed_id);
-					 if (breed!= null) {
-						 petPropertie.setBreed(breed);
-					}else {
-						Log.d(LOG_TAG, "Breed null reading in local DB for : "+petPropertie.getName());
-					}
-					
 
 					petProperties.add(petPropertie);
 

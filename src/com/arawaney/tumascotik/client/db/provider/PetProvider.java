@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.arawaney.tumascotik.client.db.PetEntity;
 import com.arawaney.tumascotik.client.db.TumascotikProvider;
+import com.arawaney.tumascotik.client.model.Breed;
 import com.arawaney.tumascotik.client.model.Pet;
 import com.arawaney.tumascotik.client.model.User;
 
@@ -31,16 +32,20 @@ public class PetProvider {
 			values.put(PetEntity.COLUMN_USER_ID, pet.getOwner().getId());
 			values.put(PetEntity.COLUMN_COMMENT, pet.getComment());
 			values.put(PetEntity.COLUMN_GENDER, pet.getGender());
-			if (pet.getPet_properties() != null) {
-				values.put(PetEntity.COLUMN_PET_PROPERTIES,
-						pet.getPet_properties());
-			}
+
 			if (pet.getBreed() != null) {
-				values.put(PetEntity.COLUMN_BREED, pet.getBreed());
+				if (pet.getBreed().getSystem_id() != null) {
+					values.put(PetEntity.COLUMN_BREED_ID, pet.getBreed()
+							.getSystem_id());
+				} else {
+					Log.d(LOG_TAG,
+							"Breed Name null inserting pet: " + pet.getName());
+				}
+
+			} else {
+				Log.d(LOG_TAG, "Breed null inserting pet: " + pet.getName());
 			}
-			if (pet.getSpecie() != null) {
-				values.put(PetEntity.COLUMN_SPECIE, pet.getSpecie());
-			}
+
 			values.put(PetEntity.COLUMN_PUPPY, pet.getPuppy());
 
 			final Uri result = context.getContentResolver().insert(URI_PET,
@@ -79,17 +84,19 @@ public class PetProvider {
 			values.put(PetEntity.COLUMN_GENDER, pet.getGender());
 			values.put(PetEntity.COLUMN_PUPPY, pet.getPuppy());
 
-			if (pet.getPet_properties() != null) {
-				values.put(PetEntity.COLUMN_PET_PROPERTIES,
-						pet.getPet_properties());
-			}
 			if (pet.getBreed() != null) {
-				values.put(PetEntity.COLUMN_BREED, pet.getBreed());
+				if (pet.getBreed().getSystem_id() != null) {
+					values.put(PetEntity.COLUMN_BREED_ID, pet.getBreed()
+							.getSystem_id());
+				} else {
+					Log.d(LOG_TAG,
+							"Breed Name null updating pet: " + pet.getName());
+				}
+
+			} else {
+				Log.d(LOG_TAG, "Breed null updating pet: " + pet.getName());
 			}
-			if (pet.getSpecie() != null) {
-				values.put(PetEntity.COLUMN_SPECIE, pet.getSpecie());
-			}
-			
+
 			if (pet.getOwner() != null)
 				values.put(PetEntity.COLUMN_USER_ID, pet.getOwner().getId());
 
@@ -139,17 +146,9 @@ public class PetProvider {
 							.getColumnIndex(PetEntity.COLUMN_SYSTEM_ID));
 					final String name = cursor.getString(cursor
 							.getColumnIndex(PetEntity.COLUMN_NAME));
-					long owner_id = 0;
-					owner_id = cursor.getLong(cursor
-							.getColumnIndex(PetEntity.COLUMN_USER_ID));
+
 					final String comment = cursor.getString(cursor
 							.getColumnIndex(PetEntity.COLUMN_COMMENT));
-					final String breed = cursor.getString(cursor
-							.getColumnIndex(PetEntity.COLUMN_BREED));
-					final String pet_properties = cursor.getString(cursor
-							.getColumnIndex(PetEntity.COLUMN_PET_PROPERTIES));
-					final String specie = cursor.getString(cursor
-							.getColumnIndex(PetEntity.COLUMN_SPECIE));
 					final int gender = cursor.getInt(cursor
 							.getColumnIndex(PetEntity.COLUMN_GENDER));
 					final Integer puppy = cursor.getInt(cursor
@@ -161,13 +160,17 @@ public class PetProvider {
 					pet.setSystem_id(system_id);
 					pet.setName(name);
 					pet.setComment(comment);
-					pet.setBreed(breed);
-					pet.setPet_properties(pet_properties);
-					pet.setSpecie(specie);
 					pet.setGender(gender);
 					pet.setPuppy(puppy);
-					if (owner_id != 0) {
-						pet.setOwner(UserProvider.readUser(context));
+					pet.setOwner(UserProvider.readUser(context));
+
+					String breed_id = cursor.getString(cursor
+							.getColumnIndex(PetEntity.COLUMN_BREED_ID));
+					;
+					final Breed breed = BreedProvider.readBreed(context,
+							breed_id);
+					if (breed != null) {
+						pet.setBreed(breed);
 					}
 
 				} while (cursor.moveToNext());
@@ -210,16 +213,8 @@ public class PetProvider {
 							.getColumnIndex(PetEntity.COLUMN_SYSTEM_ID));
 					final String name = cursor.getString(cursor
 							.getColumnIndex(PetEntity.COLUMN_NAME));
-					final long owner_id = cursor.getLong(cursor
-							.getColumnIndex(PetEntity.COLUMN_USER_ID));
 					final String comment = cursor.getString(cursor
 							.getColumnIndex(PetEntity.COLUMN_COMMENT));
-					final String breed = cursor.getString(cursor
-							.getColumnIndex(PetEntity.COLUMN_BREED));
-					final String pet_properties = cursor.getString(cursor
-							.getColumnIndex(PetEntity.COLUMN_PET_PROPERTIES));
-					final String specie = cursor.getString(cursor
-							.getColumnIndex(PetEntity.COLUMN_SPECIE));
 					final int gender = cursor.getInt(cursor
 							.getColumnIndex(PetEntity.COLUMN_GENDER));
 					final Integer puppy = cursor.getInt(cursor
@@ -231,15 +226,18 @@ public class PetProvider {
 					pet.setSystem_id(system_id);
 					pet.setName(name);
 					pet.setComment(comment);
-					pet.setBreed(breed);
-					pet.setPet_properties(pet_properties);
-					Log.d(LOG_TAG, "specieee: " + specie);
-					pet.setSpecie(specie);
 					pet.setGender(gender);
 					pet.setPuppy(puppy);
+					pet.setOwner(UserProvider.readUser(context));
 
-					User owner = UserProvider.readUser(context);
-					pet.setOwner(owner);
+					String breed_id = cursor.getString(cursor
+							.getColumnIndex(PetEntity.COLUMN_BREED_ID));
+					
+					final Breed breed = BreedProvider.readBreed(context,
+							breed_id);
+					if (breed != null) {
+						pet.setBreed(breed);
+					}
 
 					pets.add(pet);
 

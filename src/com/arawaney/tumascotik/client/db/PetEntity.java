@@ -7,9 +7,7 @@ public class PetEntity {
 	public static final String COLUMN_NAME = "name";
 	public static final String COLUMN_USER_ID = "owner_id";
 	public static final String COLUMN_COMMENT = "comment";
-	public static final String COLUMN_BREED = "breed";
-	public static final String COLUMN_PET_PROPERTIES = "pet_properties";
-	public static final String COLUMN_SPECIE = "specie";
+	public static final String COLUMN_BREED_ID = "breed_id";
 	public static final String COLUMN_GENDER = "gender";
 	public static final String COLUMN_PUPPY = "puppy";
 
@@ -28,14 +26,10 @@ public class PetEntity {
 			+ " INTEGER, "
 			+ COLUMN_COMMENT 
 			+ " TEXT, " 
-			+ COLUMN_BREED 
+			+ COLUMN_BREED_ID 
 			+ " TEXT, "
 			+ COLUMN_GENDER 
 			+ " INTEGER, " 
-			+ COLUMN_PET_PROPERTIES 
-			+ " TEXT, " 
-			+ COLUMN_SPECIE 
-			+ " TEXT, " 
 			+ COLUMN_PUPPY 
 			+ " INTEGER);";
 }
