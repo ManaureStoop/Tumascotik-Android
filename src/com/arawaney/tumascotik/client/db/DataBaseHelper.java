@@ -26,6 +26,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 			db.execSQL(UserEntity.CREATE_TABLE_USER);
 			db.execSQL(PetEntity.CREATE_TABLE_PET);
 			db.execSQL(RequestEntity.CREATE_TABLE_REQUEST);
+			db.execSQL(SpecieEntity.CREATE_TABLE_SPECIE);
+			db.execSQL(BreedEntity.CREATE_TABLE_BREED);
+			db.execSQL(PetPropertieEntity.CREATE_TABLE_PETPROPERTIES);
+			db.execSQL(MotiveEntity.CREATE_TABLE_MOTIVE);
 		} catch (SQLException e) {
 			Log.d(LOG_TAG, "Error creating table:"+e.getMessage());
 		}catch (Exception e) {
@@ -42,6 +46,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 					+ PetEntity.TABLE);
 			db.execSQL("DROP TABLE IF EXISTS"
 					+ RequestEntity.TABLE);
+			db.execSQL("DROP TABLE IF EXISTS"
+					+ SpecieEntity.TABLE);
+			db.execSQL("DROP TABLE IF EXISTS"
+					+ BreedEntity.TABLE);
+			db.execSQL("DROP TABLE IF EXISTS"
+					+ PetPropertieEntity.TABLE);
+			db.execSQL("DROP TABLE IF EXISTS"
+					+ MotiveEntity.TABLE);
 		} catch (SQLException e) {
 			Log.d(LOG_TAG, "Error Ddroping table:"+e.getMessage());
 		}

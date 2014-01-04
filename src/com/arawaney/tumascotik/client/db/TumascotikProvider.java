@@ -27,6 +27,14 @@ public class TumascotikProvider extends ContentProvider {
 	private static final int PET_ID = 4;
 	private static final int REQUESTS = 5;
 	private static final int REQUEST_ID = 6;
+	private static final int SPECIES = 7;
+	private static final int SPECIE_ID = 8;
+	private static final int BREEDS = 9;
+	private static final int BREED_ID = 10;
+	private static final int PETPROPERTIES = 11;
+	private static final int PETPROPERTIES_ID = 12;
+	private static final int MOTIVES = 13;
+	private static final int MOTIVE_ID = 14;
 
 	// URIs
 
@@ -41,6 +49,22 @@ public class TumascotikProvider extends ContentProvider {
 	private static final String CONTENT_REQUEST = "content://" + PROVIDER_NAME
 			+ "/" + RequestEntity.TABLE;
 	public static final Uri URI_REQUEST = Uri.parse(CONTENT_REQUEST);
+	
+	private static final String CONTENT_SPECIE = "content://" + PROVIDER_NAME
+			+ "/" + SpecieEntity.TABLE;
+	public static final Uri URI_SPECIE = Uri.parse(CONTENT_SPECIE);
+	
+	private static final String CONTENT_BREED = "content://" + PROVIDER_NAME
+			+ "/" + BreedEntity.TABLE;
+	public static final Uri URI_BREED = Uri.parse(CONTENT_BREED);
+	
+	private static final String CONTENT_PETPROPERTIES = "content://" + PROVIDER_NAME
+			+ "/" + PetPropertieEntity.TABLE;
+	public static final Uri URI_PET_PROPERTIES = Uri.parse(CONTENT_PETPROPERTIES);
+	
+	private static final String CONTENT_MOTIVE = "content://" + PROVIDER_NAME
+			+ "/" + MotiveEntity.TABLE;
+	public static final Uri URI_MOTIVE = Uri.parse(CONTENT_MOTIVE);
 
 	// Content Types
 
@@ -56,6 +80,22 @@ public class TumascotikProvider extends ContentProvider {
 			+ PROVIDER_NAME + "." + RequestEntity.TABLE;
 	private static final String TYPE_REQUEST_ITEMS = "android.cursor.item/vnd."
 			+ PROVIDER_NAME + "." + RequestEntity.TABLE;
+	private static final String TYPE_SPECIE_ITEM = "android.cursor.item/vnd."
+			+ PROVIDER_NAME + "." + SpecieEntity.TABLE;
+	private static final String TYPE_SPECIE_ITEMS = "android.cursor.item/vnd."
+			+ PROVIDER_NAME + "." + SpecieEntity.TABLE;
+	private static final String TYPE_BREED_ITEM = "android.cursor.item/vnd."
+			+ PROVIDER_NAME + "." + BreedEntity.TABLE;
+	private static final String TYPE_BREED_ITEMS = "android.cursor.item/vnd."
+			+ PROVIDER_NAME + "." + BreedEntity.TABLE;
+	private static final String TYPE_PETPROPERTIES_ITEM = "android.cursor.item/vnd."
+			+ PROVIDER_NAME + "." + PetPropertieEntity.TABLE;
+	private static final String TYPE_PETPROPERTIES_ITEMS = "android.cursor.item/vnd."
+			+ PROVIDER_NAME + "." + PetPropertieEntity.TABLE;
+	private static final String TYPE_MOTIVE_ITEM = "android.cursor.item/vnd."
+			+ PROVIDER_NAME + "." + MotiveEntity.TABLE;
+	private static final String TYPE_MOTIVE_ITEMS = "android.cursor.item/vnd."
+			+ PROVIDER_NAME + "." + MotiveEntity.TABLE;
 
 	private static final UriMatcher uriMatcher;
 
@@ -71,6 +111,22 @@ public class TumascotikProvider extends ContentProvider {
 		uriMatcher.addURI(PROVIDER_NAME, RequestEntity.TABLE, REQUESTS);
 		uriMatcher
 				.addURI(PROVIDER_NAME, RequestEntity.TABLE + "/#", REQUEST_ID);
+		
+		uriMatcher.addURI(PROVIDER_NAME, SpecieEntity.TABLE, SPECIES);
+		uriMatcher
+				.addURI(PROVIDER_NAME, SpecieEntity.TABLE + "/#", SPECIE_ID);
+		
+		uriMatcher.addURI(PROVIDER_NAME, BreedEntity.TABLE, BREEDS);
+		uriMatcher
+				.addURI(PROVIDER_NAME, BreedEntity.TABLE + "/#", BREED_ID);
+		
+		uriMatcher.addURI(PROVIDER_NAME, PetPropertieEntity.TABLE, PETPROPERTIES);
+		uriMatcher
+				.addURI(PROVIDER_NAME, PetPropertieEntity.TABLE + "/#", PETPROPERTIES_ID);
+		
+		uriMatcher.addURI(PROVIDER_NAME, MotiveEntity.TABLE, MOTIVES);
+		uriMatcher
+				.addURI(PROVIDER_NAME, MotiveEntity.TABLE + "/#", MOTIVE_ID);
 	}
 
 	public static final String DATABASE_NAME = "tumascotik_client_db";
@@ -115,6 +171,23 @@ public class TumascotikProvider extends ContentProvider {
 			return TYPE_REQUEST_ITEMS;
 		case REQUEST_ID:
 			return TYPE_REQUEST_ITEM;
+			
+		case SPECIES:
+			return TYPE_SPECIE_ITEMS;
+		case SPECIE_ID:
+			return TYPE_SPECIE_ITEM;
+		case BREEDS:
+			return TYPE_BREED_ITEMS;
+		case BREED_ID:
+			return TYPE_BREED_ITEM;
+		case PETPROPERTIES:
+			return TYPE_PETPROPERTIES_ITEMS;
+		case PETPROPERTIES_ID:
+			return TYPE_PETPROPERTIES_ITEM;
+		case MOTIVES:
+			return TYPE_MOTIVE_ITEMS;
+		case MOTIVE_ID:
+			return TYPE_MOTIVE_ITEM;
 		default:
 			throw new IllegalArgumentException("Unsupported UR" + uri);
 		}
@@ -142,6 +215,25 @@ public class TumascotikProvider extends ContentProvider {
 			target = URI_REQUEST;
 			break;
 
+		case SPECIES:
+			tableName = SpecieEntity.TABLE;
+			target = URI_SPECIE;
+			break;
+			
+		case BREEDS:
+			tableName = BreedEntity.TABLE;
+			target = URI_BREED;
+			break;
+			
+		case PETPROPERTIES:
+			tableName = PetPropertieEntity.TABLE;
+			target = URI_PET_PROPERTIES;
+			break;
+			
+		case MOTIVES:
+			tableName = MotiveEntity.TABLE;
+			target = URI_MOTIVE;
+			break;
 		default:
 			throw new IllegalArgumentException("Unsupported UR" + uri);
 		}
@@ -222,6 +314,50 @@ public class TumascotikProvider extends ContentProvider {
 		case REQUEST_ID:
 			tableName = RequestEntity.TABLE;
 			target = URI_REQUEST;
+			single = true;
+			break;
+			
+		case SPECIES:
+			tableName = SpecieEntity.TABLE;
+			target = URI_SPECIE;
+			break;
+			
+		case SPECIE_ID:
+			tableName = SpecieEntity.TABLE;
+			target = URI_SPECIE;
+			single = true;
+			break;
+			
+		case BREEDS:
+			tableName = BreedEntity.TABLE;
+			target = URI_BREED;
+			break;
+			
+		case BREED_ID:
+			tableName = BreedEntity.TABLE;
+			target = URI_BREED;
+			single = true;
+			break;
+			
+		case PETPROPERTIES:
+			tableName = PetPropertieEntity.TABLE;
+			target = URI_PET_PROPERTIES;
+			break;
+			
+		case PETPROPERTIES_ID:
+			tableName = PetPropertieEntity.TABLE;
+			target = URI_PET_PROPERTIES;
+			single = true;
+			break;
+			
+		case MOTIVES:
+			tableName = MotiveEntity.TABLE;
+			target = URI_MOTIVE;
+			break;
+			
+		case MOTIVE_ID:
+			tableName = MotiveEntity.TABLE;
+			target = URI_MOTIVE;
 			single = true;
 			break;
 
@@ -328,6 +464,66 @@ public class TumascotikProvider extends ContentProvider {
 			count = db.update(RequestEntity.TABLE, values, selection,
 					selectionArgs);
 			break;
+			
+		case SPECIES:
+			count = db.update(SpecieEntity.TABLE, values, selection,
+					selectionArgs);
+			break;
+
+		case SPECIE_ID:
+			selection = SpecieEntity.COLUMN_ID
+					+ " = "
+					+ uri.getPathSegments().get(1)
+					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
+							+ ')' : "");
+			count = db.update(RequestEntity.TABLE, values, selection,
+					selectionArgs);
+			break;
+			
+		case BREEDS:
+			count = db.update(BreedEntity.TABLE, values, selection,
+					selectionArgs);
+			break;
+
+		case BREED_ID:
+			selection = BreedEntity.COLUMN_ID
+					+ " = "
+					+ uri.getPathSegments().get(1)
+					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
+							+ ')' : "");
+			count = db.update(BreedEntity.TABLE, values, selection,
+					selectionArgs);
+			break;
+			
+		case PETPROPERTIES:
+			count = db.update(PetPropertieEntity.TABLE, values, selection,
+					selectionArgs);
+			break;
+
+		case PETPROPERTIES_ID:
+			selection = PetPropertieEntity.COLUMN_ID
+					+ " = "
+					+ uri.getPathSegments().get(1)
+					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
+							+ ')' : "");
+			count = db.update(PetPropertieEntity.TABLE, values, selection,
+					selectionArgs);
+			break;
+			
+		case MOTIVES:
+			count = db.update(MotiveEntity.TABLE, values, selection,
+					selectionArgs);
+			break;
+
+		case MOTIVE_ID:
+			selection = MotiveEntity.COLUMN_ID
+					+ " = "
+					+ uri.getPathSegments().get(1)
+					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
+							+ ')' : "");
+			count = db.update(MotiveEntity.TABLE, values, selection,
+					selectionArgs);
+			break;
 
 		default:
 			throw new IllegalArgumentException("Unsupported URI" + uri);
@@ -398,6 +594,70 @@ public class TumascotikProvider extends ContentProvider {
 			rowsAffected = db.delete(RequestEntity.TABLE, selection,
 					selectionArgs);
 			break;
+			
+		case SPECIES:
+			rowsAffected = db.delete(SpecieEntity.TABLE, selection,
+					selectionArgs);
+			break;
+
+		case SPECIE_ID:
+			selection = SpecieEntity.COLUMN_ID
+					+ " = "
+					+ uri.getPathSegments().get(1)
+					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
+							+ ')' : "");
+			rowsAffected = db.delete(SpecieEntity.TABLE, selection,
+					selectionArgs);
+			break;
+
+			
+		case BREEDS:
+			rowsAffected = db.delete(BreedEntity.TABLE, selection,
+					selectionArgs);
+			break;
+
+		case BREED_ID:
+			selection = BreedEntity.COLUMN_ID
+					+ " = "
+					+ uri.getPathSegments().get(1)
+					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
+							+ ')' : "");
+			rowsAffected = db.delete(BreedEntity.TABLE, selection,
+					selectionArgs);
+			break;
+
+			
+		case PETPROPERTIES:
+			rowsAffected = db.delete(PetPropertieEntity.TABLE, selection,
+					selectionArgs);
+			break;
+
+		case PETPROPERTIES_ID:
+			selection = PetPropertieEntity.COLUMN_ID
+					+ " = "
+					+ uri.getPathSegments().get(1)
+					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
+							+ ')' : "");
+			rowsAffected = db.delete(PetPropertieEntity.TABLE, selection,
+					selectionArgs);
+			break;
+
+			
+		case MOTIVES:
+			rowsAffected = db.delete(MotiveEntity.TABLE, selection,
+					selectionArgs);
+			break;
+
+		case MOTIVE_ID:
+			selection = MotiveEntity.COLUMN_ID
+					+ " = "
+					+ uri.getPathSegments().get(1)
+					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
+							+ ')' : "");
+			rowsAffected = db.delete(MotiveEntity.TABLE, selection,
+					selectionArgs);
+			break;
+
 
 		default:
 			throw new IllegalArgumentException("Unsupported UR" + uri);

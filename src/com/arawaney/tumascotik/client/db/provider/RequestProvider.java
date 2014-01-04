@@ -303,4 +303,90 @@ public class RequestProvider {
 		}
 		return requests;
 	}
+
+	public static ArrayList<Request> readAllBudgets(Context context) {
+		if (context == null)
+			return null;
+
+		ArrayList<Request> requests = new ArrayList<Request>();
+		
+		String condition = RequestEntity.COLUMN_IS_APPOINTMENT + " = " + "'"
+				+ String.valueOf(Request.IS__NOT_APPOINTMENT) + "'";
+
+		final Cursor cursor = context.getContentResolver().query(URI_REQUEST,
+				null, condition, null, null);
+
+		Pet pet = null;
+
+		if (cursor.getCount() == 0) {
+			cursor.close();
+			return null;
+		}
+
+		try {
+			if (cursor.moveToFirst()) {
+
+				do {
+
+					final long id = cursor.getLong(cursor
+							.getColumnIndex(RequestEntity.COLUMN_ID));
+					final String system_id = cursor.getString(cursor
+							.getColumnIndex(RequestEntity.COLUMN_SYSTEM_ID));
+					final long start_date = cursor.getLong(cursor
+							.getColumnIndex(RequestEntity.COLUMN_START_DATE));
+					final long finish_date = cursor.getLong(cursor
+							.getColumnIndex(RequestEntity.COLUMN_FINISH_DATE));
+					final String service = cursor.getString(cursor
+							.getColumnIndex(RequestEntity.COLUMN_SERVICE));
+					final Integer price = cursor.getInt(cursor
+							.getColumnIndex(RequestEntity.COLUMN_PRICE));
+					final String comment = cursor.getString(cursor
+							.getColumnIndex(RequestEntity.COLUMN_COMMENT));
+					final int status = cursor.getInt(cursor
+							.getColumnIndex(RequestEntity.COLUMN_STATUS));
+					final Integer delivery = cursor.getInt(cursor
+							.getColumnIndex(RequestEntity.COLUMN_DELIVERY));
+					final Integer is_appointment = cursor.getInt(cursor
+							.getColumnIndex(RequestEntity.COLUMN_DELIVERY));
+					final Integer active = cursor.getInt(cursor
+							.getColumnIndex(RequestEntity.COLUMN_ACTIVE));
+					final String pet_id = cursor.getString(cursor
+							.getColumnIndex(RequestEntity.COLUMN_PET_ID));
+
+					Calendar startCalendar = Calendar.getInstance();
+					startCalendar.setTimeInMillis(start_date);
+
+					Calendar finishCalendar = Calendar.getInstance();
+					finishCalendar.setTimeInMillis(finish_date);
+
+					Request request = new Request();
+					request.setId(id);
+					request.setSystem_id(system_id);
+					request.setStart_date(startCalendar);
+					request.setFinish_date(finishCalendar);
+					request.setService(service);
+					request.setPrice(price);
+					request.setComment(comment);
+					request.setStatus(status);
+					request.setDelivery(delivery);
+					request.setIs_appointment(is_appointment);
+					request.setActive(active);
+
+					if (pet_id != null) {
+						request.setPet(PetProvider.readPet(context, pet_id));
+					}
+
+					requests.add(request);
+
+				} while (cursor.moveToNext());
+			}
+
+		} catch (Exception e) {
+			requests = null;
+			Log.e(LOG_TAG, "Error : " + e.getMessage());
+		} finally {
+			cursor.close();
+		}
+		return requests;
+	}
 }
