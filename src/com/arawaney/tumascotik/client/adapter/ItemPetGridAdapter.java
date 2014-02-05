@@ -80,12 +80,10 @@ public class ItemPetGridAdapter extends BaseAdapter {
 	        return footerView;
 	    }
 	
-		String path = new String( String.valueOf(itemsPet.get(position).getSpecie()));
+		String path = new String( String.valueOf(itemsPet.get(position).getBreed().getSpecie().getName()));
 		holder.petName.setTypeface(FontUtil.getTypeface(contxt, FontUtil.ROBOTO_THIN));
 		holder.petName.setText(itemsPet.get(position).getName());
 		holder.petAvatar.setImageResource(BitMapUtil.getImageId(contxt, path));
-		
-		
 		
 		return convertView;
 	}

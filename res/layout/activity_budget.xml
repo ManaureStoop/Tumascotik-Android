@@ -3,69 +3,91 @@
     android:id="@+id/linListViews"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-	android:background="@drawable/background"
-    android:orientation="vertical"
+    android:background="@color/text_white"
     android:screenOrientation="portrait" >
 
-    <ListView
-        android:id="@+id/listpresp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true"
+        android:background="@drawable/background" >
 
-    </ListView>
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/textview_budget_total_title"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="3dp" >
 
-    <TextView
-        android:id="@+id/txttotal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/textview_budget_total_title"
-        android:background="@drawable/ic_yellow_button"
-        android:gravity="center"
-        android:paddingBottom="5dp"
-        android:paddingTop="10dp"
-        android:text="0 Bs"
-        android:textColor="@color/text_white"
-        android:textSize="@dimen/big_oval_buttons" />
+            <ListView
+                android:id="@+id/listview_budgets"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null" >
+            </ListView>
 
-    <TextView
-        android:id="@+id/textview_budget_total_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-    
-        android:layout_below="@+id/listpresp"
-        android:layout_marginRight="30dp"
-        android:text="@string/budget_total_title"
-        android:textColor="@color/text_blue"
-        android:textSize="@dimen/blue_text" />
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                layout="@layout/zero_data_budget_list_view" />
+        </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/bhacerpedidopresp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textview_budget_total_title"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:src="@drawable/ic_foward" />
+        <TextView
+            android:id="@+id/textview_budget_total_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/txttotal"
+            android:layout_alignRight="@+id/relativeLayout1"
+            android:layout_marginRight="31dp"
+            android:text="@string/budget_total_title"
+            android:textColor="@color/text_blue"
+            android:textSize="@dimen/blue_text" />
 
-    <ImageView
-        android:id="@+id/bdeleteallpresp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/bhacerpedidopresp"
-        android:layout_marginRight="17dp"
-        android:layout_toLeftOf="@+id/txttotal"
-        android:src="@drawable/ic_cancel" />
+        <ImageView
+            android:id="@+id/bhacerpedidopresp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textview_budget_total_title"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="22dp"
+            android:src="@drawable/buton_foward" />
 
-    <ImageView
-        android:id="@+id/bagregpresp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bdeleteallpresp"
-        android:layout_below="@+id/textview_budget_total_title"
-        android:src="@drawable/ic_add" />
+        <ImageView
+            android:id="@+id/bagregpresp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txttotal"
+            android:layout_marginRight="16dp"
+            android:layout_toLeftOf="@+id/txttotal"
+            android:src="@drawable/buton_add" />
+
+        <TextView
+            android:id="@+id/txttotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/bhacerpedidopresp"
+            android:layout_alignRight="@+id/relativeLayout1"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/buton_yellow"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="10dp"
+            android:text="0 Bs"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/big_oval_buttons" />
+
+        <ImageView
+            android:id="@+id/bdeleteallpresp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_alignBottom="@+id/bagregpresp"
+            android:layout_toLeftOf="@+id/bagregpresp"
+            android:src="@drawable/buton_delete" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

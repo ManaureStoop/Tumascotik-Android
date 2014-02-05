@@ -79,6 +79,7 @@
     <string name="menu_make_appointment">Make Appointment</string>
     <string name="menu_view_appointment">My Appointments</string>
     <string name="menu_budget">Budgets</string>
+    <string name="main_load_backend_data_dialog">Loading data from Tumascotik. This process can take several minutes</string>
 
     <!-- Pet Info -->
     <string name="pet_info_button_edit">Edit</string>
@@ -86,6 +87,9 @@
     <string name="pet_info_title_specie">Specie</string>
     <string name="pet_info_title_breed">Breed</string>
     <string name="pet_info_title_gender">Gender</string>
+    <string name="pet_info_title_agressive">Agressive</string>
+    <string name="pet_info_title_agressive_yes">Yes</string>
+    <string name="pet_info_title_agressive_no">No</string>
     <string name="pet_info_title_properties">Properties</string>
     <string name="pet_info_title_puppy">Age</string>
     <string name="pet_info_title_comment">Comments</string>
@@ -94,6 +98,7 @@
     <string name="pet_info_loading_specie_lists">Loading Species ...</string>
     <string name="pet_info_pet_not_updated">It is not possible to update the your pet at the moment</string>
     <string name="pet_info_pet_not_inserted">It is not possible to insert your pet at the moment</string>
+    <string name="pet_info_pet_data_incomplete">There is some important information missing on your pet profile...</string>
 
     <!-- User Info -->
     <string name="user_info_button_edit">Edit</string>
@@ -125,7 +130,8 @@
     <string name="set_request_details_comments_title">Comments: </string>
     <string name="set_request_details_motive_title">Motive: </string>
     <string name="set_request_details_motive">Motive</string>
-    <string name="set_request_details_isDeivery_title">Delivery: </string>
+    <string name="set_request_details_isDeivery_title_afirmative">Delivery: YES </string>
+    <string name="set_request_details_isDeivery_title_negative">Delivery: NO </string>
     <string name="set_request_details_loading_motive_lists">Loading Services ...</string>
 
     <!-- Send Request -->
@@ -141,9 +147,27 @@
     <string name="request_view_time">Time: </string>
     <string name="request_view_dialog_conector">for</string>
     <string name="request_view_dialog_cancel_button">Cancel Appointment</string>
+    <string name="request_view_zero_data">You havent made any \n appointments yet...</string>
+
+    <!-- Request Notification -->
+    <string name="request_notification_toast_accepted">Appointment accepted for : </string>
+    <string name="request_notification_accepted_title">The appointment was accepted for : </string>
+    <string name="request_notification_accepted_content">The appointment has been added into your Calendar </string>
+    <string name="request_notification_toast_rejected">Your vet can not attend </string>
+    <string name="request_notification_rejected_title">Appointment rejected for : </string>
+    <string name="request_notification_rejected_content">We are sorry, please choose another date/time </string>
 
     <!-- Budget -->
     <string name="budget_total_title">Total</string>
+    <string name="budget_zero_data">You havent \n added anything yet...</string>
+    <string name="budget_updating_prices">Updating prices...</string>
+    <string name="budget_dialog_ok">OK</string>
+    <string name="budget_dialog_cancel">Cancel</string>
+    <string name="budget_dialog_delete_from_list">Delete from list</string>
+    <string name="budget_dialog_send">Send</string>
+    <string name="budget_dialog_send_title">Dear client</string>
+    <string name="budget_dialog_send_body">Do you want to send the order for a total of Bs. </string>
+    <string name="budget_sending_order">Sending order...</string>
 
     <string-array name="Genders">
         <item>--Choose--</item>
@@ -161,6 +185,10 @@
         <item>Female</item>
     </string-array>
     <string-array name="Status">
+        <item>ATTENDED</item>
+        <item>CANCELED</item>
+        <item>ACCEPTED</item>
+        <item>PENDING</item>
         <item>ATTENDED</item>
         <item>CANCELED</item>
         <item>ACCEPTED</item>

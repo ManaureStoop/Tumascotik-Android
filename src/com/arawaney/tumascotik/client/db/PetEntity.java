@@ -10,6 +10,8 @@ public class PetEntity {
 	public static final String COLUMN_BREED_ID = "breed_id";
 	public static final String COLUMN_GENDER = "gender";
 	public static final String COLUMN_PUPPY = "puppy";
+	public static final String COLUMN_AGRESSIVE = "agressive";
+	public static final String COLUMN_UPDATED_AT = "updated_at";
 
 	public static final int DATABASE_VERSION = 1;
 
@@ -30,6 +32,10 @@ public class PetEntity {
 			+ " TEXT, "
 			+ COLUMN_GENDER 
 			+ " INTEGER, " 
+			+ COLUMN_UPDATED_AT 
+			+ " INTEGER, " 
 			+ COLUMN_PUPPY 
+			+ " INTEGER, " 
+			+ COLUMN_AGRESSIVE
 			+ " INTEGER);";
 }

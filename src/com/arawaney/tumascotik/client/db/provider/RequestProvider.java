@@ -2,6 +2,7 @@ package com.arawaney.tumascotik.client.db.provider;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -14,6 +15,7 @@ import com.arawaney.tumascotik.client.db.RequestEntity;
 import com.arawaney.tumascotik.client.db.TumascotikProvider;
 import com.arawaney.tumascotik.client.model.Pet;
 import com.arawaney.tumascotik.client.model.Request;
+import com.arawaney.tumascotik.client.model.Service;
 import com.arawaney.tumascotik.client.model.User;
 import com.arawaney.tumascotik.client.util.CalendarUtil;
 
@@ -35,12 +37,16 @@ public class RequestProvider {
 					.getTimeInMillis());
 			values.put(RequestEntity.COLUMN_FINISH_DATE, request
 					.getFinish_date().getTimeInMillis());
-			values.put(RequestEntity.COLUMN_SERVICE, request.getService());
+			if (request.getUpdated_at() != null) {
+				values.put(RequestEntity.COLUMN_UPDATED_AT, request
+						.getUpdated_at().getTimeInMillis());
+			}
+			
+			values.put(RequestEntity.COLUMN_SERVICE_ID, request.getService().getSystem_id()
+					);
 			values.put(RequestEntity.COLUMN_COMMENT, request.getComment());
 			values.put(RequestEntity.COLUMN_STATUS, request.getStatus());
 			values.put(RequestEntity.COLUMN_DELIVERY, request.isDelivery());
-			values.put(RequestEntity.COLUMN_IS_APPOINTMENT,
-					request.Is_appointment());
 			values.put(RequestEntity.COLUMN_ACTIVE, request.isActive());
 			values.put(RequestEntity.COLUMN_PET_ID, request.getPet()
 					.getSystem_id());
@@ -83,18 +89,18 @@ public class RequestProvider {
 					.getTimeInMillis());
 			values.put(RequestEntity.COLUMN_FINISH_DATE, request
 					.getFinish_date().getTimeInMillis());
+			values.put(RequestEntity.COLUMN_UPDATED_AT, request
+					.getUpdated_at().getTimeInMillis());
 	
 			values.put(RequestEntity.COLUMN_COMMENT, request.getComment());
 
 			values.put(RequestEntity.COLUMN_DELIVERY, request.isDelivery());
-			values.put(RequestEntity.COLUMN_IS_APPOINTMENT,
-					request.Is_appointment());
 			values.put(RequestEntity.COLUMN_ACTIVE, request.isActive());
 			values.put(RequestEntity.COLUMN_PET_ID, request.getPet()
 					.getSystem_id());
 
-			if (request.getService() != null) {
-				values.put(RequestEntity.COLUMN_SERVICE, request.getService());
+			if (request.getService().getSystem_id() != null) {
+				values.put(RequestEntity.COLUMN_SERVICE_ID, request.getService().getSystem_id());
 			}
 			if (request.getStatus() != 0) {
 				values.put(RequestEntity.COLUMN_STATUS, request.getStatus());
@@ -151,8 +157,8 @@ public class RequestProvider {
 							.getColumnIndex(RequestEntity.COLUMN_START_DATE));
 					final long finish_date = cursor.getInt(cursor
 							.getColumnIndex(RequestEntity.COLUMN_FINISH_DATE));
-					final String service = cursor.getString(cursor
-							.getColumnIndex(RequestEntity.COLUMN_SERVICE));
+					final String serviceId = cursor.getString(cursor
+							.getColumnIndex(RequestEntity.COLUMN_SERVICE_ID));
 					final Integer price = cursor.getInt(cursor
 							.getColumnIndex(RequestEntity.COLUMN_PRICE));
 					final String comment = cursor.getString(cursor
@@ -161,18 +167,23 @@ public class RequestProvider {
 							.getColumnIndex(RequestEntity.COLUMN_STATUS));
 					final Integer delivery = cursor.getInt(cursor
 							.getColumnIndex(RequestEntity.COLUMN_DELIVERY));
-					final Integer is_appointment = cursor.getInt(cursor
-							.getColumnIndex(RequestEntity.COLUMN_DELIVERY));
 					final Integer active = cursor.getInt(cursor
 							.getColumnIndex(RequestEntity.COLUMN_ACTIVE));
 					final String pet_id = cursor.getString(cursor
 							.getColumnIndex(RequestEntity.COLUMN_PET_ID));
+					final long updated_at = cursor.getInt(cursor
+							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
+					
+					Calendar updatedAt = Calendar.getInstance();
+					updatedAt.setTimeInMillis(updated_at);
 
 					Calendar startCalendar = Calendar.getInstance();
 					startCalendar.setTimeInMillis(start_date);
 
 					Calendar finishCalendar = Calendar.getInstance();
 					finishCalendar.setTimeInMillis(finish_date);
+					
+					Service service = ServiceProvider.readMotive(context, serviceId);
 
 					request = new Request();
 					request.setId(id);
@@ -184,8 +195,9 @@ public class RequestProvider {
 					request.setComment(comment);
 					request.setStatus(status);
 					request.setDelivery(delivery);
-					request.setIs_appointment(is_appointment);
 					request.setActive(active);
+					request.setUpdated_at(updatedAt);
+
 
 					if (pet_id != null) {
 						request.setPet(PetProvider.readPet(context, pet_id));
@@ -203,17 +215,20 @@ public class RequestProvider {
 		return request;
 	}
 
-	public static boolean removeRequest(Context context, long requestId) {
+	public static boolean removeRequest(Context context, String requestId) {
 
 		try {
-			String condition = RequestEntity.COLUMN_ID + " = "
-					+ String.valueOf(requestId);
+			String condition = RequestEntity.COLUMN_SYSTEM_ID + " = "+ "'"
+					+ String.valueOf(requestId)+ "'";
 			int rows = context.getContentResolver().delete(URI_REQUEST,
 					condition, null);
 
 			if (rows == 1) {
 				Log.i(LOG_TAG, "Request : " + requestId + "has been deleted");
 				return true;
+			}else {
+				Log.i(LOG_TAG, "Request : " + requestId + "has not been deleted");
+
 			}
 		} catch (Exception e) {
 			Log.e(LOG_TAG, "Error deleting request: " + e.getMessage());
@@ -230,7 +245,6 @@ public class RequestProvider {
 		final Cursor cursor = context.getContentResolver().query(URI_REQUEST,
 				null, null, null, null);
 
-		Pet pet = null;
 
 		if (cursor.getCount() == 0) {
 			cursor.close();
@@ -250,8 +264,8 @@ public class RequestProvider {
 							.getColumnIndex(RequestEntity.COLUMN_START_DATE));
 					final long finish_date = cursor.getLong(cursor
 							.getColumnIndex(RequestEntity.COLUMN_FINISH_DATE));
-					final String service = cursor.getString(cursor
-							.getColumnIndex(RequestEntity.COLUMN_SERVICE));
+					final String serviceId = cursor.getString(cursor
+							.getColumnIndex(RequestEntity.COLUMN_SERVICE_ID));
 					final Integer price = cursor.getInt(cursor
 							.getColumnIndex(RequestEntity.COLUMN_PRICE));
 					final String comment = cursor.getString(cursor
@@ -260,18 +274,23 @@ public class RequestProvider {
 							.getColumnIndex(RequestEntity.COLUMN_STATUS));
 					final Integer delivery = cursor.getInt(cursor
 							.getColumnIndex(RequestEntity.COLUMN_DELIVERY));
-					final Integer is_appointment = cursor.getInt(cursor
-							.getColumnIndex(RequestEntity.COLUMN_DELIVERY));
 					final Integer active = cursor.getInt(cursor
 							.getColumnIndex(RequestEntity.COLUMN_ACTIVE));
 					final String pet_id = cursor.getString(cursor
 							.getColumnIndex(RequestEntity.COLUMN_PET_ID));
+					final long updated_at = cursor.getInt(cursor
+							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
+					
+					Calendar updatedAt = Calendar.getInstance();
+					updatedAt.setTimeInMillis(updated_at);
 
 					Calendar startCalendar = Calendar.getInstance();
 					startCalendar.setTimeInMillis(start_date);
 
 					Calendar finishCalendar = Calendar.getInstance();
 					finishCalendar.setTimeInMillis(finish_date);
+					
+					Service service = ServiceProvider.readMotive(context, serviceId);
 
 					Request request = new Request();
 					request.setId(id);
@@ -283,8 +302,9 @@ public class RequestProvider {
 					request.setComment(comment);
 					request.setStatus(status);
 					request.setDelivery(delivery);
-					request.setIs_appointment(is_appointment);
 					request.setActive(active);
+					request.setUpdated_at(updatedAt);
+
 
 					if (pet_id != null) {
 						request.setPet(PetProvider.readPet(context, pet_id));
@@ -304,20 +324,11 @@ public class RequestProvider {
 		return requests;
 	}
 
-	public static ArrayList<Request> readAllBudgets(Context context) {
-		if (context == null)
-			return null;
-
-		ArrayList<Request> requests = new ArrayList<Request>();
+	
+	public static Date getLastUpdate(Context context) {
+		final Cursor cursor = context.getContentResolver().query(URI_REQUEST, null,
+				null, null, PetEntity.COLUMN_UPDATED_AT+" DESC");
 		
-		String condition = RequestEntity.COLUMN_IS_APPOINTMENT + " = " + "'"
-				+ String.valueOf(Request.IS__NOT_APPOINTMENT) + "'";
-
-		final Cursor cursor = context.getContentResolver().query(URI_REQUEST,
-				null, condition, null, null);
-
-		Pet pet = null;
-
 		if (cursor.getCount() == 0) {
 			cursor.close();
 			return null;
@@ -326,67 +337,20 @@ public class RequestProvider {
 		try {
 			if (cursor.moveToFirst()) {
 
-				do {
-
-					final long id = cursor.getLong(cursor
-							.getColumnIndex(RequestEntity.COLUMN_ID));
-					final String system_id = cursor.getString(cursor
-							.getColumnIndex(RequestEntity.COLUMN_SYSTEM_ID));
-					final long start_date = cursor.getLong(cursor
-							.getColumnIndex(RequestEntity.COLUMN_START_DATE));
-					final long finish_date = cursor.getLong(cursor
-							.getColumnIndex(RequestEntity.COLUMN_FINISH_DATE));
-					final String service = cursor.getString(cursor
-							.getColumnIndex(RequestEntity.COLUMN_SERVICE));
-					final Integer price = cursor.getInt(cursor
-							.getColumnIndex(RequestEntity.COLUMN_PRICE));
-					final String comment = cursor.getString(cursor
-							.getColumnIndex(RequestEntity.COLUMN_COMMENT));
-					final int status = cursor.getInt(cursor
-							.getColumnIndex(RequestEntity.COLUMN_STATUS));
-					final Integer delivery = cursor.getInt(cursor
-							.getColumnIndex(RequestEntity.COLUMN_DELIVERY));
-					final Integer is_appointment = cursor.getInt(cursor
-							.getColumnIndex(RequestEntity.COLUMN_DELIVERY));
-					final Integer active = cursor.getInt(cursor
-							.getColumnIndex(RequestEntity.COLUMN_ACTIVE));
-					final String pet_id = cursor.getString(cursor
-							.getColumnIndex(RequestEntity.COLUMN_PET_ID));
-
-					Calendar startCalendar = Calendar.getInstance();
-					startCalendar.setTimeInMillis(start_date);
-
-					Calendar finishCalendar = Calendar.getInstance();
-					finishCalendar.setTimeInMillis(finish_date);
-
-					Request request = new Request();
-					request.setId(id);
-					request.setSystem_id(system_id);
-					request.setStart_date(startCalendar);
-					request.setFinish_date(finishCalendar);
-					request.setService(service);
-					request.setPrice(price);
-					request.setComment(comment);
-					request.setStatus(status);
-					request.setDelivery(delivery);
-					request.setIs_appointment(is_appointment);
-					request.setActive(active);
-
-					if (pet_id != null) {
-						request.setPet(PetProvider.readPet(context, pet_id));
-					}
-
-					requests.add(request);
-
-				} while (cursor.moveToNext());
+					final long updated_at = cursor.getLong(cursor
+							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
+					Date date = new Date(updated_at);
+					Log.d(LOG_TAG, "last update "+CalendarUtil.getDateFormated(date, "dd MM yyy mm:ss"));
+					
+			return date;		
 			}
 
 		} catch (Exception e) {
-			requests = null;
 			Log.e(LOG_TAG, "Error : " + e.getMessage());
 		} finally {
 			cursor.close();
 		}
-		return requests;
+		
+		return null;
 	}
 }

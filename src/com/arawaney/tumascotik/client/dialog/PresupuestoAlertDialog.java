@@ -1,6 +1,6 @@
 package com.arawaney.tumascotik.client.dialog;
 
-import com.arawaney.tumascotik.client.activity.Budget;
+import com.arawaney.tumascotik.client.activity.BudgetActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -15,12 +15,10 @@ import com.arawaney.tumascotik.client.R;
 @SuppressLint("ValidFragment")
 public class PresupuestoAlertDialog extends DialogFragment {
 	
-	String motivos;
 	int price;
 
-	public PresupuestoAlertDialog(String motv, int pric){
-		motivos=motv;
-		price = pric;
+	public PresupuestoAlertDialog(int price){
+		this.price = price;
 		
     }  
 	
@@ -30,18 +28,16 @@ public class PresupuestoAlertDialog extends DialogFragment {
 	
 
 	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	    builder.setTitle("Estimado CLiente");
-	    builder.setMessage("�Desea solicitar una cita con su veterinario para realizar:  "+motivos+" por un total de "+ String.valueOf(price)+"BsF?. ");
-	    builder.setIcon(R.drawable.mascotiklogodialog);
-	 // Add the buttons
-	    builder.setPositiveButton("Pedir Cita", new DialogInterface.OnClickListener() {
+	    builder.setTitle(getResources().getString(R.string.budget_dialog_send_title));
+	    builder.setMessage(getResources().getString(R.string.budget_dialog_send_body)+price+"?");
+	    builder.setPositiveButton(getResources().getString(R.string.budget_dialog_send), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	Budget callingActivity = (Budget) getActivity();
-	    		callingActivity.MakeAppointment("Si");
+            	BudgetActivity callingActivity = (BudgetActivity) getActivity();
+	    		callingActivity.sendBudget();
 	               }
 	           });
 	   
-	    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+	    builder.setNegativeButton(getResources().getString(R.string.budget_dialog_cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
   
 	            	  dialog.cancel();

@@ -17,6 +17,7 @@
     <color name="text_yellow">#FCAF25</color>
     <color name="background_gray">#E6E6E6</color>
     <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
     <color name="request_status_pending">#FFAF25</color>
     <color name="request_status_accepted">#B2D235</color>
     <color name="request_status_canceled">#FF4444</color>

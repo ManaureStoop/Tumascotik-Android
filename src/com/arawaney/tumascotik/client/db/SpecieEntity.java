@@ -1,10 +1,11 @@
 package com.arawaney.tumascotik.client.db;
 
 public class SpecieEntity {
-	public static final String TABLE = "pet";
+	public static final String TABLE = "specie";
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_SYSTEM_ID = "system_id";
 	public static final String COLUMN_NAME = "name";
+	public static final String COLUMN_UPDATED_AT = "updated_at";
 
 
 
@@ -16,7 +17,9 @@ public class SpecieEntity {
 			+ COLUMN_ID 
 			+ " INTEGER PRIMARY KEY AUTOINCREMENT, " 
 			+ COLUMN_SYSTEM_ID
-			+ " TEXT, " 
+			+ " TEXT, "
+			+ COLUMN_UPDATED_AT 
+			+ " INTEGER, " 
 			+ COLUMN_NAME 
 			+ " TEXT);";
 }

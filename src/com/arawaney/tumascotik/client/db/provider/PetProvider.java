@@ -1,18 +1,23 @@
 package com.arawaney.tumascotik.client.db.provider;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.arawaney.tumascotik.client.db.PetEntity;
+import com.arawaney.tumascotik.client.db.RequestEntity;
 import com.arawaney.tumascotik.client.db.TumascotikProvider;
 import com.arawaney.tumascotik.client.model.Breed;
 import com.arawaney.tumascotik.client.model.Pet;
 import com.arawaney.tumascotik.client.model.User;
+import com.arawaney.tumascotik.client.util.CalendarUtil;
 
 public class PetProvider {
 	private static final String LOG_TAG = "Tumascotik-Client-PetProvider";
@@ -32,6 +37,8 @@ public class PetProvider {
 			values.put(PetEntity.COLUMN_USER_ID, pet.getOwner().getId());
 			values.put(PetEntity.COLUMN_COMMENT, pet.getComment());
 			values.put(PetEntity.COLUMN_GENDER, pet.getGender());
+			values.put(PetEntity.COLUMN_UPDATED_AT, pet
+					.getUpdated_at().getTimeInMillis());
 
 			if (pet.getBreed() != null) {
 				if (pet.getBreed().getSystem_id() != null) {
@@ -47,6 +54,7 @@ public class PetProvider {
 			}
 
 			values.put(PetEntity.COLUMN_PUPPY, pet.getPuppy());
+			values.put(PetEntity.COLUMN_AGRESSIVE, pet.getAgressive());
 
 			final Uri result = context.getContentResolver().insert(URI_PET,
 					values);
@@ -83,7 +91,11 @@ public class PetProvider {
 			values.put(PetEntity.COLUMN_COMMENT, pet.getComment());
 			values.put(PetEntity.COLUMN_GENDER, pet.getGender());
 			values.put(PetEntity.COLUMN_PUPPY, pet.getPuppy());
-
+			values.put(PetEntity.COLUMN_AGRESSIVE, pet.getAgressive());
+			values.put(PetEntity.COLUMN_UPDATED_AT, pet
+					.getUpdated_at().getTimeInMillis());
+			
+			
 			if (pet.getBreed() != null) {
 				if (pet.getBreed().getSystem_id() != null) {
 					values.put(PetEntity.COLUMN_BREED_ID, pet.getBreed()
@@ -153,7 +165,14 @@ public class PetProvider {
 							.getColumnIndex(PetEntity.COLUMN_GENDER));
 					final Integer puppy = cursor.getInt(cursor
 							.getColumnIndex(PetEntity.COLUMN_PUPPY));
-					;
+					final Integer agressive = cursor.getInt(cursor
+							.getColumnIndex(PetEntity.COLUMN_AGRESSIVE));
+					final long updated_at = cursor.getLong(cursor
+							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
+					
+					Calendar updatedAt = Calendar.getInstance();
+					updatedAt.setTimeInMillis(updated_at);
+					
 
 					pet = new Pet();
 					pet.setId(id);
@@ -162,7 +181,10 @@ public class PetProvider {
 					pet.setComment(comment);
 					pet.setGender(gender);
 					pet.setPuppy(puppy);
+					pet.setAgressive(agressive);
 					pet.setOwner(UserProvider.readUser(context));
+					pet.setUpdated_at(updatedAt);
+
 
 					String breed_id = cursor.getString(cursor
 							.getColumnIndex(PetEntity.COLUMN_BREED_ID));
@@ -219,7 +241,13 @@ public class PetProvider {
 							.getColumnIndex(PetEntity.COLUMN_GENDER));
 					final Integer puppy = cursor.getInt(cursor
 							.getColumnIndex(PetEntity.COLUMN_PUPPY));
-					;
+					final Integer agressive = cursor.getInt(cursor
+							.getColumnIndex(PetEntity.COLUMN_AGRESSIVE));
+					final long updated_at = cursor.getLong(cursor
+							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
+					
+					Calendar updatedAt = Calendar.getInstance();
+					updatedAt.setTimeInMillis(updated_at);
 
 					pet = new Pet();
 					pet.setId(id);
@@ -228,15 +256,20 @@ public class PetProvider {
 					pet.setComment(comment);
 					pet.setGender(gender);
 					pet.setPuppy(puppy);
+					pet.setAgressive(agressive);
 					pet.setOwner(UserProvider.readUser(context));
+					pet.setUpdated_at(updatedAt);
 
 					String breed_id = cursor.getString(cursor
 							.getColumnIndex(PetEntity.COLUMN_BREED_ID));
 					
 					final Breed breed = BreedProvider.readBreed(context,
 							breed_id);
+			
 					if (breed != null) {
 						pet.setBreed(breed);
+					}else{
+						Log.d(LOG_TAG, "breed null : "+ pet.getName());
 					}
 
 					pets.add(pet);
@@ -269,5 +302,34 @@ public class PetProvider {
 			Log.e(LOG_TAG, "Error deleting pet: " + e.getMessage());
 		}
 		return false;
+	}
+
+	public static Date getLastUpdate(Context context) {
+		final Cursor cursor = context.getContentResolver().query(URI_PET, null,
+				null, null, PetEntity.COLUMN_UPDATED_AT+" DESC");
+		
+		if (cursor.getCount() == 0) {
+			cursor.close();
+			return null;
+		}
+
+		try {
+			if (cursor.moveToFirst()) {
+
+					final long updated_at = cursor.getLong(cursor
+							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
+					Date date = new Date(updated_at);
+					Log.d(LOG_TAG, "last update "+CalendarUtil.getDateFormated(date, "dd MM yyy mm:ss"));
+					
+			return date;		
+			}
+
+		} catch (Exception e) {
+			Log.e(LOG_TAG, "Error : " + e.getMessage());
+		} finally {
+			cursor.close();
+		}
+		
+		return null;
 	}
 }

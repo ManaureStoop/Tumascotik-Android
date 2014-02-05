@@ -13,7 +13,7 @@ public class ConnectionDialog extends DialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
         
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setIcon(R.drawable.mascotiklogodialog);
+//        builder.setIcon(R.drawable.mascotiklogodialog);
         builder.setTitle("Alerta!");
         builder.setMessage("No se ha detectado ninguna conexi�n  a internet en su equipo. Para realizar citas o conectarse a las redes sociales necesitar� de internet. ")
                .setPositiveButton("OK", new DialogInterface.OnClickListener() {

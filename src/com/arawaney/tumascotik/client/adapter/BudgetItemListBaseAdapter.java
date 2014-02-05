@@ -3,9 +3,14 @@ package com.arawaney.tumascotik.client.adapter;
 import java.util.ArrayList;
 
 import com.arawaney.tumascotik.client.model.BudgetItemDetails;
+import com.arawaney.tumascotik.client.model.BudgetService;
+import com.arawaney.tumascotik.client.model.Request;
+import com.arawaney.tumascotik.client.model.Service;
+import com.arawaney.tumascotik.client.util.FontUtil;
 import com.arawaney.tumascotik.client.R;
 
 
+import android.R.integer;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,25 +23,25 @@ import android.widget.TextView;
 
 
 public class BudgetItemListBaseAdapter extends BaseAdapter {
-	private static ArrayList<BudgetItemDetails> budgetList;
+	private static ArrayList<BudgetService> services;
 	Context contxt;
 	private LayoutInflater l_Inflater;
 	
 
 	
 
-	public BudgetItemListBaseAdapter(Context context, ArrayList<BudgetItemDetails> results) {
-		budgetList = results;
+	public BudgetItemListBaseAdapter(Context context, ArrayList<BudgetService> services) {
+		this.services = services;
 		l_Inflater = LayoutInflater.from(context);
 		contxt = context;
 	}
 
 	public int getCount() {
-		return budgetList.size();
+		return services.size();
 	}
 
 	public Object getItem(int position) {
-		return budgetList.get(position);
+		return services.get(position);
 	}
 
 	public long getItemId(int position) {
@@ -57,13 +62,10 @@ public class BudgetItemListBaseAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder2) convertView.getTag();
 		}
-
-		holder.itemServiceName.setText(budgetList.get(position).getTitle());
+		holder.txt_itemPrice.setTypeface(FontUtil.getTypeface(contxt, FontUtil.ROBOTO_LIGHT));
+		holder.itemServiceName.setText(services.get(position).getService().getName());
 		
-		String price = new String(" Bs."+String.valueOf(budgetList.get(position).getPrice()));
-		if(price.equals("0 Bs"))
-			holder.txt_itemPrice.setText("");
-		else
+		String price = new String(" Bs."+String.valueOf(services.get(position).getPrice()));
 			holder.txt_itemPrice.setText(price);
 	    
 		return convertView;

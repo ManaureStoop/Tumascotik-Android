@@ -10,8 +10,10 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.arawaney.tumascotik.client.R;
+import com.arawaney.tumascotik.client.adapter.BudgetItemListBaseAdapter;
 import com.arawaney.tumascotik.client.adapter.ViewRequestBaseAdapter;
 import com.arawaney.tumascotik.client.db.provider.RequestProvider;
 import com.arawaney.tumascotik.client.dialog.ListItemDialog;
@@ -20,7 +22,8 @@ import com.arawaney.tumascotik.client.model.Request;
 public class ViewRequests extends FragmentActivity {
 	ListView requestList;
 	Boolean flagclick;
-	ArrayList<Request> requests ;
+	ArrayList<Request> requests;
+	RelativeLayout zeroDataLayout;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -30,10 +33,9 @@ public class ViewRequests extends FragmentActivity {
 
 		flagclick = false;
 
-		requests = getRequests();
+		loadViews();
 
-		requestList = (ListView) findViewById(R.id.listverc);
-		requestList.setAdapter(new ViewRequestBaseAdapter(this, requests));
+		refreshListView();
 
 		requestList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -41,29 +43,62 @@ public class ViewRequests extends FragmentActivity {
 					long id) {
 				if (!flagclick) {
 					Request request = requests.get(position);
-					DialogFragment newFragment = new ListItemDialog(request, getApplicationContext());
+					DialogFragment newFragment = new ListItemDialog(request,
+							getApplicationContext());
 					newFragment
 							.show(getSupportFragmentManager(), "itemdetails");
 				}
 			}
 		});
-	
+
+	}
+
+	private void loadViews() {
+		requestList = (ListView) findViewById(R.id.listverc);
+		zeroDataLayout = (RelativeLayout) findViewById(R.id.layout_request_view_zero_data);
 	}
 
 	private ArrayList<Request> getRequests() {
-		ArrayList<Request> requestList ;
-		
+		ArrayList<Request> requestList;
+
 		requestList = RequestProvider.readRequests(this);
 
 		return requestList;
 	}
 
-
-	public void Refresh() {
+	@Override
+	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		ArrayList<Request> image_details = getRequests();
-		requestList = (ListView) findViewById(R.id.listverc);
-		requestList.setAdapter(new ViewRequestBaseAdapter(this, image_details));
+		refreshListView();
+	}
+
+	public void refreshListView() {
+
+		requests = getRequests();
+
+		if (requests == null) {
+			setEmptyDataView();
+		} else {
+			setListView();
+
+		}
+
+	}
+
+	private void setListView() {
+
+		requestList.setVisibility(View.VISIBLE);
+		zeroDataLayout.setVisibility(View.GONE);
+
+		requestList.setAdapter(new ViewRequestBaseAdapter(this, requests));
+
+	}
+
+	private void setEmptyDataView() {
+
+		requestList.setVisibility(View.GONE);
+		zeroDataLayout.setVisibility(View.VISIBLE);
+
 	}
 }

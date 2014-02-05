@@ -1,6 +1,7 @@
 package com.arawaney.tumascotik.client.db.provider;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
+import com.arawaney.tumascotik.client.db.RequestEntity;
 import com.arawaney.tumascotik.client.db.SpecieEntity;
 import com.arawaney.tumascotik.client.db.TumascotikProvider;
 import com.arawaney.tumascotik.client.model.Specie;
@@ -27,6 +29,8 @@ public class SpecieProvider {
 			ContentValues values = new ContentValues();
 			values.put(SpecieEntity.COLUMN_SYSTEM_ID, specie.getSystem_id());
 			values.put(SpecieEntity.COLUMN_NAME, specie.getName());
+			values.put(RequestEntity.COLUMN_UPDATED_AT, specie
+					.getUpdated_at().getTimeInMillis());
 
 			final Uri result = context.getContentResolver().insert(URI_SPECIE,
 					values);
@@ -60,6 +64,8 @@ public class SpecieProvider {
 			values.put(SpecieEntity.COLUMN_ID, specie.getId());
 			values.put(SpecieEntity.COLUMN_SYSTEM_ID, specie.getSystem_id());
 			values.put(SpecieEntity.COLUMN_NAME, specie.getName());
+			values.put(RequestEntity.COLUMN_UPDATED_AT, specie
+					.getUpdated_at().getTimeInMillis());
 
 			String condition = SpecieEntity.COLUMN_SYSTEM_ID + " = " + "'"
 					+ String.valueOf(specie.getSystem_id()) + "'";
@@ -107,11 +113,17 @@ public class SpecieProvider {
 							.getColumnIndex(SpecieEntity.COLUMN_SYSTEM_ID));
 					final String name = cursor.getString(cursor
 							.getColumnIndex(SpecieEntity.COLUMN_NAME));
+					final long updated_at = cursor.getInt(cursor
+							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
+					
+					Calendar updatedAt = Calendar.getInstance();
+					updatedAt.setTimeInMillis(updated_at);
 
 					specie = new Specie();
 					specie.setId(id);
 					specie.setSystem_id(system_id);
 					specie.setName(name);
+					specie.setUpdated_at(updatedAt);
 					
 
 				} while (cursor.moveToNext());
@@ -154,13 +166,18 @@ public class SpecieProvider {
 							.getColumnIndex(SpecieEntity.COLUMN_SYSTEM_ID));
 					final String name = cursor.getString(cursor
 							.getColumnIndex(SpecieEntity.COLUMN_NAME));
+					final long updated_at = cursor.getInt(cursor
+							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
+					
+					Calendar updatedAt = Calendar.getInstance();
+					updatedAt.setTimeInMillis(updated_at);
 
 
 					specie = new Specie();
 					specie.setId(id);
 					specie.setSystem_id(system_id);
 					specie.setName(name);
-
+					specie.setUpdated_at(updatedAt);
 					species.add(specie);
 
 				} while (cursor.moveToNext());

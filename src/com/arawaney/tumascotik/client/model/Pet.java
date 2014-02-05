@@ -1,5 +1,7 @@
 package com.arawaney.tumascotik.client.model;
 
+import java.util.Calendar;
+
 public class Pet {
 
 	private long id;
@@ -7,17 +9,22 @@ public class Pet {
 	private String name;
 	private User owner;
 	private String comment;
-	private String breed;
-	private String pet_properties;
-	private String specie;
+	private Breed breed;
 	private Integer gender;
 	private Integer puppy;
+	private Integer agressive;
+	private Calendar updated_at;
+
 	
 	public final static int GENDER_MALE = 1;
 	public final static int GENDER_FEMALE = 2;
 	
 	public final static int AGE_ADULT = 1;
 	public final static int AGE_PUPPY = 2;
+	
+	public final static int NOT_AGRESSIVE = 1;
+	public final static int AGRESSIVE = 2;
+	
 
 
 	
@@ -53,24 +60,6 @@ public class Pet {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	public String getBreed() {
-		return breed;
-	}
-	public void setBreed(String breed) {
-		this.breed = breed;
-	}
-	public String getPet_properties() {
-		return pet_properties;
-	}
-	public void setPet_properties(String pet_properties) {
-		this.pet_properties = pet_properties;
-	}
-	public String getSpecie() {
-		return specie;
-	}
-	public void setSpecie(String specie) {
-		this.specie = specie;
-	}
 	public int getGender() {
 		if (gender == null) {
 			return 0;
@@ -88,5 +77,23 @@ public class Pet {
 	}
 	public void setPuppy(Integer puppy) {
 		this.puppy = puppy;
+	}
+	public Breed getBreed() {
+		return breed;
+	}
+	public void setBreed(Breed breed) {
+		this.breed = breed;
+	}
+	public Integer getAgressive() {
+		return agressive;
+	}
+	public void setAgressive(Integer agressive) {
+		this.agressive = agressive;
+	}
+	public Calendar getUpdated_at() {
+		return updated_at;
+	}
+	public void setUpdated_at(Calendar updated_at) {
+		this.updated_at = updated_at;
 	}
 }

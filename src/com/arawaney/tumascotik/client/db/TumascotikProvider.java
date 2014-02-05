@@ -35,6 +35,10 @@ public class TumascotikProvider extends ContentProvider {
 	private static final int PETPROPERTIES_ID = 12;
 	private static final int MOTIVES = 13;
 	private static final int MOTIVE_ID = 14;
+	private static final int BUDGETS = 15;
+	private static final int BUDGET_ID = 16;
+	private static final int SERVICE_BUDGETS = 17;
+	private static final int SERVICE_BUDGET_ID = 18;
 
 	// URIs
 
@@ -63,8 +67,16 @@ public class TumascotikProvider extends ContentProvider {
 	public static final Uri URI_PET_PROPERTIES = Uri.parse(CONTENT_PETPROPERTIES);
 	
 	private static final String CONTENT_MOTIVE = "content://" + PROVIDER_NAME
-			+ "/" + MotiveEntity.TABLE;
+			+ "/" + ServiceEntity.TABLE;
 	public static final Uri URI_MOTIVE = Uri.parse(CONTENT_MOTIVE);
+	
+	private static final String CONTENT_BUDGET = "content://" + PROVIDER_NAME
+			+ "/" + BudgetEntity.TABLE;
+	public static final Uri URI_BUDGET = Uri.parse(CONTENT_BUDGET);
+	
+	private static final String CONTENT_SERVICE_BUDGET = "content://" + PROVIDER_NAME
+			+ "/" + ServiceBudgetEntity.TABLE;
+	public static final Uri URI_SERVICE_BUDGET = Uri.parse(CONTENT_SERVICE_BUDGET);
 
 	// Content Types
 
@@ -93,9 +105,17 @@ public class TumascotikProvider extends ContentProvider {
 	private static final String TYPE_PETPROPERTIES_ITEMS = "android.cursor.item/vnd."
 			+ PROVIDER_NAME + "." + PetPropertieEntity.TABLE;
 	private static final String TYPE_MOTIVE_ITEM = "android.cursor.item/vnd."
-			+ PROVIDER_NAME + "." + MotiveEntity.TABLE;
+			+ PROVIDER_NAME + "." + ServiceEntity.TABLE;
 	private static final String TYPE_MOTIVE_ITEMS = "android.cursor.item/vnd."
-			+ PROVIDER_NAME + "." + MotiveEntity.TABLE;
+			+ PROVIDER_NAME + "." + ServiceEntity.TABLE;
+	private static final String TYPE_BUDGET_ITEM = "android.cursor.item/vnd."
+			+ PROVIDER_NAME + "." + BudgetEntity.TABLE;
+	private static final String TYPE_BUDGET_ITEMS = "android.cursor.item/vnd."
+			+ PROVIDER_NAME + "." + BudgetEntity.TABLE;
+	private static final String TYPE_SERVICE_BUDGET_ITEM = "android.cursor.item/vnd."
+			+ PROVIDER_NAME + "." + ServiceBudgetEntity.TABLE;
+	private static final String TYPE_SERVICE_BUDGET_ITEMS = "android.cursor.item/vnd."
+			+ PROVIDER_NAME + "." + ServiceBudgetEntity.TABLE;
 
 	private static final UriMatcher uriMatcher;
 
@@ -124,9 +144,17 @@ public class TumascotikProvider extends ContentProvider {
 		uriMatcher
 				.addURI(PROVIDER_NAME, PetPropertieEntity.TABLE + "/#", PETPROPERTIES_ID);
 		
-		uriMatcher.addURI(PROVIDER_NAME, MotiveEntity.TABLE, MOTIVES);
+		uriMatcher.addURI(PROVIDER_NAME, ServiceEntity.TABLE, MOTIVES);
 		uriMatcher
-				.addURI(PROVIDER_NAME, MotiveEntity.TABLE + "/#", MOTIVE_ID);
+				.addURI(PROVIDER_NAME, ServiceEntity.TABLE + "/#", MOTIVE_ID);
+		
+		uriMatcher.addURI(PROVIDER_NAME, BudgetEntity.TABLE, BUDGETS);
+		uriMatcher
+				.addURI(PROVIDER_NAME, BudgetEntity.TABLE + "/#", BUDGET_ID);
+		
+		uriMatcher.addURI(PROVIDER_NAME, ServiceBudgetEntity.TABLE, SERVICE_BUDGETS);
+		uriMatcher
+				.addURI(PROVIDER_NAME, ServiceBudgetEntity.TABLE + "/#", SERVICE_BUDGET_ID);
 	}
 
 	public static final String DATABASE_NAME = "tumascotik_client_db";
@@ -188,6 +216,14 @@ public class TumascotikProvider extends ContentProvider {
 			return TYPE_MOTIVE_ITEMS;
 		case MOTIVE_ID:
 			return TYPE_MOTIVE_ITEM;
+		case BUDGETS:
+			return TYPE_BUDGET_ITEMS;
+		case BUDGET_ID:
+			return TYPE_BUDGET_ITEM;
+		case SERVICE_BUDGETS:
+			return TYPE_SERVICE_BUDGET_ITEMS;
+		case SERVICE_BUDGET_ID:
+			return TYPE_SERVICE_BUDGET_ITEM;
 		default:
 			throw new IllegalArgumentException("Unsupported UR" + uri);
 		}
@@ -231,8 +267,18 @@ public class TumascotikProvider extends ContentProvider {
 			break;
 			
 		case MOTIVES:
-			tableName = MotiveEntity.TABLE;
+			tableName = ServiceEntity.TABLE;
 			target = URI_MOTIVE;
+			break;
+		
+		case BUDGETS:
+			tableName = BudgetEntity.TABLE;
+			target = URI_BUDGET;
+			break;
+			
+		case SERVICE_BUDGETS:
+			tableName = ServiceBudgetEntity.TABLE;
+			target = URI_SERVICE_BUDGET;
 			break;
 		default:
 			throw new IllegalArgumentException("Unsupported UR" + uri);
@@ -349,17 +395,41 @@ public class TumascotikProvider extends ContentProvider {
 			target = URI_PET_PROPERTIES;
 			single = true;
 			break;
-			
+
 		case MOTIVES:
-			tableName = MotiveEntity.TABLE;
+			tableName = ServiceEntity.TABLE;
 			target = URI_MOTIVE;
 			break;
 			
 		case MOTIVE_ID:
-			tableName = MotiveEntity.TABLE;
+			tableName = ServiceEntity.TABLE;
 			target = URI_MOTIVE;
 			single = true;
 			break;
+
+
+		case BUDGETS:
+			tableName = BudgetEntity.TABLE;
+			target = URI_BUDGET;
+			break;
+			
+		case BUDGET_ID:
+			tableName = BudgetEntity.TABLE;
+			target = URI_BUDGET;
+			single = true;
+			break;
+			
+		case SERVICE_BUDGETS:
+			tableName = ServiceBudgetEntity.TABLE;
+			target = URI_SERVICE_BUDGET;
+			break;
+			
+		case SERVICE_BUDGET_ID:
+			tableName = ServiceBudgetEntity.TABLE;
+			target = URI_SERVICE_BUDGET;
+			single = true;
+			break;
+
 
 		default:
 			throw new IllegalArgumentException("Unsupported UR" + uri);
@@ -511,17 +581,47 @@ public class TumascotikProvider extends ContentProvider {
 			break;
 			
 		case MOTIVES:
-			count = db.update(MotiveEntity.TABLE, values, selection,
+			count = db.update(ServiceEntity.TABLE, values, selection,
 					selectionArgs);
 			break;
 
 		case MOTIVE_ID:
-			selection = MotiveEntity.COLUMN_ID
+			selection = ServiceEntity.COLUMN_ID
 					+ " = "
 					+ uri.getPathSegments().get(1)
 					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
 							+ ')' : "");
-			count = db.update(MotiveEntity.TABLE, values, selection,
+			count = db.update(ServiceEntity.TABLE, values, selection,
+					selectionArgs);
+			
+			
+		case BUDGETS:
+			count = db.update(BudgetEntity.TABLE, values, selection,
+					selectionArgs);
+			break;
+
+		case BUDGET_ID:
+			selection = BudgetEntity.COLUMN_ID
+					+ " = "
+					+ uri.getPathSegments().get(1)
+					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
+							+ ')' : "");
+			count = db.update(BudgetEntity.TABLE, values, selection,
+					selectionArgs);
+			break;
+			
+		case SERVICE_BUDGETS:
+			count = db.update(ServiceBudgetEntity.TABLE, values, selection,
+					selectionArgs);
+			break;
+
+		case SERVICE_BUDGET_ID:
+			selection = ServiceBudgetEntity.COLUMN_ID
+					+ " = "
+					+ uri.getPathSegments().get(1)
+					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
+							+ ')' : "");
+			count = db.update(ServiceBudgetEntity.TABLE, values, selection,
 					selectionArgs);
 			break;
 
@@ -566,7 +666,7 @@ public class TumascotikProvider extends ContentProvider {
 			break;
 
 		case PETS:
-			rowsAffected = db.delete(UserEntity.TABLE, selection,
+			rowsAffected = db.delete(PetEntity.TABLE, selection,
 					selectionArgs);
 			break;
 
@@ -581,7 +681,7 @@ public class TumascotikProvider extends ContentProvider {
 			break;
 
 		case REQUESTS:
-			rowsAffected = db.delete(UserEntity.TABLE, selection,
+			rowsAffected = db.delete(RequestEntity.TABLE, selection,
 					selectionArgs);
 			break;
 
@@ -644,17 +744,47 @@ public class TumascotikProvider extends ContentProvider {
 
 			
 		case MOTIVES:
-			rowsAffected = db.delete(MotiveEntity.TABLE, selection,
+			rowsAffected = db.delete(ServiceEntity.TABLE, selection,
 					selectionArgs);
 			break;
 
 		case MOTIVE_ID:
-			selection = MotiveEntity.COLUMN_ID
+			selection = ServiceEntity.COLUMN_ID
 					+ " = "
 					+ uri.getPathSegments().get(1)
 					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
 							+ ')' : "");
-			rowsAffected = db.delete(MotiveEntity.TABLE, selection,
+			rowsAffected = db.delete(ServiceEntity.TABLE, selection,
+					selectionArgs);
+			break;
+			
+		case BUDGETS:
+			rowsAffected = db.delete(BudgetEntity.TABLE, selection,
+					selectionArgs);
+			break;
+
+		case BUDGET_ID:
+			selection = BudgetEntity.COLUMN_ID
+					+ " = "
+					+ uri.getPathSegments().get(1)
+					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
+							+ ')' : "");
+			rowsAffected = db.delete(BudgetEntity.TABLE, selection,
+					selectionArgs);
+			break;
+			
+		case SERVICE_BUDGETS:
+			rowsAffected = db.delete(ServiceBudgetEntity.TABLE, selection,
+					selectionArgs);
+			break;
+
+		case SERVICE_BUDGET_ID:
+			selection = ServiceBudgetEntity.COLUMN_ID
+					+ " = "
+					+ uri.getPathSegments().get(1)
+					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
+							+ ')' : "");
+			rowsAffected = db.delete(ServiceBudgetEntity.TABLE, selection,
 					selectionArgs);
 			break;
 

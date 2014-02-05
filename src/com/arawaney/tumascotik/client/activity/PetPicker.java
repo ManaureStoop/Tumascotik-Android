@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,39 +25,39 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class PetPicker extends Activity {
 	private final String LOG_TAG = "Tumascotik-Client-Pet Picker";
-	
+
 	ArrayList<Pet> pets;
 	ListView petGRidView;
 	View addPetView;
 	private LayoutInflater inflater;
 	ItemPetGridAdapter adapter;
 	public static int functionMode;
-	
+
 	public static final int MODE_MAKE_APPOINTMENT = 1;
 	public static final int MODE_EDIT_PET = 2;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pick_pet);
-		
+
 		loadViews();
 		loadPets();
 		loadAddButtons();
-		
-	}
 
+	}
 
 	private void loadViews() {
 		petGRidView = (ListView) findViewById(R.id.grid_pet_picker);
 		inflater = (LayoutInflater) getSystemService(this.LAYOUT_INFLATER_SERVICE);
 		addPetView = inflater.inflate(R.layout.add_pet_view, null);
-		
+
 	}
-	
+
 	private void loadPets() {
 		pets = PetProvider.readPets(this);
 		if (pets == null) {
@@ -65,13 +66,12 @@ public class PetPicker extends Activity {
 		adapter = new ItemPetGridAdapter(this, pets);
 		adapter.setFooterView(addPetView);
 		petGRidView.setAdapter(adapter);
-		
-		
+
 	}
-	
+
 	private void loadAddButtons() {
 		addPetView.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Log.d(LOG_TAG, "Add new pet!!");
@@ -82,52 +82,81 @@ public class PetPicker extends Activity {
 				PetInfoActivity.viewMode = PetInfoActivity.MODE_EDIT_LIST;
 				Intent i = new Intent(PetPicker.this, PetInfoActivity.class);
 				startActivity(i);
-				
+
 			}
 		});
-		
+
 		petGRidView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View view, int position,
-					long arg3) {
-				
-				if (pets.get(position).getName() != null) {
-					Log.d(LOG_TAG, "name : "+pets.get(position).getName());
-			
-				}
-				if (pets.get(position).getComment() != null) {
-					Log.d(LOG_TAG, "comment : "+pets.get(position).getComment() );
-			
-				}
-				if (pets.get(position).getBreed() != null) {
-				Log.d(LOG_TAG, "breed : "+pets.get(position).getBreed());
-		
-			}
-			if (pets.get(position).getSpecie() != null) {
-				Log.d(LOG_TAG, "specie : "+pets.get(position).getSpecie());
-		
-			}
-			if (pets.get(position).getPet_properties() != null) {
-				Log.d(LOG_TAG, "properties : "+pets.get(position).getPet_properties());
-			
-			}
+			public void onItemClick(AdapterView<?> arg0, View view,
+					int position, long arg3) {
+
 				MainController.setPET(pets.get(position));
 				if (functionMode == MODE_EDIT_PET) {
 					PetInfoActivity.viewMode = PetInfoActivity.MODE_INFO_LIST;
 					Intent i = new Intent(PetPicker.this, PetInfoActivity.class);
 					startActivity(i);
-				}else if (functionMode == MODE_MAKE_APPOINTMENT) {
-					Intent i = new Intent(PetPicker.this, SetDate.class);
-					startActivity(i);
-				}
-				
-				
-				
+				} else if (functionMode == MODE_MAKE_APPOINTMENT) {
+					if (!petDataComplete(MainController.getPET())) {
+						PetInfoActivity.viewMode = PetInfoActivity.MODE_EDIT_LIST;
+						Intent i = new Intent(PetPicker.this,
+								PetInfoActivity.class);
+						startActivity(i);
+					} else {
+						Intent i = new Intent(PetPicker.this, SetRequestDetails.class);
+						startActivity(i);
+					}
+				} 
+
 			}
 		});
 	}
-	
-	
+
+	boolean petDataComplete(Pet pet) {
+
+		boolean dataComplete = true;
+
+		if (pet.getName() == null ) {
+			
+			dataComplete = false;
+		}
+		if (pet.getName().isEmpty() ) {
+			
+			dataComplete = false;
+		}
+		if (pet.getBreed() == null) {
+			dataComplete = false;
+		}
+		if (pet.getBreed().getPetPropertie() == null) {
+			dataComplete = false;
+		}
+		if (pet.getBreed().getSpecie() == null) {
+			dataComplete = false;
+		}
+		if (pet.getBreed().getSpecie().getName() == null) {
+			dataComplete = false;
+		}
+		if (pet.getBreed().getPetPropertie().getName() == null) {
+			dataComplete = false;
+		}
+		if (pet.getAgressive() == null) {
+			dataComplete = false;
+		}
+		if (!dataComplete) {
+			notifyDataIncomplete();
+		}
+		return dataComplete;
+	}
+
+	private void notifyDataIncomplete() {
+		String toastText = getResources().getString(
+				R.string.pet_info_pet_data_incomplete);
+		Toast toast = Toast.makeText(PetPicker.this, toastText,
+				Toast.LENGTH_LONG);
+		toast.setGravity(Gravity.CENTER, 0, 0);
+		toast.show();
+
+	}
 
 }

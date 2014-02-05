@@ -1,6 +1,7 @@
 package com.arawaney.tumascotik.client.db.provider;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.arawaney.tumascotik.client.db.PetPropertieEntity;
+import com.arawaney.tumascotik.client.db.RequestEntity;
 import com.arawaney.tumascotik.client.db.TumascotikProvider;
 import com.arawaney.tumascotik.client.model.PetPropertie;
 import com.arawaney.tumascotik.client.model.Breed;
@@ -28,6 +30,8 @@ public class PetPropertieProvider {
 			ContentValues values = new ContentValues();
 			values.put(PetPropertieEntity.COLUMN_SYSTEM_ID, petPropertie.getSystem_id());
 			values.put(PetPropertieEntity.COLUMN_NAME, petPropertie.getName());
+			values.put(RequestEntity.COLUMN_UPDATED_AT, petPropertie
+					.getUpdated_at().getTimeInMillis());
 
 
 			final Uri result = context.getContentResolver().insert(URI_PETPROPERTIE,
@@ -63,6 +67,8 @@ public class PetPropertieProvider {
 			values.put(PetPropertieEntity.COLUMN_ID, petPropertie.getId());
 			values.put(PetPropertieEntity.COLUMN_SYSTEM_ID, petPropertie.getSystem_id());
 			values.put(PetPropertieEntity.COLUMN_NAME, petPropertie.getName());
+			values.put(RequestEntity.COLUMN_UPDATED_AT, petPropertie
+					.getUpdated_at().getTimeInMillis());
 
 
 			String condition = PetPropertieEntity.COLUMN_SYSTEM_ID + " = " + "'"
@@ -112,11 +118,17 @@ public class PetPropertieProvider {
 							.getColumnIndex(PetPropertieEntity.COLUMN_SYSTEM_ID));
 					final String name = cursor.getString(cursor
 							.getColumnIndex(PetPropertieEntity.COLUMN_NAME));
+					final long updated_at = cursor.getInt(cursor
+							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
+					
+					Calendar updatedAt = Calendar.getInstance();
+					updatedAt.setTimeInMillis(updated_at);
 
 					petPropertie = new PetPropertie();
 					petPropertie.setId(id);
 					petPropertie.setSystem_id(system_id);
 					petPropertie.setName(name);
+					petPropertie.setUpdated_at(updatedAt);
 					
 
 				} while (cursor.moveToNext());
@@ -161,12 +173,17 @@ public class PetPropertieProvider {
 							.getColumnIndex(PetPropertieEntity.COLUMN_SYSTEM_ID));
 					final String name = cursor.getString(cursor
 							.getColumnIndex(PetPropertieEntity.COLUMN_NAME));
+					final long updated_at = cursor.getInt(cursor
+							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
+					
+					Calendar updatedAt = Calendar.getInstance();
+					updatedAt.setTimeInMillis(updated_at);
 
 					petPropertie = new PetPropertie();
 					petPropertie.setId(id);
 					petPropertie.setSystem_id(system_id);
 					petPropertie.setName(name);
-
+					petPropertie.setUpdated_at(updatedAt);
 					petProperties.add(petPropertie);
 
 				} while (cursor.moveToNext());

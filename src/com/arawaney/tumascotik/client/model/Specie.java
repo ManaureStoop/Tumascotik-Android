@@ -1,10 +1,14 @@
 package com.arawaney.tumascotik.client.model;
 
+import java.util.Calendar;
+
 public class Specie {
 
 	private long id;
 	private String system_id;
 	private String name;
+	private Calendar updated_at;
+
 
 	
 	public long getId() {
@@ -24,6 +28,12 @@ public class Specie {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public Calendar getUpdated_at() {
+		return updated_at;
+	}
+	public void setUpdated_at(Calendar updated_at) {
+		this.updated_at = updated_at;
 	}
 	
 }

@@ -6,10 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!-- The main content view -->
-    <FrameLayout
-        android:id="@+id/content_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+ <include 
+     layout="@layout/activity_menu"/> 
 
     <ListView android:id="@+id/left_drawer_list"
         android:layout_width="240dp"

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.arawaney.tumascotik.client.ClientMainActivity;
 import com.arawaney.tumascotik.client.R;
 import com.arawaney.tumascotik.client.backend.ParseProvider;
+import com.arawaney.tumascotik.client.backend.ParseRequestProvider;
 import com.arawaney.tumascotik.client.control.MainController;
 import com.arawaney.tumascotik.client.db.provider.RequestProvider;
 import com.arawaney.tumascotik.client.listener.ParseRequestListener;
@@ -30,8 +31,8 @@ import com.parse.ParseObject;
 public class SendRequest extends Activity implements ParseRequestListener {
 	private static final String LOG_TAG = "Tumascotik-Client-SendRequestActivity";
 	
-	ImageView enviar;
-	ImageView cancelar;
+	ImageView send;
+	ImageView cancel;
 	TextView resumen;
 	Request request;
 	private ProgressDialog progressDialog;
@@ -41,7 +42,7 @@ public class SendRequest extends Activity implements ParseRequestListener {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_final);
+		setContentView(R.layout.activity_send_request);
 		
 		request = MainController.getREQUEST();
 
@@ -51,9 +52,9 @@ public class SendRequest extends Activity implements ParseRequestListener {
 	}
 
 	private void loadButtons() {
-		enviar = (ImageView) findViewById(R.id.benviarfinal);
+		send = (ImageView) findViewById(R.id.benviarfinal);
 
-		enviar.setOnClickListener(new OnClickListener() {
+		send.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -65,8 +66,8 @@ public class SendRequest extends Activity implements ParseRequestListener {
 			
 		});
 
-		cancelar = (ImageView) findViewById(R.id.bcancfinal);
-		cancelar.setOnClickListener(new OnClickListener() {
+		cancel = (ImageView) findViewById(R.id.bcancfinal);
+		cancel.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -81,7 +82,7 @@ public class SendRequest extends Activity implements ParseRequestListener {
 		progressDialog = ProgressDialog
 				.show(this, "", getResources().getString(R.string.send_request_sending));
 		ParseProvider.initializeParse(getApplicationContext());
-		ParseProvider.sendRequest(this,this, request);
+		ParseRequestProvider.sendRequest(this,this, request);
 	}
 	private void setResume() {
 		final String userName = MainController.USER.getName();
@@ -135,6 +136,19 @@ public class SendRequest extends Activity implements ParseRequestListener {
 
 	@Override
 	public void onCanceledQueryFinished(boolean canceled) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onRequestRemoveFinished(Request request) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDayRequestsQueryFinished(Date[] initialScheduledDates,
+			Date[] finalScheduledDates) {
 		// TODO Auto-generated method stub
 		
 	}

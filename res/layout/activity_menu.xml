@@ -50,7 +50,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:clickable="true"
-            android:src="@drawable/ic_twitter" />
+            android:src="@drawable/buton_twiter" />
 
         <ImageView
             android:id="@+id/bfacebookmenu"
@@ -60,7 +60,7 @@
             android:layout_marginRight="18dp"
             android:layout_toLeftOf="@+id/btwittermenu"
             android:clickable="true"
-            android:src="@drawable/ic_facebook" />
+            android:src="@drawable/buton_facebook" />
 
         <ImageView
             android:id="@+id/byoutubemenu"
@@ -70,7 +70,7 @@
             android:layout_marginLeft="18dp"
             android:layout_toRightOf="@+id/btwittermenu"
             android:clickable="true"
-            android:src="@drawable/ic_youtube" />
+            android:src="@drawable/buton_youtube" />
 
     </RelativeLayout>
 
@@ -80,6 +80,6 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:layout_marginBottom="3dp"
-        android:src="@drawable/ic_call_vet" />
+        android:src="@drawable/buton_call_vet" />
 
 </LinearLayout>

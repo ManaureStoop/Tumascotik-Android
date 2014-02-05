@@ -1,11 +1,14 @@
 package com.arawaney.tumascotik.client.model;
 
+import java.util.Calendar;
+
 public class PetPropertie {
 
 	private long id;
 	private String system_id;
 	private String name;
-	private Breed breed;
+	private Calendar updated_at;
+
 	
 	public long getId() {
 		return id;
@@ -25,13 +28,11 @@ public class PetPropertie {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Breed getBreed() {
-		return breed;
+	public Calendar getUpdated_at() {
+		return updated_at;
 	}
-	public void setBreed(Breed breed) {
-		this.breed = breed;
+	public void setUpdated_at(Calendar updated_at) {
+		this.updated_at = updated_at;
 	}
-
-
 	
 }

@@ -6,37 +6,48 @@
     android:orientation="vertical"
     android:screenOrientation="portrait" >
 
-    <ImageView
-        android:id="@+id/image_user_info_avatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_dog" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/button_user_info_edit_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/image_user_info_avatar"
+            android:gravity="center"
+            android:src="@drawable/buton_edit" />
+
+        <ImageView
+            android:id="@+id/image_user_info_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/ic_perro" />
 
         <TextView
             android:id="@+id/text_user_info_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/image_user_info_avatar"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/ic_pet_name_label"
-            android:gravity="center"
-            android:text="Jose Perez"
-            android:textColor="@color/text_white"
-            android:textSize="@dimen/pet_names_blue_bckg" />
+            android:layout_marginTop="5dp"
+            android:background="@drawable/label_pet_name"
+            android:ems="10"
+            android:gravity="center_horizontal"
+            android:inputType="textPersonName"
+            android:textColor="@color/text_white" />
     </RelativeLayout>
 
     <ScrollView
         android:id="@+id/scrollView_user_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp" 
+        android:layout_marginTop="15dp"
         android:paddingLeft="@dimen/padding_scroll_edit_profile"
-         android:paddingRight="@dimen/padding_scroll_edit_profile">
+        android:paddingRight="@dimen/padding_scroll_edit_profile" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -157,7 +168,6 @@
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-      
                     android:inputType="phone"
                     android:textColor="@color/text_edit_profiles"
                     android:textSize="@dimen/user_edit_text" />
@@ -199,7 +209,7 @@
                     android:id="@+id/imageView_alert_user_info_phone_mobile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/facebook" />
+                    android:src="@drawable/buton_edit" />
 
                 <TextView
                     android:id="@+id/text_user_info_phone_mobile"
@@ -256,7 +266,7 @@
                     android:id="@+id/imageView_alert_user_info_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/facebook" />
+                    android:src="@drawable/buton_edit" />
 
                 <TextView
                     android:id="@+id/text_user_info_address"
@@ -305,22 +315,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
+                    android:background="@drawable/buton_profile_edit"
                     android:entries="@array/Genders"
                     android:scrollbars="horizontal"
                     android:splitMotionEvents="false"
-                    android:textAlignment="center"
-                    android:background="@drawable/ic_profile_edit" />
+                    android:textAlignment="center" />
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/button_user_info_edit_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:clickable="true"
-                android:gravity="center"
-                android:src="@drawable/ic_edit_button" />
         </LinearLayout>
     </ScrollView>
 

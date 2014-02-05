@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:screenOrientation="portrait" >
+
+    <TextView
+        android:id="@+id/txtresumentitlefinal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="52dp"
+        android:text="@string/send_request_details_title"
+        android:textSize="@dimen/big_oval_buttons"
+        android:textColor="@color/text_blue" 
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtresumnfinal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtresumentitlefinal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="115dp"
+        android:text="TextView"
+        android:textColor="@color/text_edit_profiles" />
+
+    <ImageView
+        android:id="@+id/bcancfinal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:clickable="true"
+        android:src="@drawable/buton_cancel" />
+
+    <ImageView
+        android:id="@+id/benviarfinal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/txtresumentitlefinal"
+        android:clickable="true"
+        android:src="@drawable/buton_foward" />
+
+</RelativeLayout>

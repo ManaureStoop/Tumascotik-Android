@@ -1,14 +1,17 @@
 package com.arawaney.tumascotik.client.db.provider;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View.OnClickListener;
 
 import com.arawaney.tumascotik.client.db.BreedEntity;
+import com.arawaney.tumascotik.client.db.RequestEntity;
 import com.arawaney.tumascotik.client.db.TumascotikProvider;
 import com.arawaney.tumascotik.client.model.Breed;
 import com.arawaney.tumascotik.client.model.PetPropertie;
@@ -35,6 +38,7 @@ public class BreedProvider {
 							.getSystem_id());
 
 				} else {
+					
 					Log.d(LOG_TAG,
 							"Specie object null inserting: " + breed.getName());
 				}
@@ -55,6 +59,8 @@ public class BreedProvider {
 				Log.d(LOG_TAG,
 						"Pet Propertie id null inserting: " + breed.getName());
 			}
+			values.put(RequestEntity.COLUMN_UPDATED_AT, breed
+					.getUpdated_at().getTimeInMillis());
 
 			final Uri result = context.getContentResolver().insert(URI_BREED,
 					values);
@@ -115,6 +121,9 @@ public class BreedProvider {
 				Log.d(LOG_TAG,
 						"Pet Propertie id null inserting: " + breed.getName());
 			}
+			
+			values.put(RequestEntity.COLUMN_UPDATED_AT, breed
+					.getUpdated_at().getTimeInMillis());
 
 			String condition = BreedEntity.COLUMN_SYSTEM_ID + " = " + "'"
 					+ String.valueOf(breed.getSystem_id()) + "'";
@@ -163,11 +172,18 @@ public class BreedProvider {
 							.getColumnIndex(BreedEntity.COLUMN_SYSTEM_ID));
 					final String name = cursor.getString(cursor
 							.getColumnIndex(BreedEntity.COLUMN_NAME));
+					final long updated_at = cursor.getInt(cursor
+							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
+					
+					Calendar updatedAt = Calendar.getInstance();
+					updatedAt.setTimeInMillis(updated_at);
 
 					breed = new Breed();
 					breed.setId(id);
 					breed.setSystem_id(system_id);
 					breed.setName(name);
+					breed.setUpdated_at(updatedAt);
+
 
 					String specie_id = cursor.getString(cursor
 							.getColumnIndex(BreedEntity.COLUMN_SPECIE_ID));
@@ -235,11 +251,102 @@ public class BreedProvider {
 							.getColumnIndex(BreedEntity.COLUMN_SYSTEM_ID));
 					final String name = cursor.getString(cursor
 							.getColumnIndex(BreedEntity.COLUMN_NAME));
+					final long updated_at = cursor.getInt(cursor
+							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
+					
+					Calendar updatedAt = Calendar.getInstance();
+					updatedAt.setTimeInMillis(updated_at);
 
 					breed = new Breed();
 					breed.setId(id);
 					breed.setSystem_id(system_id);
 					breed.setName(name);
+					breed.setUpdated_at(updatedAt);
+
+					String specie_id = cursor.getString(cursor
+							.getColumnIndex(BreedEntity.COLUMN_SPECIE_ID));
+
+					final Specie specie = SpecieProvider.readSpecie(context,
+							specie_id);
+					if (specie != null) {
+						breed.setSpecie(specie);
+					} else {
+						Log.d(LOG_TAG, "SPecie null reading in local DB for : "
+								+ breed.getName());
+					}
+
+					String petpropertie_id = cursor
+							.getString(cursor
+									.getColumnIndex(BreedEntity.COLUMN_PETPROPERTIE_ID));
+
+					final PetPropertie petPropertie = PetPropertieProvider
+							.readPetPropertie(context, petpropertie_id);
+					if (petPropertie != null) {
+						breed.setPetPropertie(petPropertie);
+					} else {
+						Log.d(LOG_TAG,
+								"PetPropertie null reading in local DB for : "
+										+ breed.getName());
+					}
+
+					breeds.add(breed);
+
+				} while (cursor.moveToNext());
+			}
+
+		} catch (Exception e) {
+			breeds = null;
+			Log.e(LOG_TAG, "Error : " + e.getMessage());
+		} finally {
+			cursor.close();
+		}
+		return breeds;
+	}
+	
+	public static ArrayList<Breed> readBreedBySpecie(
+			Context context, String specieId) {
+
+		if (context == null)
+			return null;
+
+		ArrayList<Breed> breeds = new ArrayList<Breed>();
+		
+		String condition = BreedEntity.COLUMN_SPECIE_ID + " = " + "'" + specieId
+				+ "'";
+
+		final Cursor cursor = context.getContentResolver().query(URI_BREED,
+				null, condition, null, null);
+
+		Breed breed = null;
+
+		if (cursor.getCount() == 0) {
+			cursor.close();
+			return null;
+		}
+
+		try {
+			if (cursor.moveToFirst()) {
+
+				do {
+
+					final long id = cursor.getLong(cursor
+							.getColumnIndex(BreedEntity.COLUMN_ID));
+					final String system_id = cursor.getString(cursor
+							.getColumnIndex(BreedEntity.COLUMN_SYSTEM_ID));
+					final String name = cursor.getString(cursor
+							.getColumnIndex(BreedEntity.COLUMN_NAME));
+					final long updated_at = cursor.getInt(cursor
+							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
+					
+					Calendar updatedAt = Calendar.getInstance();
+					updatedAt.setTimeInMillis(updated_at);
+
+					breed = new Breed();
+					breed.setId(id);
+					breed.setSystem_id(system_id);
+					breed.setName(name);
+					breed.setUpdated_at(updatedAt);
+
 					String specie_id = cursor.getString(cursor
 							.getColumnIndex(BreedEntity.COLUMN_SPECIE_ID));
 
@@ -297,4 +404,7 @@ public class BreedProvider {
 		}
 		return false;
 	}
+
+
+	
 }

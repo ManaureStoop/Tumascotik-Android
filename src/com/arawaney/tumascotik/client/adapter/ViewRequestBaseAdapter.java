@@ -2,7 +2,9 @@ package com.arawaney.tumascotik.client.adapter;
 
 import java.util.ArrayList;
 
+import com.arawaney.tumascotik.client.db.provider.ServiceProvider;
 import com.arawaney.tumascotik.client.model.Request;
+import com.arawaney.tumascotik.client.model.Service;
 import com.arawaney.tumascotik.client.util.BitMapUtil;
 import com.arawaney.tumascotik.client.util.CalendarUtil;
 import com.arawaney.tumascotik.client.util.FontUtil;
@@ -23,6 +25,7 @@ public class ViewRequestBaseAdapter extends BaseAdapter {
 	Context contxt;
 	private String[] status;
 	private LayoutInflater lInflater;
+
 
 	public ViewRequestBaseAdapter(Context context, ArrayList<Request> results) {
 		requests = results;
@@ -73,16 +76,25 @@ public class ViewRequestBaseAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		String path = new String( String.valueOf(requests.get(position).getPet().getSpecie()+"_mini"));
-		holder.petName.setText(requests.get(position).getPet().getName());
-		holder.serviceName.setText(requests.get(position).getService());
-		
+		String path = new String("mini_"+ String.valueOf(requests.get(position).getPet().getBreed().getSpecie().getName()));
+		holder.petName.setText(requests.get(position).getPet().getName().toString());
+		Service service = requests.get(position).getService();
+		holder.serviceName.setText(service.getName());
+		Log.d("LOG", "path");
 		String dayOfWeek = CalendarUtil.getDateFormated(requests.get(position).getStart_date(), "EEEE");
 		String date = CalendarUtil.getDateFormated(requests.get(position).getStart_date(), "dd MMMM yyyy");
 		String totalDate = dayOfWeek+""+", "+date;
 		holder.day.setText(totalDate);
 		
 		holder.time.setText(CalendarUtil.getDateFormated(requests.get(position).getStart_date(), "hh:mm a"));
+		holder.status.setText(status[requests.get(position).getStatus()-1]);
+		if (requests.get(position).getStatus() == Request.STATUS_ACCEPTED) {
+			holder.status.setTextColor(contxt.getResources().getColor(R.color.request_status_accepted));
+		}else if (requests.get(position).getStatus() == Request.STATUS_PENDING) {
+			holder.status.setTextColor(contxt.getResources().getColor(R.color.request_status_pending));
+		}else if (requests.get(position).getStatus() == Request.STATUS_CANCELED) {
+			holder.status.setTextColor(contxt.getResources().getColor(R.color.request_status_canceled));
+		}
 		holder.status.setText(status[requests.get(position).getStatus()-1]);
 		holder.petAvatar.setImageResource(BitMapUtil.getImageId(contxt, path));
 		

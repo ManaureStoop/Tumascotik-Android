@@ -315,29 +315,38 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 		}
 
 		if (user.getMobile_telephone() != null) {
-			edituserPhoneMobile.setText(user
-					.getMobile_telephone()
-					.toString()
-					.subSequence(3,
-							user.getMobile_telephone().toString().length()));
-			edituserPhoneMobilePrefix.setText(user.getMobile_telephone()
-					.toString().subSequence(0, 3));
+			if (user.getMobile_telephone()!=0) {
+				edituserPhoneMobile.setText(user
+						.getMobile_telephone()
+						.toString()
+						.subSequence(3,
+								user.getMobile_telephone().toString().length()));
+				edituserPhoneMobilePrefix.setText(user.getMobile_telephone()
+						.toString().subSequence(0, 3));
+			}else{
+			edituserPhoneMobile.setText(" ");
+			edituserPhoneMobilePrefix.setText(" ");}
 
 		}else{
 			alertUserCellphone.setVisibility(View.VISIBLE);
 		}
 		if (user.getHouse_telephone() != null) {
+			if (user.getHouse_telephone()!=0) {
 			edituserPhoneLocal.setText(user
 					.getHouse_telephone()
 					.toString()
 					.subSequence(3,
 							user.getHouse_telephone().toString().length()));
 			edituserPhoneLocalPrefix.setText(user.getHouse_telephone()
-					.toString().subSequence(0, 3));
+					.toString().subSequence(0, 3));}
+			else{
+				edituserPhoneLocal.setText(" ");
+				edituserPhoneLocalPrefix.setText(" ");
+				
+			}
 
 		}
-//		saveEditButton.setText(getResources().getString(
-//				R.string.user_info_button_save));
+		saveEditButton.setImageResource(R.drawable.buton_check);
 
 	}
 
@@ -392,9 +401,7 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 			userPhoneLocal.setText(user.getHouse_telephone().toString());
 
 		}
-
-//		saveEditButton.setText(getResources().getString(
-//				R.string.user_info_button_edit));
+		saveEditButton.setImageResource(R.drawable.buton_edit);
 
 	}
 

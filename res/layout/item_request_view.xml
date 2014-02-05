@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="2dp" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView_request_view_petname"
+        android:layout_height="130dp"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/imageView_request_view_petavatar"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="4dp"
-        android:layout_toRightOf="@+id/textView_request_view_petname"
+        android:layout_toRightOf="@+id/imageView_request_view_petavatar"
         android:background="@color/background_gray"
         android:orientation="vertical"
-        android:paddingTop="5dp" >
+        android:padding="5dp" >
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -87,27 +85,29 @@
             android:id="@+id/textView_request_view_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="5dp"
             android:text="PENDINNNG"
-            android:textColor="@color/request_status_pending" 
-            android:textStyle="bold"/>
+            android:textColor="@color/request_status_pending"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/imageView_request_view_petavatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/ic_cat_mini" />
+        android:layout_alignRight="@+id/textView_request_view_petname"
+        android:layout_alignTop="@+id/linearLayout1"
+        android:layout_marginTop="3dp"
+        android:src="@drawable/ic_mini_gato" />
 
     <TextView
         android:id="@+id/textView_request_view_petname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/imageView_request_view_petavatar"
-        android:layout_below="@+id/imageView_request_view_petavatar"
-        android:background="@drawable/ic_pet_name_label_appointment"
+        android:layout_alignBottom="@+id/linearLayout1"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/label_pet_name_appointment"
         android:gravity="center"
         android:text="Milou"
         android:textSize="@dimen/pet_names_gray_bckg" />

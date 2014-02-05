@@ -11,6 +11,6 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginTop="@dimen/space_between_items_petpicker"
-        android:src="@drawable/ic_add_pet" />
+        android:src="@drawable/buton_add_pet" />
 
 </RelativeLayout>

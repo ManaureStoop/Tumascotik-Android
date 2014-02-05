@@ -1,5 +1,8 @@
 package com.arawaney.tumascotik.client.db.provider;
 
+import java.util.Calendar;
+
+import com.arawaney.tumascotik.client.db.RequestEntity;
 import com.arawaney.tumascotik.client.db.TumascotikProvider;
 import com.arawaney.tumascotik.client.db.UserEntity;
 import com.arawaney.tumascotik.client.model.User;
@@ -38,6 +41,8 @@ public class UserProvider {
 			values.put(UserEntity.COLUMN_TELEPHONE_MOBILE,
 					user.getMobile_telephone());
 			values.put(UserEntity.COLUMN_ADMIN, user.getisAdmin());
+			values.put(RequestEntity.COLUMN_UPDATED_AT, user
+					.getUpdated_at().getTimeInMillis());
 
 			final Uri result = context.getContentResolver().insert(URI_USER,
 					values);
@@ -82,6 +87,8 @@ public class UserProvider {
 					user.getHouse_telephone());
 			values.put(UserEntity.COLUMN_TELEPHONE_MOBILE,
 					user.getMobile_telephone());
+			values.put(RequestEntity.COLUMN_UPDATED_AT, user
+					.getUpdated_at().getTimeInMillis());
 			values.put(UserEntity.COLUMN_ADMIN, user.getisAdmin());
 
 			String condition = UserEntity.COLUMN_ID + " = "
@@ -133,6 +140,11 @@ public class UserProvider {
 			final Long mobile_telephone = cursor.getLong(cursor.getColumnIndex(UserEntity.COLUMN_TELEPHONE_MOBILE));
 			final Long house_telephone = cursor.getLong(cursor.getColumnIndex(UserEntity.COLUMN_TELEPHONE_HOUSE));
 			final Integer admin = cursor.getInt(cursor.getColumnIndex(UserEntity.COLUMN_ADMIN));
+			final long updated_at = cursor.getInt(cursor
+					.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
+			
+			Calendar updatedAt = Calendar.getInstance();
+			updatedAt.setTimeInMillis(updated_at);
 			
 			user = new User();
 			user.setId(id);
@@ -148,6 +160,8 @@ public class UserProvider {
 			user.setMobile_telephone(mobile_telephone);
 			user.setHouse_telephone(house_telephone);
 			user.setAdmin(admin);
+			user.setUpdated_at(updatedAt);
+
 			
 		} while (cursor.moveToNext());
 	}

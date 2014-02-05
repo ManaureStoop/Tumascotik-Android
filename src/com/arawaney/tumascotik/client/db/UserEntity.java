@@ -15,6 +15,7 @@ public class UserEntity {
 	public static final String COLUMN_TELEPHONE_MOBILE = "mobile_telephone";
 	public static final String COLUMN_TELEPHONE_HOUSE = "house_telephone";
 	public static final String COLUMN_ADMIN = "admin";
+	public static final String COLUMN_UPDATED_AT = "updated_at";
 
 	public static final int DATABASE_VERSION = 1;
 
@@ -45,6 +46,8 @@ public class UserEntity {
 			+ " TEXT, " 
 			+ COLUMN_TELEPHONE_HOUSE
 			+ " TEXT, " 
+			+ COLUMN_UPDATED_AT 
+			+ " INTEGER, " 
 			+ COLUMN_ADMIN 
 			+ " INTEGER);";
 

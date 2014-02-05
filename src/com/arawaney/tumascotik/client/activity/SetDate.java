@@ -1,6 +1,7 @@
 package com.arawaney.tumascotik.client.activity;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -28,9 +29,11 @@ import android.widget.Toast;
 
 import com.arawaney.tumascotik.client.R;
 import com.arawaney.tumascotik.client.backend.ParseProvider;
+import com.arawaney.tumascotik.client.backend.ParseRequestProvider;
 import com.arawaney.tumascotik.client.control.MainController;
 import com.arawaney.tumascotik.client.dialog.DatePickr;
 import com.arawaney.tumascotik.client.dialog.TimePicker;
+import com.arawaney.tumascotik.client.listener.ParseRequestListener;
 import com.arawaney.tumascotik.client.model.Request;
 import com.arawaney.tumascotik.client.util.CalendarUtil;
 import com.arawaney.tumascotik.client.util.FontUtil;
@@ -39,13 +42,13 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-public class SetDate extends FragmentActivity {
+public class SetDate extends FragmentActivity implements ParseRequestListener {
 	private static final String LOG_TAG = "Tumascotik-Client-SetDateActivity";
 	int numberOfScheduledAppointments;
 	int numberOfCreatedTimeBlocks;
 	Date initialDate;
 	Button dateButton;
-	ImageView siguiente;
+	ImageView forward;
 	ImageView cancelar;
 	Button timeButton;
 	TextView pickedTime;
@@ -67,6 +70,11 @@ public class SetDate extends FragmentActivity {
 	int[] houri;
 	int[] hourf;
 	int ind;
+	int duration;
+	int minDuration;
+	
+	ProgressDialog progressDialog;
+	
 
 	Request request;
 
@@ -104,7 +112,7 @@ public class SetDate extends FragmentActivity {
 
 		ParseProvider.initializeParse(this);
 
-		setRequest();
+		loadRequest();
 
 		loadViews();
 
@@ -112,13 +120,14 @@ public class SetDate extends FragmentActivity {
 
 	}
 
-	private void setRequest() {
-		request = new Request();
-		request.setPet(MainController.getPET());
-		request.setStatus(Request.STATUS_PENDING);
-		request.setActive(Request.ACTIVE);
-		request.setIs_appointment(Request.IS_APPOINTMENT);
+
+
+	private void loadRequest() {
+		request = MainController.getREQUEST();
+		
 	}
+
+
 
 	private void loadButtons() {
 		dateButton.setOnClickListener(new OnClickListener() {
@@ -141,12 +150,12 @@ public class SetDate extends FragmentActivity {
 
 			}
 		});
-		siguiente.setOnClickListener(new OnClickListener() {
+		forward.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				if (Checkfields()) {
-					Intent i = new Intent(SetDate.this, SetRequestDetails.class);
+					Intent i = new Intent(SetDate.this, SendRequest.class);
 					startActivity(i);
 				}
 
@@ -166,7 +175,7 @@ public class SetDate extends FragmentActivity {
 
 	private void loadViews() {
 		dateButton = (Button) findViewById(R.id.bfechasetd);
-		siguiente = (ImageView) findViewById(R.id.bsigsetd);
+		forward = (ImageView) findViewById(R.id.bsigsetd);
 		cancelar = (ImageView) findViewById(R.id.bcancsetd);
 		timeButton = (Button) findViewById(R.id.bhorasetd);
 		timeButton.setEnabled(false);
@@ -175,83 +184,46 @@ public class SetDate extends FragmentActivity {
 		pickedDate = (TextView) findViewById(R.id.txtfechasetd);
 		alerta = (TextView) findViewById(R.id.txtalertasetd);
 		alerta.setVisibility(View.GONE);
-		
+
 		setFonts();
 
 	}
 
 	private void setFonts() {
-		dateButton.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		timeButton.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		pickedTime.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
-		pickedDate.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
+		dateButton.setTypeface(FontUtil
+				.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		timeButton.setTypeface(FontUtil
+				.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		pickedTime
+				.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
+		pickedDate
+				.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
 		alerta.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
-		
+
 	}
 
 	public void getScheduledTimeBlocks() {
 
-		final ProgressDialog progressDialog = ProgressDialog.show(
+		 progressDialog = ProgressDialog.show(
 				SetDate.this,
 				"",
 				getResources().getString(
 						R.string.set_date_dialog_loading_timeblocks));
 
-		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Request");
-		query.whereGreaterThan("Initial_Date", dayInitialDate);
-		query.whereLessThan("Culmination_Date", dayFinalDate);
-		query.findInBackground(new FindCallback<ParseObject>() {
+		timeBlocks = new String[100];
+		expensiveBlocks = new int[100];
+		minutei = new int[100];
+		minutef = new int[100];
+		houri = new int[100];
+		hourf = new int[100];
 
-			@Override
-			public void done(List<ParseObject> cList, ParseException e) {
-
-				if (e == null) {
-					int i;
-					ParseObject parseobject;
-					numberOfScheduledAppointments = cList.size();
-					timeBlocks = new String[20];
-					expensiveBlocks = new int[20];
-					minutei = new int[20];
-					minutef = new int[20];
-					houri = new int[20];
-					hourf = new int[20];
-
-					if (numberOfScheduledAppointments > 0) {
-						initialScheduledDates = new Date[numberOfScheduledAppointments];
-						finalScheduledDates = new Date[numberOfScheduledAppointments];
-						for (i = 0; i < numberOfScheduledAppointments; i++) {
-							parseobject = cList.get(i);
-							initialScheduledDates[i] = parseobject
-									.getDate("Initial_Date");
-							finalScheduledDates[i] = parseobject
-									.getDate("Culmination_Date");
-
-						}
-					}
-					for (i = 0; i < numberOfScheduledAppointments; i++) {
-						Log.d("TEST", String.valueOf(initialScheduledDates[i]
-								.toString()));
-						Log.d("TEST", String.valueOf(finalScheduledDates[i]
-								.toString()));
-
-					}
-					progressDialog.dismiss();
-					enableTimeButton();
-				} else {
-					Log.d(LOG_TAG,
-							"Error loading scheduled time blocks: "
-									+ e.getMessage());
-				}
-			}
-
-			private void enableTimeButton() {
-				timeButton.setClickable(true);
-				timeButton.setEnabled(true);
-				pickedTime.setText(R.string.set_date_time_text);
-			}
-
-		});
-
+		ParseRequestProvider.geRequestByDay(dayInitialDate, dayFinalDate, this);
+	}
+	
+	private void enableTimeButton() {
+		timeButton.setClickable(true);
+		timeButton.setEnabled(true);
+		pickedTime.setText(R.string.set_date_time_text);
 	}
 
 	public void writehours() {
@@ -284,17 +256,19 @@ public class SetDate extends FragmentActivity {
 
 		// While the times doesnt exceeds the last hour-block
 		while (cursorDate.before(maximumDate)) {
-			auxFinalDate = new Date(cursorDate.getTime() + (90 * 60 * 1000));// Added
-																				// 1.5
-																				// Hours
-			min = 60 * 60 * 1000; // minimum block is 1 hour
+			
+			loadDuration();
+			
+			auxFinalDate = new Date(cursorDate.getTime() + duration);// Added service duration
+			
+			min = minDuration; // minimum block is 1 hour
 			blockCreated = false;
 			block = false;
 			// If there is an activity or appointment already in the first hour
 			// block
 			// the list will start at the end of this hour-block
 			for (i = 0; i < numberOfScheduledAppointments; i++) {
-				
+
 				if (auxFinalDate.after(finalScheduledDates[i])
 						&& cursorDate.before(finalScheduledDates[i])) {
 					Log.d(LOG_TAG, "Test true raro");
@@ -330,7 +304,7 @@ public class SetDate extends FragmentActivity {
 						// If difference between block start and next activity
 						// is more than one hour
 						if (initialScheduledDates[i].getTime()
-								- cursorDate.getTime() >= (60 * 60 * 1000)) {
+								- cursorDate.getTime() >= (minDuration)) {
 							Log.d(LOG_TAG + " ALGORITH ",
 									"Time between begginings more than minimum");
 							min = initialScheduledDates[i].getTime()
@@ -428,7 +402,7 @@ public class SetDate extends FragmentActivity {
 						.before(maximumDate) || cursorDate.equals(maximumDate)))) {
 					isBlockBetween = true;
 					// // If difference is more than one hour
-					if (maximumDate.getTime() - cursorDate.getTime() >= (60 * 60 * 1000)) {
+					if (maximumDate.getTime() - cursorDate.getTime() >= (minDuration)) {
 						if (blockCreated) {
 							if (maximumDate.getTime() - cursorDate.getTime() < min) {
 								j--;
@@ -548,6 +522,15 @@ public class SetDate extends FragmentActivity {
 
 	}
 
+	private void loadDuration() {
+		request = MainController.getREQUEST();
+		int durationInHours = request.getService().getDuration();
+		
+		duration = durationInHours* 60 *60 * 1000;
+		minDuration = ((durationInHours* 60 *60 * 1000)*3)/4;
+		
+	}
+
 	public void onUserSelectValue(int index) {
 		pickedTime.setText(timeBlocks[index]);
 		ind = index;
@@ -635,5 +618,52 @@ public class SetDate extends FragmentActivity {
 			}
 		}
 		return ready;
+	}
+
+	@Override
+	public void OnRequestInserted(boolean inserted, String systemId) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void OnAllRequestsQueryFinished(ArrayList<Request> requests) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onRequestQueryFInished(Request request) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onCanceledQueryFinished(boolean canceled) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onRequestRemoveFinished(Request request) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onDayRequestsQueryFinished(Date[] initialScheduledDates,
+			Date[] finalScheduledDates) {
+if (initialScheduledDates != null && finalScheduledDates != null) {
+	this.initialScheduledDates = initialScheduledDates;
+	this.finalScheduledDates = finalScheduledDates;
+
+
+	numberOfScheduledAppointments = initialScheduledDates.length;
+}else{
+	numberOfScheduledAppointments = 0;
+}
+	
+		progressDialog.dismiss();
+		enableTimeButton();
 	}
 }

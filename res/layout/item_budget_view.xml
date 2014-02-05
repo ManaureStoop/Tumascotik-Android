@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="wrap_content" 
+    >
 
     <TextView
         android:id="@+id/budget_item_service"
@@ -20,8 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/budget_item_service"
         android:layout_below="@+id/budget_item_service"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/ic_pet_name_label_appointment"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/label_pet_name_appointment"
         android:gravity="center"
         android:text="BsF. 500"
         android:textColor="@color/text_edit_profiles"

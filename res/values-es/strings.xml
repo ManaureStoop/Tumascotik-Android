@@ -88,6 +88,7 @@
     <string name="menu_make_appointment">Pedir Cita</string>
     <string name="menu_view_appointment">Mis Citas</string>
     <string name="menu_budget">Presupuestos</string>
+    <string name="main_load_backend_data_dialog">Cargando datos de Tumascotik. Este proceso puede tomar algunos minutos.</string>
 
     <!-- PET INFO -->
     <string name="pet_info_button_edit">Editar</string>
@@ -95,6 +96,9 @@
     <string name="pet_info_title_specie">Especie</string>
     <string name="pet_info_title_breed">Raza</string>
     <string name="pet_info_title_gender">Sexo</string>
+    <string name="pet_info_title_agressive">Agresivo/a</string>
+    <string name="pet_info_title_agressive_yes">Si</string>
+    <string name="pet_info_title_agressive_no">No</string>
     <string name="pet_info_title_properties">Propiedades</string>
     <string name="pet_info_title_puppy">Edad</string>
     <string name="pet_info_title_comment">Otros comentarios</string>
@@ -103,6 +107,7 @@
     <string name="pet_info_loading_specie_lists">Cargando Especies ...</string>
     <string name="pet_info_pet_not_updated">En este momento no es posible actualizar tu mascota</string>
     <string name="pet_info_pet_not_inserted">En este momento no es posible registrar tu mascota</string>
+    <string name="pet_info_pet_data_incomplete">Faltan algunos datos importantes de tu mascota...</string>
 
     <!-- User Info -->
     <string name="user_info_button_edit">Editar</string>
@@ -134,7 +139,8 @@
     <string name="set_request_details_comments_title">Comentarios: </string>
     <string name="set_request_details_motive_title">Motivo: </string>
     <string name="set_request_details_motive">Motivo</string>
-    <string name="set_request_details_isDeivery_title">A Domicilio: </string>
+    <string name="set_request_details_isDeivery_title_afirmative">A Domicilio: SI </string>
+    <string name="set_request_details_isDeivery_title_negative">A Domicilio : NO </string>
     <string name="set_request_details_loading_motive_lists">Cargando Servicios ...</string>
 
     <!-- Send Request -->
@@ -149,10 +155,28 @@
     <string name="request_view_day">Dia: </string>
     <string name="request_view_time">Hora: </string>
     <string name="request_view_dialog_conector">para</string>
-        <string name="request_view_dialog_cancel_button">Cancelar Cita</string>
+    <string name="request_view_dialog_cancel_button">Cancelar Cita</string>
+    <string name="request_view_zero_data">No has \n generado ninguna cita aún...</string>
+
+    <!-- Request Notification -->
+    <string name="request_notification_toast_accepted">Cita aceptada para : </string>
+    <string name="request_notification_accepted_title">Cita aceptada para : </string>
+    <string name="request_notification_accepted_content">La cita fue agregada a su Calendario </string>
+    <string name="request_notification_toast_rejected">Su veterinario no puede atender a </string>
+    <string name="request_notification_rejected_title">Cita no aceptada para  </string>
+    <string name="request_notification_rejected_content">Por favor elija otra fecha / hora </string>
 
     <!-- Budget -->
     <string name="budget_total_title">Total</string>
+    <string name="budget_zero_data">No has \n agregado nada aún...</string>
+    <string name="budget_updating_prices">Actualizando precios</string>
+    <string name="budget_dialog_ok">OK</string>
+    <string name="budget_dialog_cancel">Cancelar</string>
+    <string name="budget_dialog_send">Enviar</string>
+    <string name="budget_dialog_send_title">Estimado cliente</string>
+    <string name="budget_dialog_send_body">¿Desea hacer el pedido a su veterinario por un total de Bs.</string>
+    <string name="budget_dialog_delete_from_list">Eliminar de la lista</string>
+     <string name="budget_sending_order">Enviando orden...</string>
 
     <string-array name="Genders">
         <item>--Elija--</item>
@@ -170,6 +194,10 @@
         <item>Mujer</item>
     </string-array>
     <string-array name="Status">
+        <item>ATENDIDA</item>
+        <item>CANCELADA</item>
+        <item>ACEPTADA</item>
+        <item>PENDIENTE</item>
         <item>ATENDIDA</item>
         <item>CANCELADA</item>
         <item>ACEPTADA</item>

@@ -1,5 +1,7 @@
 package com.arawaney.tumascotik.client.model;
 
+import java.util.Calendar;
+
 public class User {
 
 
@@ -15,6 +17,7 @@ public class User {
 	private int gender;
 	private Long mobile_telephone;
 	private Long house_telephone;
+	private Calendar updated_at;
 	private Integer admin;
 	
 	public final static int GENDER_MAN= 1;
@@ -142,6 +145,14 @@ public class User {
 
 	public void setAdmin(Integer  admin) {
 		this.admin = admin;
+	}
+
+	public Calendar getUpdated_at() {
+		return updated_at;
+	}
+
+	public void setUpdated_at(Calendar updated_at) {
+		this.updated_at = updated_at;
 	}
 
 }

@@ -6,13 +6,6 @@
     android:orientation="vertical"
     android:screenOrientation="portrait" >
 
-    <ImageView
-        android:id="@+id/image_pet_info_avatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_cat" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
@@ -21,10 +14,10 @@
             android:id="@+id/edit_text_pet_info_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/text_pet_info_name"
-            android:layout_alignBottom="@+id/text_pet_info_name"
+            android:layout_below="@+id/image_pet_info_avatar"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/ic_pet_name_label"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/label_pet_name"
             android:ems="10"
             android:gravity="center_horizontal"
             android:inputType="textPersonName"
@@ -34,13 +27,32 @@
             android:id="@+id/text_pet_info_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/image_pet_info_avatar"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/ic_pet_name_label"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/label_pet_name"
+            android:ems="10"
             android:gravity="center_horizontal"
             android:text="Pancho"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/text_white" />
+
+        <ImageView
+            android:id="@+id/image_pet_info_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/ic_gato" />
+
+        <ImageView
+            android:id="@+id/button_pet_info_edit_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/image_pet_info_avatar"
+            android:gravity="center"
+            android:src="@drawable/buton_edit" />
     </RelativeLayout>
 
     <ScrollView
@@ -49,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:paddingLeft="@dimen/padding_scroll_edit_profile"
-         android:paddingRight="@dimen/padding_scroll_edit_profile" >
+        android:paddingRight="@dimen/padding_scroll_edit_profile" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,7 +96,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:background="@drawable/ic_profile_edit"
+                    android:background="@drawable/buton_profile_edit"
                     android:scrollbars="horizontal"
                     android:splitMotionEvents="false"
                     android:textAlignment="center" />
@@ -119,7 +131,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:background="@drawable/ic_profile_edit"
+                    android:background="@drawable/buton_profile_edit"
                     android:scrollbars="horizontal"
                     android:splitMotionEvents="false"
                     android:textAlignment="center" />
@@ -154,7 +166,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:background="@drawable/ic_profile_edit"
+                    android:background="@drawable/buton_profile_edit"
                     android:entries="@array/Genders"
                     android:scrollbars="horizontal"
                     android:splitMotionEvents="false"
@@ -190,11 +202,46 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:background="@drawable/ic_profile_edit"
+                    android:background="@drawable/buton_profile_edit"
                     android:entries="@array/Age"
                     android:scrollbars="horizontal"
                     android:splitMotionEvents="false"
                     android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="15dp" >
+
+                <TextView
+                    android:id="@+id/text_pet_info_isagressive_tittle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/pet_info_title_agressive"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
+
+                <TextView
+                    android:id="@+id/text_pet_info_isagressive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="@string/pet_info_title_agressive_yes"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/blue_text" />
+
+                <Button
+                    android:id="@+id/Button_pet_info_isagressive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/ic_yellow_button_pressed"
+                    android:text="@string/pet_info_title_agressive_yes"
+                    android:textColor="@color/text_white"
+                    android:textSize="@dimen/big_oval_buttons" />
             </LinearLayout>
 
             <LinearLayout
@@ -228,15 +275,6 @@
                     android:layout_gravity="bottom"
                     android:ems="10" />
             </LinearLayout>
-
-            <ImageView
-                android:layout_marginTop="10dp"
-                android:id="@+id/button_pet_info_edit_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:src="@drawable/ic_edit_button" />
         </LinearLayout>
     </ScrollView>
 

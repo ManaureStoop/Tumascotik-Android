@@ -10,14 +10,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_dog" />
+        android:src="@drawable/ic_perro" 
+        android:layout_marginTop="@dimen/space_between_name_and_image_petpicker"/>
 
     <TextView
         android:id="@+id/pet_item_textv_pet_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/ic_pet_name_label"
+        android:background="@drawable/label_pet_name"
         android:gravity="center"
         android:text="TextView"
          android:layout_marginTop="@dimen/space_between_name_and_image_petpicker"

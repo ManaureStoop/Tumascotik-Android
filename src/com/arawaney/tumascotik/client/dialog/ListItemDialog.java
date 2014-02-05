@@ -9,10 +9,13 @@ import com.arawaney.tumascotik.client.R;
 
 import com.arawaney.tumascotik.client.activity.ViewRequests;
 import com.arawaney.tumascotik.client.backend.ParseProvider;
+import com.arawaney.tumascotik.client.backend.ParseRequestProvider;
 import com.arawaney.tumascotik.client.db.CitationDB;
 import com.arawaney.tumascotik.client.db.provider.RequestProvider;
+import com.arawaney.tumascotik.client.db.provider.ServiceProvider;
 import com.arawaney.tumascotik.client.listener.ParseRequestListener;
 import com.arawaney.tumascotik.client.model.Request;
+import com.arawaney.tumascotik.client.model.Service;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -56,7 +59,8 @@ public class ListItemDialog extends DialogFragment implements
 	public ListItemDialog(Request request, Context context) {
 
 		petName = request.getPet().getName();
-		service = request.getService();
+		Service services =  request.getService();
+		service = services.getName();
 		initialDate = request.getStart_date().getTime();
 		finalDate = request.getFinish_date().getTime();
 		status = request.getStatus();
@@ -71,7 +75,7 @@ public class ListItemDialog extends DialogFragment implements
 		String connector = context.getResources().getString(
 				R.string.request_view_dialog_conector);
 		builder.setTitle(service + " " + connector + " " + petName);
-		builder.setIcon(R.drawable.mascotiklogodialog);
+//		builder.setIcon(R.drawable.mascotiklogodialog);
 		// Add the buttons
 		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
@@ -91,7 +95,7 @@ public class ListItemDialog extends DialogFragment implements
 									finalDate.getTime(),
 									"Cita con Tumascotik para " + petName);
 							ViewRequests callingActivity = (ViewRequests) getActivity();
-							callingActivity.Refresh();
+							callingActivity.refreshListView();
 						}
 
 					});
@@ -101,7 +105,7 @@ public class ListItemDialog extends DialogFragment implements
 
 	private void cancelRequestParse() {
 
-		ParseProvider.cancelRequest(context, this, request);
+		ParseRequestProvider.cancelRequest(context, this, request);
 
 	}
 
@@ -199,7 +203,19 @@ public class ListItemDialog extends DialogFragment implements
 	}
 
 	private void deleteRequestFromDataBase() {
-		RequestProvider.removeRequest(context, request.getId());
+		RequestProvider.removeRequest(context, request.getSystem_id());
+	}
+	@Override
+	public void onRequestRemoveFinished(Request request) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDayRequestsQueryFinished(Date[] initialScheduledDates,
+			Date[] finalScheduledDates) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

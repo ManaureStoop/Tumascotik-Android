@@ -1,6 +1,6 @@
 package com.arawaney.tumascotik.client.dialog;
 
-import com.arawaney.tumascotik.client.activity.Budget;
+import com.arawaney.tumascotik.client.activity.BudgetActivity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -17,11 +17,11 @@ public class PresupuestoDeleteallDialog extends DialogFragment  {
 	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 	    builder.setTitle("Estimado CLiente");
 	    builder.setMessage("El contenido de la lista de presupuestos se borrara");
-	    builder.setIcon(R.drawable.mascotiklogodialog);
+//	    builder.setIcon(R.drawable.mascotiklogodialog);
 	 // Add the buttons
 	    builder.setPositiveButton("Borrar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	Budget callingActivity = (Budget) getActivity();
+            	BudgetActivity callingActivity = (BudgetActivity) getActivity();
 	    		callingActivity.DeleteAll();
 	               }
 	           });

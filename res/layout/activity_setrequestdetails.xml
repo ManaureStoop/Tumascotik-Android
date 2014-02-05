@@ -15,7 +15,7 @@
         android:layout_marginBottom="14dp"
         android:layout_marginLeft="14dp"
         android:clickable="true"
-        android:src="@drawable/ic_cancel" />
+        android:src="@drawable/buton_cancel" />
 
     <ImageView
         android:id="@+id/bsigpedirc"
@@ -25,77 +25,64 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:clickable="true"
-        android:src="@drawable/ic_foward" />
+        android:src="@drawable/buton_foward" />
 
-    <ToggleButton
-        android:id="@+id/toggleButton_setrequestdetails_isdelivetry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView1"
-        android:layout_alignBottom="@+id/textView1"
-        android:layout_marginLeft="26dp"
-        android:layout_toRightOf="@+id/bcancpedirc" />
+                <Button
+                    android:id="@+id/toggleButton_setrequestdetails_isdelivetry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/bsigpedirc"
+                    android:layout_alignLeft="@+id/button_setrequestdetails_comment"
+                    android:layout_marginBottom="64dp"
+                    android:background="@drawable/ic_yellow_button_pressed"
+                    android:text="@string/set_request_details_isDeivery_title_negative"
+                    android:textColor="@color/text_white"
+                    android:textSize="@dimen/big_oval_buttons" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bsigpedirc"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="44dp"
-        android:text="@string/set_request_details_isDeivery_title"
-        android:textColor="@color/text_yellow"
-        android:textSize="@dimen/blue_text" />
+                <Button
+                    android:id="@+id/button_set_requestdetails_motive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="37dp"
+                    android:background="@drawable/buton_yellow"
+                    android:text="@string/set_request_details_motive_title"
+                    android:textColor="@color/text_white"
+                    android:textSize="@dimen/big_oval_buttons" />
 
-    <Button
-        android:id="@+id/button_set_requestdetails_motive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/text_motive"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="17dp"
-        android:background="@drawable/ic_yellow_button"
-        android:text="@string/set_request_details_motive_title"
-        android:textColor="@color/text_white" 
-        android:textSize="@dimen/big_oval_buttons"/>
+                <TextView
+                    android:id="@+id/text_motive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/button_set_requestdetails_motive"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="14dp"
+                    android:text="@string/set_request_details_motive"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
 
-    <TextView
-        android:id="@+id/text_motive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="74dp"
-        android:text="@string/set_request_details_motive"
-        android:textColor="@color/text_edit_profiles" 
-        android:textSize="@dimen/user_edit_text"/>
+                <Button
+                    android:id="@+id/button_setrequestdetails_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/button_set_requestdetails_motive"
+                    android:layout_below="@+id/text_motive"
+                    android:layout_marginTop="39dp"
+                    android:background="@drawable/buton_yellow"
+                    android:text="@string/set_request_details_comments_title"
+                    android:textColor="@color/text_white"
+                    android:textSize="@dimen/big_oval_buttons" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true" >
+                <EditText
+                    android:id="@+id/editText_setrequestdetails_comments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:ems="10" >
 
-        <TextView
-            android:id="@+id/textView_setrequestdetails_comment_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/set_request_details_comments_title"
-            android:textColor="@color/text_yellow"
-            android:textSize="@dimen/blue_text" />
-
-        <EditText
-            android:id="@+id/editText_setrequestdetails_comments"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:textColor="@color/text_edit_profiles"
-            android:textSize="@dimen/user_edit_text"
-            android:inputType="textMultiLine" >
-
-            <requestFocus />
-        </EditText>
-    </LinearLayout>
+                    <requestFocus />
+                </EditText>
 
 </RelativeLayout>

@@ -8,12 +8,12 @@ public class Request {
 	private String system_id;
 	private Calendar start_date;
 	private Calendar finish_date;
-	private String service;
+	private Calendar updated_at;
+	private Service service;
 	private Integer price;
 	private String comment;
 	private int status;
 	private Integer delivery;
-	private Integer is_appointment;
 	private Integer active;
 	private Pet pet;
 	
@@ -24,9 +24,6 @@ public class Request {
 	
 	public final static int ACTIVE = 1;
 	public final static int INACTIVE = 0;
-	
-	public final static int IS_APPOINTMENT = 1;
-	public final static int IS__NOT_APPOINTMENT = 0;
 	
 	public final static int IS_DELIVERY = 1;
 	public final static int IS__NOT_DELIVERY = 0;
@@ -58,10 +55,10 @@ public class Request {
 	public void setFinish_date(Calendar finisch_date) {
 		this.finish_date = finisch_date;
 	}
-	public String getService() {
+	public Service getService() {
 		return service;
 	}
-	public void setService(String service) {
+	public void setService(Service service) {
 		this.service = service;
 	}
 	public Integer getPrice() {
@@ -88,12 +85,6 @@ public class Request {
 	public void setDelivery(Integer delivery) {
 		this.delivery = delivery;
 	}
-	public Integer Is_appointment() {
-		return is_appointment;
-	}
-	public void setIs_appointment(Integer is_appointment) {
-		this.is_appointment = is_appointment;
-	}
 	public Integer isActive() {
 		return active;
 	}
@@ -105,6 +96,12 @@ public class Request {
 	}
 	public void setPet(Pet pet) {
 		this.pet = pet;
+	}
+	public Calendar getUpdated_at() {
+		return updated_at;
+	}
+	public void setUpdated_at(Calendar updated_at) {
+		this.updated_at = updated_at;
 	}
 
 }
