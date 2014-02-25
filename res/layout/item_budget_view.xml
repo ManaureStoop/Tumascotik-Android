@@ -26,6 +26,6 @@
         android:gravity="center"
         android:text="BsF. 500"
         android:textColor="@color/text_edit_profiles"
-        android:textSize="@dimen/profile_data" />
+        android:textSize="@dimen/blue_text" />
 
 </RelativeLayout>

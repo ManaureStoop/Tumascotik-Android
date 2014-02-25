@@ -83,7 +83,7 @@
     <string name="pet_picker_title">Elije una mascota...</string>
 
     <!-- MENU -->
-    <string name="menu_my_profile">Mi perfil</string>
+    <string name="menu_my_profile">Mi Perfil</string>
     <string name="menu_my_pets">Mis Mascotas</string>
     <string name="menu_make_appointment">Pedir Cita</string>
     <string name="menu_view_appointment">Mis Citas</string>
@@ -170,6 +170,7 @@
     <string name="budget_total_title">Total</string>
     <string name="budget_zero_data">No has \n agregado nada aún...</string>
     <string name="budget_updating_prices">Actualizando precios</string>
+    <string name="budget_downloading_prices">Descargando precios...</string>
     <string name="budget_dialog_ok">OK</string>
     <string name="budget_dialog_cancel">Cancelar</string>
     <string name="budget_dialog_send">Enviar</string>
@@ -178,6 +179,11 @@
     <string name="budget_dialog_delete_from_list">Eliminar de la lista</string>
      <string name="budget_sending_order">Enviando orden...</string>
 
+     <!-- Budget View -->
+     <string name="budget_dialog_title">Productos</string>
+    <string name="budget_date_title">Fecha de emisión : </string>
+    <string name="budget_actionbar_title">Mis Pedidos</string>
+     
     <string-array name="Genders">
         <item>--Elija--</item>
         <item>Macho</item>
@@ -198,10 +204,10 @@
         <item>CANCELADA</item>
         <item>ACEPTADA</item>
         <item>PENDIENTE</item>
-        <item>ATENDIDA</item>
-        <item>CANCELADA</item>
-        <item>ACEPTADA</item>
-        <item>PENDIENTE</item>
+        <item>EN TRABAJO</item>
+        <item>PROCESANDO</item>
+        <item>LISTO</item>
+        <item>ENTREGADO</item>
     </string-array>
 
 </resources>

@@ -25,7 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.arawaney.tumascotik.client.ClientMainActivity;
+import com.arawaney.tumascotik.client.MainActivity;
 import com.arawaney.tumascotik.client.R;
 import com.arawaney.tumascotik.client.backend.ParseProvider;
 import com.arawaney.tumascotik.client.control.MainController;
@@ -124,7 +124,7 @@ public class SetRequestDetails extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
-						ClientMainActivity.class);
+						MainActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 
@@ -208,13 +208,6 @@ public class SetRequestDetails extends FragmentActivity {
 			}
 		}
 
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_menu, menu);
-		return true;
 	}
 
 	// Checks if every field is filled by the user. If there is one blank-field

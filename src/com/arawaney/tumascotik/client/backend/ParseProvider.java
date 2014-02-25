@@ -19,15 +19,20 @@ import android.widget.Toast;
 
 import com.arawaney.tumascotik.client.R;
 import com.arawaney.tumascotik.client.control.MainController;
+import com.arawaney.tumascotik.client.db.provider.BreedProvider;
 import com.arawaney.tumascotik.client.db.provider.PetProvider;
+import com.arawaney.tumascotik.client.db.provider.ServiceProvider;
 import com.arawaney.tumascotik.client.db.provider.UserProvider;
 import com.arawaney.tumascotik.client.listener.ParsePetListener;
 import com.arawaney.tumascotik.client.listener.ParseRequestListener;
 import com.arawaney.tumascotik.client.listener.ParseServiceListener;
 import com.arawaney.tumascotik.client.listener.ParseUserListener;
+import com.arawaney.tumascotik.client.model.Breed;
+import com.arawaney.tumascotik.client.model.PetPropertie;
 import com.arawaney.tumascotik.client.model.Service;
 import com.arawaney.tumascotik.client.model.Pet;
 import com.arawaney.tumascotik.client.model.Request;
+import com.arawaney.tumascotik.client.model.Specie;
 import com.arawaney.tumascotik.client.model.User;
 import com.arawaney.tumascotik.client.util.CalendarUtil;
 import com.parse.FindCallback;
@@ -59,6 +64,7 @@ public class ParseProvider {
 	private static final String PASSWORD_TAG = "password";
 	private static final String IS_REQUEST_TAG = "isRequest";
 	private static final String DURATION_TAG = "duration";
+	private static final String UPDATED_AT_TAG = "updatedAt";
 	
 	private static final String USER_TABLE = "_User";
 	private static final String SERVICE_TABLE = "Service";
@@ -239,8 +245,7 @@ public class ParseProvider {
 
 	}
 
-	public static void getAllMotives(final ParseServiceListener listener,
-			Context context) {
+	public static void getAllMotives(final ParseServiceListener listener) {
 
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(SERVICE_TABLE);
 		query.findInBackground(new FindCallback<ParseObject>() {
@@ -282,6 +287,63 @@ public class ParseProvider {
 			}
 
 		});
+
+	}
+
+	public static void updateAllMotives(Context context, final ParseServiceListener listener) {
+
+		Date lastUpdate = ServiceProvider.getLastUpdate(context);
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(SERVICE_TABLE);
+		if (lastUpdate != null) {
+			Log.d(LOG_TAG, CalendarUtil.getDateFormated(lastUpdate, "hh:mm dd MM yyyy"));
+			query.whereGreaterThan(UPDATED_AT_TAG, lastUpdate);
+		}
+		else{
+			Log.d(LOG_TAG, "nuuuuull");
+		}
+
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> cList, ParseException e) {
+
+				if (e == null) {
+					ArrayList<Service> motives = new ArrayList<Service>();
+					for (ParseObject object : cList) {
+						Service motive = new Service();
+						motive.setSystem_id(object.getObjectId());
+						motive.setName(object.getString(NAME_TAG));
+						Calendar Updated_At = Calendar.getInstance();
+						Updated_At.setTimeInMillis(object.getUpdatedAt()
+								.getTime());
+						motive.setUpdated_at(Updated_At);
+						boolean needsRequest = object
+								.getBoolean(IS_REQUEST_TAG);
+						if (needsRequest) {
+							motive.setNeedsRequest(Service.NEED_REQUEST);
+						} else
+							motive.setNeedsRequest(Service.NOT_NEED_REQUEST);
+						
+						if (object.getInt(DURATION_TAG) != 0) {
+							motive.setDuration(object.getInt(DURATION_TAG));
+						}
+						Log.d(LOG_TAG,"HOOOLA"+" "+ motive.getName()+" "+motive.getSystem_id()+" "+CalendarUtil.getDateFormated(motive.getUpdated_at(), "hh:mm dd MM yyyy"));
+						motives.add(motive);
+					}
+
+					listener.onUpdateMotivesFinished(true, motives);
+
+				} else {
+					listener.onUpdateMotivesFinished(false, null);
+					Log.d(LOG_TAG,
+							" Query error updating PetProperties: "
+									+ e.getMessage());
+				}
+
+			}
+
+		});
+
 
 	}
 

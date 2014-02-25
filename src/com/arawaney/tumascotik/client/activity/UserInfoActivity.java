@@ -2,6 +2,7 @@ package com.arawaney.tumascotik.client.activity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import android.R.string;
@@ -420,6 +421,7 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 		if (updated) {
 			Log.d(LOG_TAG, "updated!!");
 			this.user = new User(user);
+			this.user.setUpdated_at(Calendar.getInstance());
 			UserProvider.updateUser(this, this.user);
 		} else {
 			Toast.makeText(

@@ -2,6 +2,7 @@ package com.arawaney.tumascotik.client.activity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -36,6 +37,7 @@ import com.arawaney.tumascotik.client.model.Pet;
 import com.arawaney.tumascotik.client.model.PetPropertie;
 import com.arawaney.tumascotik.client.model.Specie;
 import com.arawaney.tumascotik.client.util.BitMapUtil;
+import com.arawaney.tumascotik.client.util.CalendarUtil;
 import com.arawaney.tumascotik.client.util.FontUtil;
 import com.arawaney.tumascotik.client.util.NetworkUtil;
 
@@ -110,6 +112,8 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 
 			auxPet = pet;
 
+			updatePetIfNecesary();
+			
 			getLists();
 
 			loadViews();
@@ -121,6 +125,11 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 			Log.d(LOG_TAG, "Pet choosen is null");
 		}
 
+	}
+
+	private void updatePetIfNecesary() {
+		ParsePetProvider.getPet(this, pet.getSystem_id(), pet.getUpdated_at());
+		
 	}
 
 	private void getLists() {
@@ -511,8 +520,8 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 		if (this.pet != null) {
 			if (pet != null) {
 				pet.setId(this.pet.getId());
-				this.pet = pet;
-				PetProvider.updatePet(this, this.pet);
+				PetProvider.updatePet(this, pet);
+				this.pet = PetProvider.readPet(this, pet.getSystem_id());
 				refreshView();
 			}
 		}
@@ -522,6 +531,7 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 	public void OnPetUpdateFinished(boolean b) {
 		if (b) {
 			pet = auxPet;
+			pet.setUpdated_at(Calendar.getInstance());
 			PetProvider.updatePet(this, pet);
 
 		} else {
@@ -579,6 +589,26 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 	public void onBreedQueryFinished(ArrayList<String> breed) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onUpdateBreedsQueryFinished(boolean b, ArrayList<Breed> species) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUpdatePetPropertiesFinished(boolean b,
+			ArrayList<PetPropertie> petProperties) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUpdateSpeciesQueryFinished(boolean b,
+			ArrayList<Specie> species) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

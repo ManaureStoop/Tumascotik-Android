@@ -2,7 +2,7 @@ package com.arawaney.tumascotik.client.activity;
 
 import java.util.ArrayList;
 
-import com.arawaney.tumascotik.client.ClientMainActivity;
+import com.arawaney.tumascotik.client.MainActivity;
 import com.arawaney.tumascotik.client.R;
 import com.arawaney.tumascotik.client.adapter.ViewRequestBaseAdapter;
 import com.arawaney.tumascotik.client.adapter.ItemPetGridAdapter;

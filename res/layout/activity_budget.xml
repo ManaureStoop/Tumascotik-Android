@@ -32,7 +32,10 @@
             <include
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
                 layout="@layout/zero_data_budget_list_view" />
+
         </RelativeLayout>
 
         <TextView
@@ -52,25 +55,25 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/textview_budget_total_title"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="22dp"
-            android:src="@drawable/buton_foward" />
+            android:layout_marginBottom="9dp"
+            android:src="@drawable/buton_check" />
 
         <ImageView
-            android:id="@+id/bagregpresp"
+            android:id="@+id/bdeleteallpresp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/txttotal"
-            android:layout_marginRight="16dp"
-            android:layout_toLeftOf="@+id/txttotal"
-            android:src="@drawable/buton_add" />
+            android:layout_alignBottom="@+id/bagregpresp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/bagregpresp"
+            android:src="@drawable/buton_delete" />
 
         <TextView
             android:id="@+id/txttotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/bhacerpedidopresp"
-            android:layout_alignRight="@+id/relativeLayout1"
-            android:layout_marginBottom="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="72dp"
             android:background="@drawable/buton_yellow"
             android:gravity="center"
             android:paddingBottom="5dp"
@@ -80,13 +83,22 @@
             android:textSize="@dimen/big_oval_buttons" />
 
         <ImageView
-            android:id="@+id/bdeleteallpresp"
+            android:id="@+id/bagregpresp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_alignBottom="@+id/bagregpresp"
-            android:layout_toLeftOf="@+id/bagregpresp"
-            android:src="@drawable/buton_delete" />
+            android:layout_above="@+id/bhacerpedidopresp"
+            android:layout_alignRight="@+id/bhacerpedidopresp"
+            android:layout_marginBottom="14dp"
+            android:src="@drawable/buton_add" />
+
+        <ImageView
+            android:id="@+id/button_budget_cancel_budget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/relativeLayout1"
+            android:layout_alignTop="@+id/bhacerpedidopresp"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/buton_cancel" />
 
     </RelativeLayout>
 

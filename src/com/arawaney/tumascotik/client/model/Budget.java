@@ -8,7 +8,8 @@ public class Budget {
 	
 	private long id;
 	private String system_id;
-	private Calendar updated_at;
+	private Calendar updatedAt;
+	private Calendar createdAt;
 	private Integer total;
 	private int status;
 	private Integer delivery;
@@ -70,10 +71,10 @@ public class Budget {
 	}
 
 	public Calendar getUpdated_at() {
-		return updated_at;
+		return updatedAt;
 	}
 	public void setUpdated_at(Calendar updated_at) {
-		this.updated_at = updated_at;
+		this.updatedAt = updated_at;
 	}
 	public String getUserId() {
 		return userId;
@@ -92,6 +93,12 @@ public class Budget {
 			this.services = new ArrayList<Service>();
 		}
 		this.services.add(service);
+	}
+	public Calendar getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(Calendar createdAt) {
+		this.createdAt = createdAt;
 	}
 
 }

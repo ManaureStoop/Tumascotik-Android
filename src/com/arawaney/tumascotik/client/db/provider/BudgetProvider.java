@@ -44,6 +44,10 @@ public class BudgetProvider {
 				values.put(BudgetEntity.COLUMN_UPDATED_AT, budget
 						.getUpdated_at().getTimeInMillis());
 			}
+			if (budget.getCreatedAt() != null) {
+				values.put(BudgetEntity.COLUMN_CREATED_AT, budget
+						.getCreatedAt().getTimeInMillis());
+			}
 			values.put(BudgetEntity.COLUMN_STATUS, budget.getStatus());
 			values.put(BudgetEntity.COLUMN_DELIVERY, budget.isDelivery());
 			values.put(BudgetEntity.COLUMN_ACTIVE, budget.isActive());
@@ -128,6 +132,14 @@ public class BudgetProvider {
 				values.put(BudgetEntity.COLUMN_UPDATED_AT, budget
 						.getUpdated_at().getTimeInMillis());
 			}
+			if (budget.getCreatedAt() != null) {
+				values.put(BudgetEntity.COLUMN_CREATED_AT, budget
+						.getCreatedAt().getTimeInMillis());
+				Log.d(LOG_TAG, CalendarUtil.getDateFormated(budget
+						.getCreatedAt(), "dd/MM/yyyy"));
+
+			}
+			
 			values.put(BudgetEntity.COLUMN_DELIVERY, budget.isDelivery());
 			values.put(BudgetEntity.COLUMN_ACTIVE, budget.isActive());
 
@@ -226,11 +238,15 @@ public class BudgetProvider {
 							.getColumnIndex(BudgetEntity.COLUMN_ACTIVE));
 					final String userId = cursor.getString(cursor
 							.getColumnIndex(BudgetEntity.COLUMN_USER_ID));
-					final long updated_at = cursor.getInt(cursor
+					final long updated_at = cursor.getLong(cursor
 							.getColumnIndex(BudgetEntity.COLUMN_UPDATED_AT));
+					final long created_at = cursor.getLong(cursor
+							.getColumnIndex(BudgetEntity.COLUMN_CREATED_AT));
 
 					Calendar updatedAt = Calendar.getInstance();
 					updatedAt.setTimeInMillis(updated_at);
+					Calendar createdAt = Calendar.getInstance();
+					createdAt.setTimeInMillis(created_at);
 
 					budget = new Budget();
 					budget.setId(id);
@@ -240,6 +256,7 @@ public class BudgetProvider {
 					budget.setDelivery(delivery);
 					budget.setActive(active);
 					budget.setUpdated_at(updatedAt);
+					budget.setCreatedAt(createdAt);
 					budget.setUserId(userId);
 
 					List<Service> services = readServiceByBudget(context,
@@ -335,11 +352,15 @@ public class BudgetProvider {
 							.getColumnIndex(BudgetEntity.COLUMN_ACTIVE));
 					final String userId = cursor.getString(cursor
 							.getColumnIndex(BudgetEntity.COLUMN_USER_ID));
-					final long updated_at = cursor.getInt(cursor
+					final long updated_at = cursor.getLong(cursor
 							.getColumnIndex(BudgetEntity.COLUMN_UPDATED_AT));
+					final long created_at = cursor.getLong(cursor
+							.getColumnIndex(BudgetEntity.COLUMN_CREATED_AT));
 
 					Calendar updatedAt = Calendar.getInstance();
 					updatedAt.setTimeInMillis(updated_at);
+					Calendar createdAt = Calendar.getInstance();
+					createdAt.setTimeInMillis(created_at);
 
 					Budget budget = new Budget();
 					budget.setId(id);
@@ -349,6 +370,7 @@ public class BudgetProvider {
 					budget.setDelivery(delivery);
 					budget.setActive(active);
 					budget.setUpdated_at(updatedAt);
+					budget.setCreatedAt(createdAt);
 					budget.setUserId(userId);
 
 					List<Service> services = readServiceByBudget(context,
@@ -485,11 +507,15 @@ public class BudgetProvider {
 							.getColumnIndex(BudgetEntity.COLUMN_ACTIVE));
 					final String userId = cursor.getString(cursor
 							.getColumnIndex(BudgetEntity.COLUMN_USER_ID));
-					final long updated_at = cursor.getInt(cursor
+					final long updated_at = cursor.getLong(cursor
 							.getColumnIndex(BudgetEntity.COLUMN_UPDATED_AT));
+					final long created_at = cursor.getLong(cursor
+							.getColumnIndex(BudgetEntity.COLUMN_CREATED_AT));
 
 					Calendar updatedAt = Calendar.getInstance();
 					updatedAt.setTimeInMillis(updated_at);
+					Calendar createdAt = Calendar.getInstance();
+					createdAt.setTimeInMillis(created_at);
 
 					budget = new Budget();
 					budget.setId(id);
@@ -499,6 +525,7 @@ public class BudgetProvider {
 					budget.setDelivery(delivery);
 					budget.setActive(active);
 					budget.setUpdated_at(updatedAt);
+					budget.setCreatedAt(createdAt);
 					budget.setUserId(userId);
 
 					List<Service> services = readServiceByBudget(context,
@@ -518,7 +545,84 @@ public class BudgetProvider {
 		}
 		return budget;
 	}
+	
+	public static ArrayList<Budget> readNotInProgress(Context context) {
+		if (context == null)
+			return null;
 
+		ArrayList<Budget> budgets = new ArrayList<Budget>();
+		
+		String condition = BudgetEntity.COLUMN_STATUS + " <> " + "'"
+				+ String.valueOf(Budget.STATUS_WORKING) + "'";
+		
+		final Cursor cursor = context.getContentResolver().query(URI_BUDGET,
+				null, condition, null, null);
+
+		if (cursor.getCount() == 0) {
+			cursor.close();
+			return null;
+		}
+
+		try {
+			if (cursor.moveToFirst()) {
+
+				do {
+
+					final long id = cursor.getLong(cursor
+							.getColumnIndex(BudgetEntity.COLUMN_ID));
+					final String system_id = cursor.getString(cursor
+							.getColumnIndex(BudgetEntity.COLUMN_SYSTEM_ID));
+					final Integer total = cursor.getInt(cursor
+							.getColumnIndex(BudgetEntity.COLUMN_TOTAL));
+					final int status = cursor.getInt(cursor
+							.getColumnIndex(BudgetEntity.COLUMN_STATUS));
+					final Integer delivery = cursor.getInt(cursor
+							.getColumnIndex(BudgetEntity.COLUMN_DELIVERY));
+					final Integer active = cursor.getInt(cursor
+							.getColumnIndex(BudgetEntity.COLUMN_ACTIVE));
+					final String userId = cursor.getString(cursor
+							.getColumnIndex(BudgetEntity.COLUMN_USER_ID));
+					final long updated_at = cursor.getLong(cursor
+							.getColumnIndex(BudgetEntity.COLUMN_UPDATED_AT));
+					final long created_at = cursor.getLong(cursor
+							.getColumnIndex(BudgetEntity.COLUMN_CREATED_AT));
+
+					Calendar updatedAt = Calendar.getInstance();
+					updatedAt.setTimeInMillis(updated_at);
+					Calendar createdAt = Calendar.getInstance();
+					createdAt.setTimeInMillis(created_at);
+
+					Budget budget = new Budget();
+					budget.setId(id);
+					budget.setSystem_id(system_id);
+					budget.setTotal(total);
+					budget.setStatus(status);
+					budget.setDelivery(delivery);
+					budget.setActive(active);
+					budget.setUpdated_at(updatedAt);
+					budget.setCreatedAt(createdAt);
+					Log.d(LOG_TAG, CalendarUtil.getDateFormated(createdAt, "dd/MM/yyyy"));
+					budget.setUserId(userId);
+
+					List<Service> services = readServiceByBudget(context,
+							id);
+					if (services != null) {
+						budget.setServices(services);
+					}
+
+					budgets.add(budget);
+
+				} while (cursor.moveToNext());
+			}
+
+		} catch (Exception e) {
+			budgets = null;
+			Log.e(LOG_TAG, "Error : " + e.getMessage());
+		} finally {
+			cursor.close();
+		}
+		return budgets;
+	}
 	public static void removeBudgetService(Context context, long budgetId,
 			String serviceId) {
 

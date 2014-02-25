@@ -26,6 +26,7 @@ public class ParseBudgetProvider {
 
 	private static final String DELIVERY_TAG = "delivery";
 	private static final String UPDATED_AT_TAG = "updatedAt";
+	private static final String CREATED_AT_TAG = "createdAt";
 	private static final String ACTIVE_TAG = "active";
 	private static final String USER_ID_TAG = "userId";
 	private static final String STATUS_ID_TAG = "statusId";
@@ -39,6 +40,7 @@ public class ParseBudgetProvider {
 	private static final String SERVICE_BUDGET_TABLE = "Service_Budget";
 	private static final String STATUS_TABLE = "Status";
 	private static final String PRICE_TABLE = "Price";
+
 
 	public static void sendBudget(Context context,
 			final ParseBudgetListener listener, final Budget budget) {
@@ -196,8 +198,18 @@ public class ParseBudgetProvider {
 
 				updateCalendar.setTimeInMillis(parsedBudget.getUpdatedAt()
 						.getTime());
+				
+				Calendar createCalendar = Calendar.getInstance();
+
+				createCalendar.setTimeInMillis(parsedBudget.getCreatedAt()
+						.getTime());
+
 
 				budget.setUpdated_at(updateCalendar);
+				
+				budget.setCreatedAt(createCalendar);
+				
+				budget.setTotal(parsedBudget.getInt(TOTAL_TAG));
 
 				budget.setUserId(MainController.USER.getSystemId());
 
@@ -345,6 +357,40 @@ public class ParseBudgetProvider {
 			ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
 					PRICE_TABLE);
 			query.whereEqualTo(SERVICE_ID_TAG, service.getSystem_id());
+
+			query.findInBackground(new FindCallback<ParseObject>() {
+
+				@Override
+				public void done(List<ParseObject> prices,
+						ParseException e) {
+					if (e == null) {
+						if (!prices.isEmpty()) {
+							BudgetService budgetService = new BudgetService();
+							budgetService.setService(service);
+							budgetService.setPrice(prices.get(0).getInt(PRICE_TAG));
+							listener.onOnePriceQueryFinished(budgetService);
+						}
+
+					} else {
+						e.printStackTrace();
+					}
+
+				}
+			});
+
+		}
+		
+	}
+	
+	public static void readSavedPrices(List<Service> services,Budget budget, 
+			final ParseBudgetListener listener) {
+
+		for (final Service service : services) {
+
+			ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+					SERVICE_BUDGET_TABLE);
+			query.whereEqualTo(SERVICE_ID_TAG, service.getSystem_id());
+			query.whereEqualTo(BUDGET_ID_TAG, budget.getSystem_id());
 
 			query.findInBackground(new FindCallback<ParseObject>() {
 

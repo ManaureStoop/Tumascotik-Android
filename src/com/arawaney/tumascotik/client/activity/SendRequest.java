@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.arawaney.tumascotik.client.ClientMainActivity;
+import com.arawaney.tumascotik.client.MainActivity;
 import com.arawaney.tumascotik.client.R;
 import com.arawaney.tumascotik.client.backend.ParseProvider;
 import com.arawaney.tumascotik.client.backend.ParseRequestProvider;
@@ -117,7 +117,7 @@ public class SendRequest extends Activity implements ParseRequestListener {
 	
 	private void backToMainActivity() {
 		Intent intent = new Intent(getApplicationContext(),
-				ClientMainActivity.class);
+				MainActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 	}

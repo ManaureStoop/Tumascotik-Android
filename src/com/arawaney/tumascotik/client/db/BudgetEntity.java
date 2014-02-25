@@ -10,6 +10,7 @@ public class BudgetEntity {
 	public static final String COLUMN_ACTIVE = "active";
 	public static final String COLUMN_USER_ID = "user_id";
 	public static final String COLUMN_UPDATED_AT = "updated_at";
+	public static final String COLUMN_CREATED_AT = "created_at";
 
 
 
@@ -31,6 +32,8 @@ public class BudgetEntity {
 			+ COLUMN_ACTIVE
 			+ " INTEGER, " 
 		    + COLUMN_UPDATED_AT 
+			+ " INTEGER, " 
+			+ COLUMN_CREATED_AT 
 			+ " INTEGER, " 
 			+ COLUMN_USER_ID 
 			+ " TEXT);";

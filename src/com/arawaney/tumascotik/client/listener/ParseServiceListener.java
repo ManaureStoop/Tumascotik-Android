@@ -15,6 +15,8 @@ public interface ParseServiceListener {
 	public void onMotivesQueryFinished(ArrayList<String> motives);
 
 	public void onAllMotivesQueryFinished(boolean b, ArrayList<Service> motives);
+	
+	public void onUpdateMotivesFinished(boolean b, ArrayList<Service> motives);
 
 
 }

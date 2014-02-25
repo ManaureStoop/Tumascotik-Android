@@ -31,6 +31,13 @@ public interface ParsePetListener {
 	public void onAllPetPropertiesFinished(boolean b,
 			ArrayList<PetPropertie> petProperties);
 	
+	public void onUpdateBreedsQueryFinished(boolean b, ArrayList<Breed> species);
+
+	public void onUpdatePetPropertiesFinished(boolean b,
+			ArrayList<PetPropertie> petProperties);
+	
+	public void onUpdateSpeciesQueryFinished(boolean b, ArrayList<Specie> species);
+	
 
 }
 

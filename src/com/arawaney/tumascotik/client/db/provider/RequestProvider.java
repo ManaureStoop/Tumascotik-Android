@@ -153,9 +153,9 @@ public class RequestProvider {
 							.getColumnIndex(RequestEntity.COLUMN_ID));
 					final String system_id = cursor.getString(cursor
 							.getColumnIndex(RequestEntity.COLUMN_SYSTEM_ID));
-					final long start_date = cursor.getInt(cursor
+					final long start_date = cursor.getLong(cursor
 							.getColumnIndex(RequestEntity.COLUMN_START_DATE));
-					final long finish_date = cursor.getInt(cursor
+					final long finish_date = cursor.getLong(cursor
 							.getColumnIndex(RequestEntity.COLUMN_FINISH_DATE));
 					final String serviceId = cursor.getString(cursor
 							.getColumnIndex(RequestEntity.COLUMN_SERVICE_ID));
@@ -182,7 +182,7 @@ public class RequestProvider {
 
 					Calendar finishCalendar = Calendar.getInstance();
 					finishCalendar.setTimeInMillis(finish_date);
-					
+									
 					Service service = ServiceProvider.readMotive(context, serviceId);
 
 					request = new Request();

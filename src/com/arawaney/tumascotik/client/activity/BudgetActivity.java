@@ -1,6 +1,7 @@
 package com.arawaney.tumascotik.client.activity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.app.ProgressDialog;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -21,6 +23,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.arawaney.tumascotik.client.R;
 import com.arawaney.tumascotik.client.adapter.BudgetItemListBaseAdapter;
 import com.arawaney.tumascotik.client.backend.ParseBudgetProvider;
@@ -39,22 +43,21 @@ import com.arawaney.tumascotik.client.model.Request;
 import com.arawaney.tumascotik.client.model.Service;
 import com.arawaney.tumascotik.client.util.FontUtil;
 
-public class BudgetActivity extends FragmentActivity implements
+public class BudgetActivity extends SherlockFragmentActivity implements
 		ParseBudgetListener {
 	private static final String LOG_TAG = "Tumascotik-Client-BudgetActivity";
 
 	ImageView add;
 	ImageView sendBudget;
 	ImageView deleteall;
+	ImageView cancelAll;
 	ListView budgetsLists;
 	RelativeLayout zeroDataLayout;
 	TextView totalprice;
 	Boolean flagclick;
 	ProgressDialog progressDialog;
 	TextView zeroDataText;
-
-	
-
+	ActionBar actionBar;
 	int total;
 
 	Budget budget;
@@ -63,11 +66,12 @@ public class BudgetActivity extends FragmentActivity implements
 	int totalServices;
 
 	protected void onCreate(Bundle savedInstanceState) {
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_budget);
-
+        
+		loadActionBar();
+        
 		loadViews();
 
 		initializeTotalPrice();
@@ -88,15 +92,15 @@ public class BudgetActivity extends FragmentActivity implements
 			@Override
 			public void onItemClick(AdapterView<?> a, View v, int position,
 					long id) {
-			
-					Object object = budgetsLists.getItemAtPosition(position);
-					BudgetService objectBudgetService = (BudgetService) object;
-					DialogFragment newFragment = new PresupuestoItemDialog(
-							objectBudgetService, getApplicationContext(),
-							budget.getId());
-					newFragment.show(getSupportFragmentManager(), "presupitem");
-				}
-			
+
+				Object object = budgetsLists.getItemAtPosition(position);
+				BudgetService objectBudgetService = (BudgetService) object;
+				DialogFragment newFragment = new PresupuestoItemDialog(
+						objectBudgetService, getApplicationContext(), budget
+								.getId());
+				newFragment.show(getSupportFragmentManager(), "presupitem");
+			}
+
 		});
 
 		add.setOnClickListener(new OnClickListener() {
@@ -125,6 +129,20 @@ public class BudgetActivity extends FragmentActivity implements
 			public void onClick(View v) {
 				DialogFragment newFragment = new PresupuestoDeleteallDialog();
 				newFragment.show(getSupportFragmentManager(), "presudelete");
+
+			}
+		});
+
+		cancelAll.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (budget != null) {
+					BudgetProvider.removeBudget(getApplicationContext(),
+							budget.getId());
+				}
+
+				finish();
 
 			}
 		});
@@ -196,9 +214,12 @@ public class BudgetActivity extends FragmentActivity implements
 		budgetsLists = (ListView) findViewById(R.id.listview_budgets);
 		zeroDataLayout = (RelativeLayout) findViewById(R.id.layout_budget_zero_data);
 		zeroDataText = (TextView) findViewById(R.id.textView_budget_zero_data);
-		
-		totalprice.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-	    zeroDataText.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		cancelAll = (ImageView) findViewById(R.id.button_budget_cancel_budget);
+
+		totalprice.setTypeface(FontUtil
+				.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		zeroDataText.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
 
 	}
 
@@ -226,9 +247,9 @@ public class BudgetActivity extends FragmentActivity implements
 		} else {
 			budget.setStatus(Budget.STATUS_WORKING);
 		}
-		
+
 		dismissDialog();
-     
+
 	}
 
 	@Override
@@ -278,6 +299,8 @@ public class BudgetActivity extends FragmentActivity implements
 	public void sendBudget() {
 		budget.setStatus(Budget.STATUS_IN_PROCESS);
 		budget.setTotal(total);
+		Calendar today = Calendar.getInstance();
+		budget.setCreatedAt(today);
 		setSendingOrderDialog();
 		ParseBudgetProvider.sendBudget(this, this, budget);
 
@@ -286,6 +309,34 @@ public class BudgetActivity extends FragmentActivity implements
 	private void setSendingOrderDialog() {
 		progressDialog = ProgressDialog.show(this, "", getResources()
 				.getString(R.string.budget_updating_prices));
+
+	}
+
+	private void loadActionBar() {
+		actionBar = getSupportActionBar();
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setDisplayUseLogoEnabled(false);
+		actionBar.setDisplayShowHomeEnabled(false);
+
+		View view = getLayoutInflater().inflate(R.layout.view_actionbar_budget,
+				null);
+		
+		ImageView syncRequest = (ImageView) view
+				.findViewById(R.id.imageView_actionbar_my_budgets);
+		syncRequest.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(BudgetActivity.this, ViewBudgets.class);
+				startActivity(i);
+			}
+		});
+		
+		ActionBar.LayoutParams params = new ActionBar.LayoutParams(
+				ActionBar.LayoutParams.MATCH_PARENT,
+				ActionBar.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+		actionBar.setCustomView(view, params);
+		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
 	}
 

@@ -23,6 +23,9 @@ public class User {
 	public final static int GENDER_MAN= 1;
 	public final static int GENDER_WOMAN = 2;
 	
+	public final static int IS_ADMIN = 1;
+	public final static int NOT_ADMIN = 0 ;
+	
 	public User(User user) {
 		id = user.getId();
 		system_id = user.getSystemId();

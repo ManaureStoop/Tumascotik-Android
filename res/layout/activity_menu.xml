@@ -5,7 +5,7 @@
     android:background="@drawable/background"
     android:orientation="vertical"
     android:screenOrientation="portrait"
-    tools:context=".ClientMainActivity" >
+    tools:context=".MainActivity" >
 
     <Button
         android:id="@+id/blogorefreshmenu"

@@ -2,6 +2,7 @@ package com.arawaney.tumascotik.client.db.provider;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,11 +10,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
+import com.arawaney.tumascotik.client.db.BreedEntity;
 import com.arawaney.tumascotik.client.db.PetPropertieEntity;
 import com.arawaney.tumascotik.client.db.RequestEntity;
 import com.arawaney.tumascotik.client.db.TumascotikProvider;
 import com.arawaney.tumascotik.client.model.PetPropertie;
 import com.arawaney.tumascotik.client.model.Breed;
+import com.arawaney.tumascotik.client.util.CalendarUtil;
 
 public class PetPropertieProvider {
 	private static final String LOG_TAG = "Tumascotik-Client-PetPropertieProvider";
@@ -214,5 +217,34 @@ public class PetPropertieProvider {
 			Log.e(LOG_TAG, "Error deleting petPropertie: " + e.getMessage());
 		}
 		return false;
+	}
+	
+	public static Date getLastUpdate(Context context) {
+		final Cursor cursor = context.getContentResolver().query(URI_PETPROPERTIE, null,
+				null, null, PetPropertieEntity.COLUMN_UPDATED_AT+" DESC");
+		
+		if (cursor.getCount() == 0) {
+			cursor.close();
+			return null;
+		}
+
+		try {
+			if (cursor.moveToFirst()) {
+
+					final long updated_at = cursor.getLong(cursor
+							.getColumnIndex(PetPropertieEntity.COLUMN_UPDATED_AT));
+					Date date = new Date(updated_at);
+					Log.d(LOG_TAG, "last update "+CalendarUtil.getDateFormated(date, "dd MM yyy mm:ss"));
+					
+			return date;		
+			}
+
+		} catch (Exception e) {
+			Log.e(LOG_TAG, "Error : " + e.getMessage());
+		} finally {
+			cursor.close();
+		}
+		
+		return null;
 	}
 }

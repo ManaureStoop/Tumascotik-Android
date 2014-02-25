@@ -2,6 +2,7 @@ package com.arawaney.tumascotik.client.db.provider;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,10 +10,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
+import com.arawaney.tumascotik.client.db.PetPropertieEntity;
 import com.arawaney.tumascotik.client.db.ServiceEntity;
 import com.arawaney.tumascotik.client.db.RequestEntity;
 import com.arawaney.tumascotik.client.db.TumascotikProvider;
 import com.arawaney.tumascotik.client.model.Service;
+import com.arawaney.tumascotik.client.util.CalendarUtil;
 
 public class ServiceProvider {
 	private static final String LOG_TAG = "Tumascotik-Client-MotiveProvider";
@@ -32,6 +35,8 @@ public class ServiceProvider {
 			values.put(ServiceEntity.COLUMN_NEED_REQUEST,
 					motive.getNeedsRequest());
 			values.put(ServiceEntity.COLUMN_DURATION, motive.getDuration());
+			values.put(RequestEntity.COLUMN_UPDATED_AT, motive
+					.getUpdated_at().getTimeInMillis());
 
 			final Uri result = context.getContentResolver().insert(URI_SERVICE,
 					values);
@@ -45,8 +50,7 @@ public class ServiceProvider {
 				} else
 					Log.e(LOG_TAG, " Motive :" + motive.getName()
 							+ " has not bee inserted");
-				values.put(RequestEntity.COLUMN_UPDATED_AT, motive
-						.getUpdated_at().getTimeInMillis());
+				
 
 			}
 		} catch (Exception e) {
@@ -70,7 +74,7 @@ public class ServiceProvider {
 			values.put(ServiceEntity.COLUMN_NAME, motive.getName());
 			values.put(ServiceEntity.COLUMN_NEED_REQUEST,
 					motive.getNeedsRequest());
-			values.put(RequestEntity.COLUMN_UPDATED_AT, motive.getUpdated_at()
+			values.put(ServiceEntity.COLUMN_UPDATED_AT, motive.getUpdated_at()
 					.getTimeInMillis());
 			values.put(ServiceEntity.COLUMN_DURATION, motive.getDuration());
 
@@ -125,8 +129,8 @@ public class ServiceProvider {
 							.getColumnIndex(ServiceEntity.COLUMN_NEED_REQUEST));
 					final int duration = cursor.getInt(cursor
 							.getColumnIndex(ServiceEntity.COLUMN_DURATION));
-					final long updated_at = cursor.getInt(cursor
-							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
+					final long updated_at = cursor.getLong(cursor
+							.getColumnIndex(ServiceEntity.COLUMN_UPDATED_AT));
 
 					Calendar updatedAt = Calendar.getInstance();
 					updatedAt.setTimeInMillis(updated_at);
@@ -183,7 +187,7 @@ public class ServiceProvider {
 							.getColumnIndex(ServiceEntity.COLUMN_NEED_REQUEST));
 					final int duration = cursor.getInt(cursor
 							.getColumnIndex(ServiceEntity.COLUMN_DURATION));
-					final long updated_at = cursor.getInt(cursor
+					final long updated_at = cursor.getLong(cursor
 							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
 
 					Calendar updatedAt = Calendar.getInstance();
@@ -247,7 +251,7 @@ public class ServiceProvider {
 							.getColumnIndex(ServiceEntity.COLUMN_NEED_REQUEST));
 					final int duration = cursor.getInt(cursor
 							.getColumnIndex(ServiceEntity.COLUMN_DURATION));
-					final long updated_at = cursor.getInt(cursor
+					final long updated_at = cursor.getLong(cursor
 							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
 
 					Calendar updatedAt = Calendar.getInstance();
@@ -311,7 +315,7 @@ public class ServiceProvider {
 							.getColumnIndex(ServiceEntity.COLUMN_NEED_REQUEST));
 					final int duration = cursor.getInt(cursor
 							.getColumnIndex(ServiceEntity.COLUMN_DURATION));
-					final long updated_at = cursor.getInt(cursor
+					final long updated_at = cursor.getLong(cursor
 							.getColumnIndex(RequestEntity.COLUMN_UPDATED_AT));
 
 					Calendar updatedAt = Calendar.getInstance();
@@ -355,5 +359,34 @@ public class ServiceProvider {
 			Log.e(LOG_TAG, "Error deleting motive: " + e.getMessage());
 		}
 		return false;
+	}
+
+	public static Date getLastUpdate(Context context) {
+		final Cursor cursor = context.getContentResolver().query(URI_SERVICE, null,
+				null, null, ServiceEntity.COLUMN_UPDATED_AT+" DESC");
+		
+		if (cursor.getCount() == 0) {
+			cursor.close();
+			return null;
+		}
+
+		try {
+			if (cursor.moveToFirst()) {
+
+					final long updated_at = cursor.getLong(cursor
+							.getColumnIndex(ServiceEntity.COLUMN_UPDATED_AT));
+					Date date = new Date(updated_at);
+					Log.d(LOG_TAG, "last update "+CalendarUtil.getDateFormated(date, "dd MM yyy mm:ss"));
+					
+			return date;		
+			}
+
+		} catch (Exception e) {
+			Log.e(LOG_TAG, "Error : " + e.getMessage());
+		} finally {
+			cursor.close();
+		}
+		
+		return null;
 	}
 }

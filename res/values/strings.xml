@@ -74,7 +74,7 @@
     <string name="pet_picker_title">Pick a pet...</string>
 
     <!-- MENU -->
-    <string name="menu_my_profile">My profile</string>
+    <string name="menu_my_profile">My Profile</string>
     <string name="menu_my_pets">My pets</string>
     <string name="menu_make_appointment">Make Appointment</string>
     <string name="menu_view_appointment">My Appointments</string>
@@ -161,6 +161,7 @@
     <string name="budget_total_title">Total</string>
     <string name="budget_zero_data">You havent \n added anything yet...</string>
     <string name="budget_updating_prices">Updating prices...</string>
+    <string name="budget_downloading_prices">Downloading prices...</string>
     <string name="budget_dialog_ok">OK</string>
     <string name="budget_dialog_cancel">Cancel</string>
     <string name="budget_dialog_delete_from_list">Delete from list</string>
@@ -168,6 +169,11 @@
     <string name="budget_dialog_send_title">Dear client</string>
     <string name="budget_dialog_send_body">Do you want to send the order for a total of Bs. </string>
     <string name="budget_sending_order">Sending order...</string>
+
+    <!-- Budget View -->
+    <string name="budget_dialog_title">Requested Products</string>
+    <string name="budget_date_title">Emission Date : </string>
+    <string name="budget_actionbar_title">My Orders</string>
 
     <string-array name="Genders">
         <item>--Choose--</item>
@@ -189,10 +195,10 @@
         <item>CANCELED</item>
         <item>ACCEPTED</item>
         <item>PENDING</item>
-        <item>ATTENDED</item>
-        <item>CANCELED</item>
-        <item>ACCEPTED</item>
-        <item>PENDING</item>
+        <item>WORKING</item>
+        <item>IN PROCESS</item>
+        <item>READY</item>
+        <item>DELIVERED</item>
     </string-array>
 
 </resources>
