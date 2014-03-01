@@ -61,7 +61,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:paddingLeft="@dimen/padding_scroll_edit_profile"
-        android:paddingRight="@dimen/padding_scroll_edit_profile" >
+        android:paddingRight="@dimen/padding_scroll_edit_profile"
+        android:layout_weight="1" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -277,5 +278,16 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/imageView_pet_info_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/buton_delete" 
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        android:layout_marginTop="20dp"
+        />
 
 </LinearLayout>

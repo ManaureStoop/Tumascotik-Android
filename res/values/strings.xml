@@ -96,9 +96,17 @@
     <string name="pet_info_loading_lists">Loading lists ...</string>
     <string name="pet_info_loading_breed_lists">Loading Breeds ...</string>
     <string name="pet_info_loading_specie_lists">Loading Species ...</string>
+    <string name="pet_info_saving_pet">Saving Pet ...</string>
+    <string name="pet_info_deleting_pet">Deleting Pet ...</string>
+    <string name="pet_info_afirmative_option">Delete Pet ...</string>
+    <string name="pet_info_dialog_alert_delete_pet">¿Are you shure you want to delete this pet?</string>
     <string name="pet_info_pet_not_updated">It is not possible to update the your pet at the moment</string>
     <string name="pet_info_pet_not_inserted">It is not possible to insert your pet at the moment</string>
     <string name="pet_info_pet_data_incomplete">There is some important information missing on your pet profile...</string>
+    <string name="pet_info_data_missing_name">Please insert a name for your pet</string>
+    <string name="pet_info_data_missing_agresive">You should tell us if your pet is aggresive</string>
+    
+     
 
     <!-- User Info -->
     <string name="user_info_button_edit">Edit</string>

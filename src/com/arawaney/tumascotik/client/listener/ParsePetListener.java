@@ -24,7 +24,7 @@ public interface ParsePetListener {
 
 	public void onGetAllPets(ArrayList<Pet> pets);
 
-	public void onPetInserted(String objectId);
+	public void onPetInserted(String objectId, boolean b);
 
 	public void onAllBreedsQueryFinished(boolean b, ArrayList<Breed> species);
 
@@ -37,6 +37,8 @@ public interface ParsePetListener {
 			ArrayList<PetPropertie> petProperties);
 	
 	public void onUpdateSpeciesQueryFinished(boolean b, ArrayList<Specie> species);
+
+	public void onPetRemoveFinished(boolean b);
 	
 
 }

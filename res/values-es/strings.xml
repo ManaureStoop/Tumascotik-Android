@@ -105,9 +105,15 @@
     <string name="pet_info_loading_lists">Cargando Listas ...</string>
     <string name="pet_info_loading_breed_lists">Cargando Razas ...</string>
     <string name="pet_info_loading_specie_lists">Cargando Especies ...</string>
+    <string name="pet_info_saving_pet">Guardando Mascota ...</string>
+    <string name="pet_info_deleting_pet">Borrando Mascota ...</string>
+    <string name="pet_info_afirmative_option">Eliminar Mascota ...</string>
+    <string name="pet_info_dialog_alert_delete_pet">¿Estás seguro de que quieres eliminar esta mascota?</string>
     <string name="pet_info_pet_not_updated">En este momento no es posible actualizar tu mascota</string>
     <string name="pet_info_pet_not_inserted">En este momento no es posible registrar tu mascota</string>
     <string name="pet_info_pet_data_incomplete">Faltan algunos datos importantes de tu mascota...</string>
+    <string name="pet_info_data_missing_name">Por favor pon el nombre de tu mascota</string>
+    <string name="pet_info_data_missing_agresive">Deberias informarnos si tu mascota es agresiva</string>
 
     <!-- User Info -->
     <string name="user_info_button_edit">Editar</string>

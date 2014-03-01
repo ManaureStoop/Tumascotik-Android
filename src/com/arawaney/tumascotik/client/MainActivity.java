@@ -420,10 +420,10 @@ public class MainActivity extends ActivityBase implements
 	private void showToastStatusBarNotif(String toasttext,
 			String notificationtitle, String notificationcontent, Class tapclass) {
 		// Generating Toast notification
-		Toast toast = Toast.makeText(MainActivity.this, toasttext,
-				Toast.LENGTH_LONG);
-		toast.setGravity(Gravity.CENTER, 0, 0);
-		toast.show();
+//		Toast toast = Toast.makeText(MainActivity.this, toasttext,
+//				Toast.LENGTH_LONG);
+//		toast.setGravity(Gravity.CENTER, 0, 0);
+//		toast.show();
 		// Generating Status Bar notification
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				this)
@@ -607,7 +607,7 @@ public class MainActivity extends ActivityBase implements
 	}
 
 	@Override
-	public void onPetInserted(String objectId) {
+	public void onPetInserted(String objectId, boolean b) {
 		// TODO Auto-generated method stub
 
 	}
@@ -898,5 +898,11 @@ public class MainActivity extends ActivityBase implements
 		
 		startService(new Intent(getBaseContext(), BackEndDataUpdater.class));
 
+	}
+
+	@Override
+	public void onPetRemoveFinished(boolean b) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -33,7 +33,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:clickable="true"
+        android:clickable="true"           
+        android:layout_marginLeft="20dp"
         android:src="@drawable/buton_cancel" />
 
     <ImageView
@@ -44,6 +45,6 @@
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@+id/txtresumentitlefinal"
         android:clickable="true"
-        android:src="@drawable/buton_foward" />
+        android:src="@drawable/buton_check" />
 
 </RelativeLayout>

@@ -353,4 +353,26 @@ public class RequestProvider {
 		
 		return null;
 	}
+
+	public static void removeRequestsByPet(Context context,
+			String petSystemId) {
+
+		try {
+			String condition = RequestEntity.COLUMN_PET_ID + " = "+ "'"
+					+ String.valueOf(petSystemId)+ "'";
+			int rows = context.getContentResolver().delete(URI_REQUEST,
+					condition, null);
+
+			if (rows >= 1) {
+				Log.i(LOG_TAG, rows +" Requests : with pet id " + petSystemId + "have been deleted");
+				
+			}else {
+				Log.i(LOG_TAG, "Requests : with pet id " + petSystemId + "have not been deleted");
+
+			}
+		} catch (Exception e) {
+			Log.e(LOG_TAG, "Error deleting request: " + e.getMessage());
+		}
+		
+	}
 }

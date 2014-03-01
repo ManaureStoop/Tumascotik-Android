@@ -27,8 +27,9 @@ public class PetProvider {
 
 	public static long insertPet(Context context, Pet pet) {
 
-		if (context == null || pet == null)
+		if (context == null || pet == null){
 			return -1;
+			}
 
 		try {
 			ContentValues values = new ContentValues();
@@ -286,11 +287,11 @@ public class PetProvider {
 		return pets;
 	}
 
-	public static boolean removePet(Context context, long petId) {
+	public static boolean removePet(Context context, String petId) {
 
 		try {
-			String condition = PetEntity.COLUMN_ID + " = "
-					+ String.valueOf(petId);
+			String condition = PetEntity.COLUMN_SYSTEM_ID + " = "
+					+"'"+petId+"'";
 			int rows = context.getContentResolver().delete(URI_PET, condition,
 					null);
 

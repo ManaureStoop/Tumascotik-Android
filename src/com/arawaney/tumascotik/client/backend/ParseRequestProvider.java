@@ -8,6 +8,7 @@ import java.util.List;
 import android.content.Context;
 import android.util.Log;
 
+import com.arawaney.tumascotik.client.activity.PetInfoActivity;
 import com.arawaney.tumascotik.client.control.MainController;
 import com.arawaney.tumascotik.client.db.provider.PetProvider;
 import com.arawaney.tumascotik.client.db.provider.RequestProvider;
@@ -359,24 +360,24 @@ public class ParseRequestProvider {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
-							REQUEST_SERVICE_TABLE);
-					query.whereMatches(REQUEST_ID_TAG, request.getSystem_id());
-					query.findInBackground(new FindCallback<ParseObject>() {
-
-						@Override
-						public void done(List<ParseObject> list,
-								ParseException arg1) {
-							try {
-								list.get(0).delete();
-							} catch (ParseException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-
-						}
-					});
-					Log.d(LOG_TAG, "HOOLA");
+//					ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+//							REQUEST_SERVICE_TABLE);
+//					query.whereMatches(REQUEST_ID_TAG, request.getSystem_id());
+//					query.findInBackground(new FindCallback<ParseObject>() {
+//
+//						@Override
+//						public void done(List<ParseObject> list,
+//								ParseException arg1) {
+//							try {
+//								list.get(0).delete();
+//							} catch (ParseException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
+//
+//						}
+//					});
+				
 					listener.onRequestRemoveFinished(request);
 
 				} else {
@@ -437,6 +438,38 @@ public class ParseRequestProvider {
 					Log.d(LOG_TAG,
 							"Error loading scheduled time blocks: "
 									+ e.getMessage());
+				}
+			}
+		});
+
+	}
+
+	public static void deleteRequestsByPet(Pet pet) {
+
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+				REQUEST_TABLE);
+		query.whereEqualTo(PET_ID_TAG, pet.getSystem_id());
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> parsedRequest, ParseException e) {
+				if (e == null) {
+					try {
+						for (ParseObject parseObject : parsedRequest) {
+							parseObject.delete();
+						}
+						
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+				} else {
+					Log.d(LOG_TAG,
+							"Error getting requests to delete : "
+									+ e.getMessage());
+					
+
 				}
 			}
 		});

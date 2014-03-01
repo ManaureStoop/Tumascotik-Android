@@ -50,6 +50,20 @@ public class PetPicker extends Activity {
 		loadAddButtons();
 
 	}
+	@Override
+	protected void onResume() {
+		super.onResume();
+		pets = PetProvider.readPets(this);
+		if (pets == null) {
+			pets = new ArrayList<Pet>();
+		}
+		if (petGRidView!= null) {
+			adapter = new ItemPetGridAdapter(this, pets);
+			adapter.setFooterView(addPetView);
+			petGRidView.setAdapter(adapter);	
+		}
+		
+	}
 
 	private void loadViews() {
 		petGRidView = (ListView) findViewById(R.id.grid_pet_picker);

@@ -7,9 +7,12 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -20,16 +23,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RemoteViewsService;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arawaney.tumascotik.client.MainActivity;
 import com.arawaney.tumascotik.client.R;
 import com.arawaney.tumascotik.client.backend.ParsePetProvider;
 import com.arawaney.tumascotik.client.backend.ParseProvider;
 import com.arawaney.tumascotik.client.control.MainController;
 import com.arawaney.tumascotik.client.db.provider.BreedProvider;
 import com.arawaney.tumascotik.client.db.provider.PetProvider;
+import com.arawaney.tumascotik.client.db.provider.RequestProvider;
 import com.arawaney.tumascotik.client.db.provider.SpecieProvider;
 import com.arawaney.tumascotik.client.listener.ParsePetListener;
 import com.arawaney.tumascotik.client.model.Breed;
@@ -63,6 +69,7 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 	Button isAgressive;
 
 	ImageView saveEditButton;
+	ImageView deletePet;
 
 	Pet pet;
 	Pet auxPet;
@@ -106,14 +113,11 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 
 		if (pet != null) {
 
-			// auxPet.setId(pet.getId());
-			// auxPet.setSystem_id(pet.getSystem_id());
-			// auxPet.setOwner(pet.getOwner());
-
 			auxPet = pet;
+			if (!newPet()) {
+				updatePetIfNecesary();
+			}
 
-			updatePetIfNecesary();
-			
 			getLists();
 
 			loadViews();
@@ -127,9 +131,13 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 
 	}
 
+	private boolean newPet() {
+		return (pet.getSystem_id() == null);
+	}
+
 	private void updatePetIfNecesary() {
 		ParsePetProvider.getPet(this, pet.getSystem_id(), pet.getUpdated_at());
-		
+
 	}
 
 	private void getLists() {
@@ -142,15 +150,17 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 				speciesNames.add(specie.getName());
 			}
 		}
+		if (pet.getBreed() != null) {
+			breeds = BreedProvider.readBreedBySpecie(this, pet.getBreed()
+					.getSpecie().getSystem_id());
 
-		breeds = BreedProvider.readBreedBySpecie(this, pet.getBreed()
-				.getSpecie().getSystem_id());
+			if (breeds != null) {
+				for (Breed breed : breeds) {
+					breedsNames.add(breed.getName());
 
-		if (breeds != null) {
-			for (Breed breed : breeds) {
-				breedsNames.add(breed.getName());
-
+				}
 			}
+
 		}
 	}
 
@@ -214,8 +224,10 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 		editPetPuppy = (Spinner) findViewById(R.id.spiner_pet_info_puppy);
 		editPetComments = (EditText) findViewById(R.id.edit_text_pet_info_comment);
 		isAgressive = (Button) findViewById(R.id.Button_pet_info_isagressive);
+		deletePet = (ImageView) findViewById(R.id.imageView_pet_info_delete);
 
 		isAgressiveStatus = false;
+		isAgressive.setText("?");
 
 		saveEditButton = (ImageView) findViewById(R.id.button_pet_info_edit_save);
 
@@ -231,6 +243,9 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 				android.R.layout.simple_spinner_item, speciesNames);
 		BreedAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, breedsNames);
+		if (newPet()) {
+			deletePet.setVisibility(View.GONE);
+		}
 		setFonts();
 
 	}
@@ -268,13 +283,47 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 						viewMode = MODE_EDIT_LIST;
 						refreshView();
 					} else if (viewMode == MODE_EDIT_LIST) {
-						setSavingPetDialog();
-						savePet();
-						insertOrUpdatePet();
-						viewMode = MODE_INFO_LIST;
-						refreshView();
+						if (checkFields()) {
+							setSavingPetDialog();
+							savePet();
+							insertOrUpdatePet();
+							viewMode = MODE_INFO_LIST;
+							refreshView();
+						}
+
 					}
 
+				}
+
+				private boolean checkFields() {
+
+					auxPet.setName(editpetName.getText().toString());
+					if (editpetName.getText().toString().length() == 0) {
+						editpetName.requestFocus();
+						Toast toast = Toast.makeText(
+								PetInfoActivity.this,
+								getResources().getString(
+										R.string.pet_info_data_missing_name),
+								Toast.LENGTH_LONG);
+						toast.setGravity(Gravity.CENTER, 0, 0);
+						toast.show();
+						return false;
+					}
+					if (isAgressive.getText().toString().equals("?")) {
+						editpetName.requestFocus();
+						Toast toast = Toast
+								.makeText(
+										PetInfoActivity.this,
+										getResources()
+												.getString(
+														R.string.pet_info_data_missing_agresive),
+										Toast.LENGTH_LONG);
+						toast.setGravity(Gravity.CENTER, 0, 0);
+						toast.show();
+						return false;
+					}
+
+					return true;
 				}
 
 				private void savePet() {
@@ -288,6 +337,7 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 
 					auxPet.setComment(editPetComments.getText().toString());
 					auxPet.setPuppy(editPetPuppy.getSelectedItemPosition());
+					
 					if (isAgressiveStatus) {
 						auxPet.setAgressive(Pet.AGRESSIVE);
 					} else {
@@ -320,10 +370,41 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 			}
 		});
 
+		deletePet.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				new AlertDialog.Builder(PetInfoActivity.this)
+						.setMessage(
+								getResources()
+										.getString(
+												R.string.pet_info_dialog_alert_delete_pet))
+						.setPositiveButton(
+								getResources().getString(
+										R.string.pet_info_afirmative_option),
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int which) {
+										removePet();
+									}
+								})
+						.setNegativeButton(android.R.string.no,
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// do nothing
+									}
+								}).show();
+
+			}
+		});
+
 	}
 
 	private Breed getBreedFromList() {
+		if (breeds != null) {
 
+		}
 		for (Breed breed : breeds) {
 			if (breed.getName().equals(
 					editPetBreed.getSelectedItem().toString())) {
@@ -340,12 +421,20 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 			setInfoView();
 		} else if (viewMode == MODE_EDIT_LIST) {
 			setEditView();
+			deletePet.setVisibility(View.GONE);
+
 		}
 
 	}
 
 	private void setSavingPetDialog() {
-		progressDialog = ProgressDialog.show(this, "", "Guardando mascota");
+		progressDialog = ProgressDialog.show(this, "", getResources()
+				.getString(R.string.pet_info_saving_pet));
+	}
+
+	private void setDeletingPetDialog() {
+		progressDialog = ProgressDialog.show(this, "", getResources()
+				.getString(R.string.pet_info_deleting_pet));
 	}
 
 	@SuppressLint("NewApi")
@@ -378,11 +467,14 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 			}
 
 			if (editPetSpecie.getSelectedItemPosition() == 0) {
-				if (pet.getBreed().getSpecie() != null) {
-					editPetSpecie.setSelection(speciesNames.indexOf(pet
-							.getBreed().getSpecie().getName()));
-					auxSpecie = (String) editPetSpecie.getSelectedItem();
+				if (pet.getBreed() != null) {
+					if (pet.getBreed().getSpecie() != null) {
+						editPetSpecie.setSelection(speciesNames.indexOf(pet
+								.getBreed().getSpecie().getName()));
+						auxSpecie = (String) editPetSpecie.getSelectedItem();
+					}
 				}
+
 			}
 		}
 
@@ -507,8 +599,13 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 
 	}
 
+	private void removePet() {
+		setDeletingPetDialog();
+		ParsePetProvider.deletePet(this, this, pet);
+	}
+
 	private void insertOrUpdatePet() {
-		if (pet.getSystem_id() != null) {
+		if (!newPet()) {
 			ParsePetProvider.updatePet(this, auxPet);
 		} else {
 			ParsePetProvider.insertPet(this, auxPet, this);
@@ -553,15 +650,20 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 	}
 
 	@Override
-	public void onPetInserted(String objectId) {
+	public void onPetInserted(String objectId, boolean b) {
+		
+		if (b) {
+			
+			auxPet.setSystem_id(objectId);
+			Calendar updatedAt = Calendar.getInstance();
+			auxPet.setUpdated_at(updatedAt);
+			pet = auxPet;
 
-		auxPet.setSystem_id(objectId);
+			long localId = PetProvider.insertPet(this, pet);
+			pet.setId(localId);
+			refreshView();
+		}
 
-		pet = auxPet;
-
-		long localId = PetProvider.insertPet(this, pet);
-		pet.setId(localId);
-		refreshView();
 		progressDialog.dismiss();
 
 	}
@@ -594,21 +696,33 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 	@Override
 	public void onUpdateBreedsQueryFinished(boolean b, ArrayList<Breed> species) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onUpdatePetPropertiesFinished(boolean b,
 			ArrayList<PetPropertie> petProperties) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onUpdateSpeciesQueryFinished(boolean b,
 			ArrayList<Specie> species) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void onPetRemoveFinished(boolean b) {
+		if (b) {
+			RequestProvider.removeRequestsByPet(this, pet.getSystem_id());
+			PetProvider.removePet(this, pet.getSystem_id());
+		}
+
+		progressDialog.dismiss();
+		this.finish();
+
 	}
 
 }

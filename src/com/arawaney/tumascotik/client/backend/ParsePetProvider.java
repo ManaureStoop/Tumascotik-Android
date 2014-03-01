@@ -51,7 +51,7 @@ public class ParsePetProvider {
 	private static final String LOG_TAG = "Tumascotik-Client-ParsePetProvider";
 
 	private static final String PUPPY_TAG = "puppy";
-	private static final String AGRESSIVE_TAG = "agressive";
+	private static final String AGRESSIVE_TAG = "aggressive";
 	private static final String COMMENT_TAG = "comment";
 	private static final String UPDATED_AT_TAG = "updatedAt";
 	private static final String USER_ID_TAG = "userId";
@@ -213,7 +213,8 @@ public class ParsePetProvider {
 		});
 	}
 
-	public static void getPet(final ParsePetListener listener, String systemId, Calendar updatedAt) {
+	public static void getPet(final ParsePetListener listener, String systemId,
+			Calendar updatedAt) {
 
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(PET_TABLE);
 		query.whereGreaterThan(UPDATED_AT_TAG, updatedAt);
@@ -388,12 +389,20 @@ public class ParsePetProvider {
 
 		final ParseObject parsePet = new ParseObject(PET_TABLE);
 		parsePet.put(NAME_TAG, auxPet.getName());
+		parsePet.put(USER_ID_TAG, auxPet.getOwner().getSystemId());
+		parsePet.put(BREED_ID_TAG, auxPet.getBreed().getSystem_id());
 
 		int gender = auxPet.getGender();
 		if (gender == Pet.GENDER_MALE) {
 			parsePet.put(GENDER_TAG, SEX_MALE);
 		} else if (gender == Pet.GENDER_FEMALE) {
 			parsePet.put(GENDER_TAG, SEX_FEMALE);
+		}
+		int agressive = auxPet.getAgressive();
+		if(agressive == Pet.AGRESSIVE) {
+			parsePet.put(AGRESSIVE_TAG, true);
+		} else if (agressive == Pet.NOT_AGRESSIVE) {
+			parsePet.put(AGRESSIVE_TAG, false);
 		}
 
 		if (auxPet.getPuppy() == Pet.AGE_PUPPY) {
@@ -406,62 +415,15 @@ public class ParsePetProvider {
 		parsePet.saveInBackground(new SaveCallback() {
 
 			@Override
-			public void done(ParseException arg0) {
-				listener.onPetInserted(parsePet.getObjectId());
-				saveNewPetUser(parsePet, auxPet, context);
-			}
-
-			private void saveNewPetUser(final ParseObject parsePet,
-					final Pet auxPet, final Context context) {
-
-				String systemId = auxPet.getOwner().getSystemId();
-				ParseQuery<ParseObject> innerQuery = new ParseQuery<ParseObject>(
-						"_User");
-				innerQuery.whereEqualTo("objectId", systemId);
-				innerQuery.findInBackground(new FindCallback<ParseObject>() {
-
-					@Override
-					public void done(List<ParseObject> arg0, ParseException e) {
-						if (e == null) {
-							ParseRelation<ParseObject> userRelation = parsePet
-									.getRelation(USER_ID_TAG);
-							userRelation.add(arg0.get(0));
-							parsePet.saveInBackground();
-							saveNewPetBreed(parsePet, auxPet, context);
-						} else {
-							Log.e(LOG_TAG, "No uset matches inserting new pet "
-									+ e.getMessage());
-
-						}
-
-					}
-				});
-
-			}
-
-			private void saveNewPetBreed(final ParseObject parsePet,
-					final Pet auxPet, final Context context) {
-
-				ParseQuery<ParseObject> innerQuery = new ParseQuery<ParseObject>(
-						BREED_TABLE);
-				innerQuery.whereEqualTo(NAME_TAG, auxPet.getBreed());
-				innerQuery.findInBackground(new FindCallback<ParseObject>() {
-
-					@Override
-					public void done(List<ParseObject> arg0, ParseException e) {
-						if (e == null) {
-							ParseRelation<ParseObject> breedRelation = parsePet
-									.getRelation(BREED_ID_TAG);
-							breedRelation.add(arg0.get(0));
-							parsePet.saveInBackground();
-						} else {
-							Log.e(LOG_TAG,
-									"No breed matches inserting new pet "
-											+ e.getMessage());
-
-						}
-					}
-				});
+			public void done(ParseException e) {
+				if (e == null) {
+					listener.onPetInserted(parsePet.getObjectId(), true);
+				}else{
+					Log.d(LOG_TAG, "error inserting pet: "+e.getMessage());
+					listener.onPetInserted(parsePet.getObjectId(), false);
+					
+				}
+				
 			}
 
 		});
@@ -518,7 +480,6 @@ public class ParsePetProvider {
 
 		});
 
-
 	}
 
 	public static void updateAllSpecies(Context context,
@@ -541,7 +502,7 @@ public class ParsePetProvider {
 					ArrayList<Specie> species = new ArrayList<Specie>();
 
 					for (ParseObject object : cList) {
-						
+
 						Specie specie = new Specie();
 						specie.setName(object.getString(NAME_TAG));
 						specie.setSystem_id(object.getObjectId());
@@ -550,7 +511,7 @@ public class ParsePetProvider {
 								.getTime());
 						specie.setUpdated_at(Updated_At);
 						species.add(specie);
-				
+
 					}
 
 					listener.onAllSpeciesQueryFinished(true, species);
@@ -606,6 +567,41 @@ public class ParsePetProvider {
 
 			}
 
+		});
+
+	}
+
+	public static void deletePet(Context context,
+			final ParsePetListener listener, final Pet pet) {
+
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+				PET_TABLE);
+		query.whereEqualTo("objectId", pet.getSystem_id());
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> parsedPet, ParseException e) {
+				if (e == null) {
+					try {
+					if (parsedPet.size() != 0) {
+						parsedPet.get(0).delete();
+					}
+						
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					ParseRequestProvider.deleteRequestsByPet(pet);
+					listener.onPetRemoveFinished(true);
+
+				} else {
+					Log.d(LOG_TAG,
+							"Error getting pet to delete : "
+									+ e.getMessage());
+					listener.onPetRemoveFinished(false);
+
+				}
+			}
 		});
 
 	}

@@ -120,7 +120,7 @@ public class BackEndDataUpdater extends Service implements ParsePetListener,
 	}
 
 	@Override
-	public void onPetInserted(String objectId) {
+	public void onPetInserted(String objectId, boolean b) {
 		// TODO Auto-generated method stub
 
 	}
@@ -229,6 +229,12 @@ public class BackEndDataUpdater extends Service implements ParsePetListener,
 	private void updatePets() {
 		ParsePetProvider.updatePets(this, MainController.USER, this);
 
+	}
+
+	@Override
+	public void onPetRemoveFinished(boolean b) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
