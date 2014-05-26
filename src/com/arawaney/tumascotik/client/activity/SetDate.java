@@ -203,12 +203,14 @@ public class SetDate extends FragmentActivity implements ParseRequestListener {
 	}
 
 	public void getScheduledTimeBlocks() {
-
-		 progressDialog = ProgressDialog.show(
+		
+		progressDialog = ProgressDialog.show(
 				SetDate.this,
 				"",
 				getResources().getString(
 						R.string.set_date_dialog_loading_timeblocks));
+	
+		 progressDialog.setCancelable(true);
 
 		timeBlocks = new String[100];
 		expensiveBlocks = new int[100];
@@ -639,7 +641,7 @@ public class SetDate extends FragmentActivity implements ParseRequestListener {
 	}
 
 	@Override
-	public void onCanceledQueryFinished(boolean canceled) {
+	public void onCanceledQueryFinished(boolean canceled, Request request) {
 		// TODO Auto-generated method stub
 
 	}
@@ -665,5 +667,38 @@ if (initialScheduledDates != null && finalScheduledDates != null) {
 	
 		progressDialog.dismiss();
 		enableTimeButton();
+	}
+
+
+
+	@Override
+	public void cancelRequest(Request request) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void acceptRequest(Request request) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void onRequestAccept(Request request, boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void onOnePriceQueryFinished(int price) {
+		if (price!= 0) {
+			request.setPrice(price);
+		}		
 	}
 }

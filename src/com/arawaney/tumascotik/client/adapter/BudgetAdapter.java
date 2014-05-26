@@ -73,7 +73,7 @@ public class BudgetAdapter extends BaseAdapter {
 		
 		if (MainController.USER.getisAdmin() == User.IS_ADMIN ) {
 			String userId = budgets.get(position).getUserId();
-			User user = UserProvider.readUser(contxt);
+			User user = UserProvider.readUser(contxt, userId);
 			holder.txt_itemUserName.setText(user.getName()+" "+user.getLastname());
 		}
 		else{
@@ -88,14 +88,23 @@ public class BudgetAdapter extends BaseAdapter {
 	    
 	    holder.txt_itemDate.setText(CalendarUtil.getDateFormated(budgets.get(position).getCreatedAt(), "dd/MM/yyyy"));
 		
-	    holder.txt_itemStatus.setText(status[budgets.get(position).getStatus()-1]);
+
+	    Log.d("TEST12", String.valueOf(budgets.get(position).getStatus()));
+	    int statusIndex = budgets.get(position).getStatus()-1;
+	    if (statusIndex == -1) {
+	    	Log.d("BudgetAdapter", "budget : "+budgets.get(position).getSystem_id()+" came with status 0");
+	    	statusIndex = 5;
+		}
+	    holder.txt_itemStatus.setText(status[statusIndex]);
 		
 	    if (budgets.get(position).getStatus() == Budget.STATUS_DELIVERED) {
 			holder.txt_itemStatus.setTextColor(contxt.getResources().getColor(R.color.request_status_accepted));
 		}else if (budgets.get(position).getStatus() == Budget.STATUS_IN_PROCESS) {
 			holder.txt_itemStatus.setTextColor(contxt.getResources().getColor(R.color.request_status_pending));
-		}else if (budgets.get(position).getStatus() == Budget.STATUS_READY) {
+		}else if (budgets.get(position).getStatus() == Budget.STATUS_CANCELED) {
 			holder.txt_itemStatus.setTextColor(contxt.getResources().getColor(R.color.request_status_canceled));
+		}else if (budgets.get(position).getStatus() == Budget.STATUS_READY) {
+			holder.txt_itemStatus.setTextColor(contxt.getResources().getColor(R.color.text_blue));
 		}
 		
 		return convertView;

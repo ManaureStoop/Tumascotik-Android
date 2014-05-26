@@ -10,6 +10,7 @@ import com.arawaney.tumascotik.client.R;
 import com.arawaney.tumascotik.client.activity.ViewRequests;
 import com.arawaney.tumascotik.client.backend.ParseProvider;
 import com.arawaney.tumascotik.client.backend.ParseRequestProvider;
+import com.arawaney.tumascotik.client.control.MainController;
 import com.arawaney.tumascotik.client.db.CitationDB;
 import com.arawaney.tumascotik.client.db.provider.RequestProvider;
 import com.arawaney.tumascotik.client.db.provider.ServiceProvider;
@@ -21,6 +22,7 @@ import com.arawaney.tumascotik.client.model.Budget;
 import com.arawaney.tumascotik.client.model.BudgetService;
 import com.arawaney.tumascotik.client.model.Request;
 import com.arawaney.tumascotik.client.model.Service;
+import com.arawaney.tumascotik.client.model.User;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -45,47 +47,88 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 
 @SuppressLint("ValidFragment")
-public class BudgetItemDialog extends DialogFragment
-		 {
+public class BudgetItemDialog extends DialogFragment {
 
 	String userName;
 	List<BudgetService> services;
 	Context context;
+	Budget budget;
+	ParseBudgetListener listener;
 
 	public BudgetItemDialog() {
 	};
 
-	public BudgetItemDialog(Context context,List<BudgetService> services) {
-		
-		
+	public BudgetItemDialog(Context context, List<BudgetService> services,
+			Budget budget, ParseBudgetListener listener) {
+
 		this.services = services;
 		this.context = context;
-		
+		this.budget = budget;
+		this.listener = listener;
 	}
 
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
 		ArrayList<String> content = new ArrayList<String>();
-		
+
 		for (int i = 0; i < services.size(); i++) {
-			String string = services.get(i).getService().getName()+"       Bs."+services.get(i).getPrice();
+			String string = services.get(i).getService().getName()
+					+ "       Bs." + services.get(i).getPrice();
 			content.add(string);
 		}
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		final CharSequence[] charSequenceItems = content.toArray(new CharSequence[content.size()]);
 
-		builder.setTitle(context.getResources().getString(R.string.budget_dialog_title));
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		final CharSequence[] charSequenceItems = content
+				.toArray(new CharSequence[content.size()]);
+
+		builder.setTitle(context.getResources().getString(
+				R.string.budget_dialog_title));
 		builder.setItems(charSequenceItems, null);
-		// Add the buttons	
-		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		// Add the buttons
+		builder.setPositiveButton(context.getResources().getString(
+				R.string.budget_request_dialog__back), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.cancel();
 			}
 		});
+		if (MainController.USER.getisAdmin() == User.IS_ADMIN) {
+			if (budget.getStatus() == Budget.STATUS_IN_PROCESS) {
+				builder.setNeutralButton(
+						context.getResources().getString(
+								R.string.budget_dialog_order_ready),
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								budget.setStatus(Budget.STATUS_READY);
+								listener.onBudgetStatusChanged(budget);
+							}
+						});
+
+				builder.setNegativeButton(
+						context.getResources().getString(
+								R.string.budget_dialog_cancel_order),
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								budget.setStatus(Budget.STATUS_CANCELED);
+								listener.onBudgetStatusChanged(budget);
+							}
+						});
+			} else if (budget.getStatus() == Budget.STATUS_READY) {
+				builder.setNeutralButton(
+						context.getResources().getString(
+								R.string.budget_dialog_order_delivered),
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								budget.setStatus(Budget.STATUS_DELIVERED);
+								listener.onBudgetStatusChanged(budget);
+							}
+						});
+			}
+		}
+
 		return builder.create();
 	}
-
-
 
 }

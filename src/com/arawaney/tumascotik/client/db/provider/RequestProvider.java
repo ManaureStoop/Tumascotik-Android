@@ -3,6 +3,7 @@ package com.arawaney.tumascotik.client.db.provider;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.jar.Attributes.Name;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -198,7 +199,7 @@ public class RequestProvider {
 					request.setActive(active);
 					request.setUpdated_at(updatedAt);
 
-
+					Log.d("TEST 1", pet_id+" "+ system_id);
 					if (pet_id != null) {
 						request.setPet(PetProvider.readPet(context, pet_id));
 					}
@@ -307,6 +308,7 @@ public class RequestProvider {
 
 
 					if (pet_id != null) {
+						Log.d(LOG_TAG, "Reading pet: "+pet_id);
 						request.setPet(PetProvider.readPet(context, pet_id));
 					}
 

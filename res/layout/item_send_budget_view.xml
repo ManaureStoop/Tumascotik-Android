@@ -3,79 +3,85 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/textView_budget_total_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1860.Bs"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:textSize="@dimen/big_oval_buttons"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_centerVertical="true"
-        android:background="@drawable/shape_circle_blue_mini"
-         />
-
     <LinearLayout
-        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="18dp"
-        android:background="@color/background_gray"
-        android:orientation="vertical"
-        android:padding="5dp" 
-        android:layout_marginLeft="5dp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1" >
-
-            <TextView
-                android:id="@+id/textView_budget_view_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/budget_date_title"
-                android:textColor="@color/black"
-                android:textSize="@dimen/request_items" />
-
-            <TextView
-                android:id="@+id/textView_budget_view_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:text="07/02/2014"
-                android:textSize="@dimen/request_items" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="1" >
-
-            <TextView
-                android:id="@+id/textView_budget_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:text="Manaure Stoop"
-                android:textSize="@dimen/request_items" />
-        </LinearLayout>
+        android:layout_centerVertical="true" >
 
         <TextView
-            android:id="@+id/textView_budget_view_status"
+            android:id="@+id/textView_budget_total_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:text="PENDINNNG"
-            android:textColor="@color/request_status_pending"
-            android:textStyle="bold" />
+            android:layout_marginLeft="@dimen/send_budget_item_gneneral_margin"
+            android:layout_marginRight="@dimen/send_budget_item_gneneral_margin"
+            android:background="@drawable/shape_circle_blue_mini"
+            android:gravity="center"
+            android:text="1860.Bs"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/white"
+            android:textSize="@dimen/big_oval_buttons" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/send_budget_item_gneneral_margin"
+            android:layout_marginRight="@dimen/send_budget_layout_margin_left"
+            android:background="@color/background_gray"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:padding="@dimen/general_padding_small" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/textView_budget_view_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/budget_date_title"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/request_items" />
+
+                <TextView
+                    android:id="@+id/textView_budget_view_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/send_budget_item_gneneral_margin"
+                    android:text="07/02/2014"
+                    android:singleLine="true"
+                    android:textSize="@dimen/request_items" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/send_budget_item_gneneral_margin"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/textView_budget_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/send_budget_item_gneneral_margin"
+                    android:text="Manaure Stoop"
+                    android:textSize="@dimen/request_items" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView_budget_view_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/send_budget_item_gneneral_margin"
+                android:layout_weight="1"
+                android:text="PENDINNNG"
+                android:textColor="@color/request_status_pending"
+                android:textStyle="bold" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

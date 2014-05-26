@@ -14,6 +14,8 @@ public class Pet {
 	private Integer puppy;
 	private Integer agressive;
 	private Calendar updated_at;
+	//Only to be used when updating pet from Background DB. Not to save on local DB
+	private boolean active;
 
 	
 	public final static int GENDER_MALE = 1;
@@ -95,5 +97,11 @@ public class Pet {
 	}
 	public void setUpdated_at(Calendar updated_at) {
 		this.updated_at = updated_at;
+	}
+	public boolean isActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 }

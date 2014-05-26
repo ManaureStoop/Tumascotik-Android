@@ -15,7 +15,13 @@ public interface ParseUserListener {
 	
 	public void onUserQueryFinish(User updatedUSer,boolean updated);
 	
+	public void onUserInsertFinish(User updatedUSer,boolean updated, String systemId);
+	
 	public void onUserUpdateFinish(User updatedUSer,boolean updated);
+
+	public void onClientsQueryFinish(ArrayList<User> users, boolean b);
+
+	public void onCLientUpdateFinish(User user, boolean b);
 	
 
 }

@@ -45,6 +45,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.SignUpCallback;
 
 public class ParseProvider {
 	private static final String LOG_TAG = "Tumascotik-Client-ParseProvider";
@@ -65,10 +66,10 @@ public class ParseProvider {
 	private static final String IS_REQUEST_TAG = "isRequest";
 	private static final String DURATION_TAG = "duration";
 	private static final String UPDATED_AT_TAG = "updatedAt";
-	
+
 	private static final String USER_TABLE = "_User";
 	private static final String SERVICE_TABLE = "Service";
-	
+
 	private static final String SEX_MALE = "M";
 	private static final String SEX_FEMALE = "F";
 
@@ -81,7 +82,7 @@ public class ParseProvider {
 			public void done(ParseUser user, ParseException e) {
 
 				if (user != null) {
-					ParseProvider.setUser(context, user, password);
+					ParseProvider.setMainUser(context, user, password);
 
 				} else {
 					Log.e(LOG_TAG, "Error by login :" + e.getMessage());
@@ -94,36 +95,57 @@ public class ParseProvider {
 	}
 
 	public static void initializeParse(Context context) {
-		Parse.initialize(context, "mLQoFv0KQAi0WYL1JGSSKGRjQ77DgZST0qX47TJe",
-				"X0GMTJKHoSDMjA7N9leHfaYNfptL4e8fPhsGMDVN");
+		Parse.initialize(context, "UfskSVeuXutUmVTvo2n9OG2KylkSMXOmqYdlBeZm",
+				"uI8ZaohGJktHtEg4rHKmfUUrtalGyhiwJhQKgOGW");
 	}
 
-	protected static void setUser(Context context, ParseUser user,
+	protected static void setMainUser(Context context, ParseUser user,
 			String password) {
 		User dbuser = new User();
 
 		dbuser.setSystemId(user.getObjectId().toString());
+
 		dbuser.setUsername(user.getUsername());
+
 		dbuser.setPassword(password);
-		dbuser.setName(user.get(NAME_TAG).toString());
-		dbuser.setLastname(user.get(LAST_NAME_TAG).toString());
+		if (user.get(NAME_TAG) != null) {
+			dbuser.setName(user.getString(NAME_TAG).toString());
+		}else
+			Log.d("LOG IN", "Name in parse null");
+
+		if (user.get(LAST_NAME_TAG) != null) {
+
+			dbuser.setLastname(user.getString(LAST_NAME_TAG).toString());
+		}else
+			Log.d("LOG IN", "Last Name in parse null");
+
 		dbuser.setCedula(user.getInt(IDENTIFICATION_TAG));
-		dbuser.setAddress(user.get(ADDRESS_TAG).toString());
-		dbuser.setEmail(user.getEmail());
-		
-		String gender = user.getString(GENDER_TAG);
-		
-		if (gender.equals(SEX_MALE)) {
-			dbuser.setGender(User.GENDER_MAN);
-		}else if (gender.equals(SEX_FEMALE)) {
-			dbuser.setGender(User.GENDER_WOMAN);
+
+		if (user.get(ADDRESS_TAG) != null) {
+			dbuser.setAddress(user.get(ADDRESS_TAG).toString());
+		}else
+			Log.d("LOG IN", "Adress in parse null");
+
+		if (user.getEmail() != null) {
+			dbuser.setEmail(user.getEmail());
 		}
-		
+
+		if (user.getString(GENDER_TAG) != null) {
+			String gender = user.getString(GENDER_TAG);
+			if (gender.equals(SEX_MALE)) {
+				dbuser.setGender(User.GENDER_MAN);
+			} else if (gender.equals(SEX_FEMALE)) {
+				dbuser.setGender(User.GENDER_WOMAN);
+			}
+
+		}
+
 		dbuser.setMobile_telephone(user.getLong(TELEPHONE_MOBILE_TAG));
 		dbuser.setHouse_telephone(user.getLong(TELEPHONE_HOME_TAG));
 		dbuser.setAdmin(user.getBoolean(ADMIN_TAG) ? 1 : 0);
 		Calendar updated_at = Calendar.getInstance();
 		dbuser.setUpdated_at(updated_at);
+		dbuser.setIsCurrentUser(User.IS_CURRENT_USER);
 
 		UserProvider.insertUser(context, dbuser);
 
@@ -148,18 +170,21 @@ public class ParseProvider {
 					updatedUser.setLastname(parseUSer.get(LAST_NAME_TAG)
 							.toString());
 					updatedUser.setCedula(parseUSer.getInt(IDENTIFICATION_TAG));
-					updatedUser.setAddress(parseUSer.get(ADDRESS_TAG)
-							.toString());
+					if (parseUSer.get(ADDRESS_TAG) != null) {
+						updatedUser.setAddress(parseUSer.get(ADDRESS_TAG)
+								.toString());
+					}
+
 					updatedUser.setEmail(parseUSer.getString(EMAIL_TAG));
-					
+
 					String gender = parseUSer.getString(GENDER_TAG);
-					
+
 					if (gender.equals(SEX_MALE)) {
 						updatedUser.setGender(User.GENDER_MAN);
-					}else if (gender.equals(SEX_FEMALE)) {
+					} else if (gender.equals(SEX_FEMALE)) {
 						updatedUser.setGender(User.GENDER_WOMAN);
 					}
-					
+
 					updatedUser.setMobile_telephone(parseUSer
 							.getLong(TELEPHONE_MOBILE_TAG));
 					updatedUser.setHouse_telephone(parseUSer
@@ -189,15 +214,14 @@ public class ParseProvider {
 			parsedUser.put(NAME_TAG, user.getName());
 			parsedUser.put(LAST_NAME_TAG, user.getLastname());
 			parsedUser.put(EMAIL_TAG, user.getEmail());
-			
+
 			int gender = user.getGender();
 			if (gender == User.GENDER_MAN) {
 				parsedUser.put(GENDER_TAG, SEX_MALE);
-			}else if (gender == User.GENDER_MAN) {
+			} else if (gender == User.GENDER_MAN) {
 				parsedUser.put(GENDER_TAG, SEX_FEMALE);
 			}
-			
-			parsedUser.put(GENDER_TAG, user.getGender());
+
 			parsedUser.put(TELEPHONE_MOBILE_TAG, user.getMobile_telephone());
 			parsedUser.put(TELEPHONE_HOME_TAG, user.getHouse_telephone());
 			parsedUser.put(ADDRESS_TAG, user.getAddress());
@@ -208,6 +232,8 @@ public class ParseProvider {
 				public void done(ParseException e) {
 					if (e != null) {
 						listener.onUserUpdateFinish(user, false);
+						Log.e(LOG_TAG, "User not updated. Error: ");
+						e.printStackTrace();
 					} else {
 						listener.onUserUpdateFinish(user, true);
 					}
@@ -220,6 +246,104 @@ public class ParseProvider {
 			listener.onUserUpdateFinish(user, false);
 		}
 
+	}
+
+	public static void updateClient(final ParseUserListener listener,
+			final User user) {
+
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(USER_TABLE);
+		// Retrieve the object by id
+		query.getInBackground(user.getSystemId(),
+				new GetCallback<ParseObject>() {
+					public void done(ParseObject parsedUser, ParseException e) {
+						if (e == null) {
+
+							parsedUser.put(NAME_TAG, user.getName());
+							parsedUser.put(LAST_NAME_TAG, user.getLastname());
+							parsedUser.put(EMAIL_TAG, user.getEmail());
+
+							int gender = user.getGender();
+							if (gender == User.GENDER_MAN) {
+								parsedUser.put(GENDER_TAG, SEX_MALE);
+							} else if (gender == User.GENDER_MAN) {
+								parsedUser.put(GENDER_TAG, SEX_FEMALE);
+							}
+							parsedUser.put(TELEPHONE_MOBILE_TAG,
+									user.getMobile_telephone());
+							parsedUser.put(TELEPHONE_HOME_TAG,
+									user.getHouse_telephone());
+							parsedUser.put(ADDRESS_TAG, user.getAddress());
+
+							parsedUser.saveInBackground(new SaveCallback() {
+								
+								@Override
+								public void done(ParseException e) {
+									if (e!=null) {
+										Log.d(LOG_TAG, "Error saving new user");
+										e.printStackTrace();
+									}else{
+										
+									}
+										
+								}
+							});
+							
+							listener.onCLientUpdateFinish(user, true);
+
+						} else {
+							Log.d(LOG_TAG, "Client " + user.getName()
+									+ " not updated:");
+							e.printStackTrace();
+							listener.onCLientUpdateFinish(user, false);
+						}
+					}
+				});
+
+	}
+
+	public static void insertUser(final ParseUserListener listener,
+			final User user) {
+
+		final ParseUser parsedUser = new ParseUser();
+		parsedUser.setUsername(user.getUsername());
+		parsedUser.setPassword(user.getPassword());
+		if (user.getEmail() != null) {
+			user.setEmail(user.getEmail());
+		}
+		parsedUser.put(NAME_TAG, user.getName());
+		parsedUser.put(LAST_NAME_TAG, user.getLastname());
+		parsedUser.put(EMAIL_TAG, user.getEmail());
+
+		int gender = user.getGender();
+		if (gender == User.GENDER_MAN) {
+			parsedUser.put(GENDER_TAG, SEX_MALE);
+		} else if (gender == User.GENDER_MAN) {
+			parsedUser.put(GENDER_TAG, SEX_FEMALE);
+		}
+
+		parsedUser.put(TELEPHONE_MOBILE_TAG, user.getMobile_telephone());
+
+		if (user.getHouse_telephone() != null) {
+			parsedUser.put(TELEPHONE_HOME_TAG, user.getHouse_telephone());
+		}
+
+		parsedUser.put(ADDRESS_TAG, user.getAddress());
+
+		parsedUser.signUpInBackground(new SignUpCallback() {
+
+			@Override
+			public void done(ParseException e) {
+				if (e != null) {
+					listener.onUserInsertFinish(user, false,
+							parsedUser.getObjectId());
+					e.printStackTrace();
+				} else {
+					listener.onUserInsertFinish(user, true,
+							parsedUser.getObjectId());
+				}
+
+			}
+		});
 	}
 
 	public static void getCurrentUser(Context context) {
@@ -247,7 +371,8 @@ public class ParseProvider {
 
 	public static void getAllMotives(final ParseServiceListener listener) {
 
-		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(SERVICE_TABLE);
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+				SERVICE_TABLE);
 		query.findInBackground(new FindCallback<ParseObject>() {
 
 			@Override
@@ -269,7 +394,7 @@ public class ParseProvider {
 							motive.setNeedsRequest(Service.NEED_REQUEST);
 						} else
 							motive.setNeedsRequest(Service.NOT_NEED_REQUEST);
-						
+
 						if (object.getInt(DURATION_TAG) != 0) {
 							motive.setDuration(object.getInt(DURATION_TAG));
 						}
@@ -290,15 +415,17 @@ public class ParseProvider {
 
 	}
 
-	public static void updateAllMotives(Context context, final ParseServiceListener listener) {
+	public static void updateAllMotives(Context context,
+			final ParseServiceListener listener) {
 
 		Date lastUpdate = ServiceProvider.getLastUpdate(context);
-		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(SERVICE_TABLE);
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+				SERVICE_TABLE);
 		if (lastUpdate != null) {
-			Log.d(LOG_TAG, CalendarUtil.getDateFormated(lastUpdate, "hh:mm dd MM yyyy"));
+			Log.d(LOG_TAG, CalendarUtil.getDateFormated(lastUpdate,
+					"hh:mm dd MM yyyy"));
 			query.whereGreaterThan(UPDATED_AT_TAG, lastUpdate);
-		}
-		else{
+		} else {
 			Log.d(LOG_TAG, "nuuuuull");
 		}
 
@@ -323,11 +450,20 @@ public class ParseProvider {
 							motive.setNeedsRequest(Service.NEED_REQUEST);
 						} else
 							motive.setNeedsRequest(Service.NOT_NEED_REQUEST);
-						
+
 						if (object.getInt(DURATION_TAG) != 0) {
 							motive.setDuration(object.getInt(DURATION_TAG));
 						}
-						Log.d(LOG_TAG,"HOOOLA"+" "+ motive.getName()+" "+motive.getSystem_id()+" "+CalendarUtil.getDateFormated(motive.getUpdated_at(), "hh:mm dd MM yyyy"));
+						Log.d(LOG_TAG,
+								"HOOOLA"
+										+ " "
+										+ motive.getName()
+										+ " "
+										+ motive.getSystem_id()
+										+ " "
+										+ CalendarUtil.getDateFormated(
+												motive.getUpdated_at(),
+												"hh:mm dd MM yyyy"));
 						motives.add(motive);
 					}
 
@@ -344,7 +480,81 @@ public class ParseProvider {
 
 		});
 
+	}
 
+	public static void updateClients(Context context,
+			final ParseUserListener listener) {
+
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(USER_TABLE);
+
+		Date lastUpdate = UserProvider.getLastUpdate(context);
+
+		if (lastUpdate == null) {
+			lastUpdate = new Date(0);
+		}
+
+		query.whereGreaterThan(UPDATED_AT_TAG, lastUpdate);
+		query.whereEqualTo(ADMIN_TAG, false);
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> clients, ParseException e) {
+				if (e == null) {
+					ArrayList<User> users = new ArrayList<User>();
+					if (clients.size() != 0) {
+						for (ParseObject parseUSer : clients) {
+
+							User user = new User();
+
+							user.setSystemId(parseUSer.getObjectId().toString());
+							user.setName(parseUSer.get(NAME_TAG).toString());
+							user.setLastname(parseUSer.get(LAST_NAME_TAG)
+									.toString());
+							user.setCedula(parseUSer.getInt(IDENTIFICATION_TAG));
+							user.setAddress(parseUSer.get(ADDRESS_TAG)
+									.toString());
+							user.setEmail(parseUSer.getString(EMAIL_TAG));
+
+							String gender = parseUSer.getString(GENDER_TAG);
+
+							if (gender.equals(SEX_MALE)) {
+								user.setGender(User.GENDER_MAN);
+							} else if (gender.equals(SEX_FEMALE)) {
+								user.setGender(User.GENDER_WOMAN);
+							}
+
+							user.setMobile_telephone(parseUSer
+									.getLong(TELEPHONE_MOBILE_TAG));
+							user.setHouse_telephone(parseUSer
+									.getLong(TELEPHONE_HOME_TAG));
+							user.setAdmin(parseUSer.getBoolean(ADMIN_TAG) ? 1
+									: 0);
+							user.setIsCurrentUser(User.NOT_CURRENT_USER);
+
+							Calendar Updated_At = Calendar.getInstance();
+							Updated_At.setTimeInMillis(parseUSer.getUpdatedAt()
+									.getTime());
+							user.setUpdated_at(Updated_At);
+
+							users.add(user);
+
+						}
+
+					} else {
+						Log.e(LOG_TAG, "No users found");
+						listener.onClientsQueryFinish(null, false);
+					}
+
+					listener.onClientsQueryFinish(users, true);
+				} else {
+					Log.e(LOG_TAG, "No users found: " + e.getMessage());
+					listener.onClientsQueryFinish(null, false);
+
+				}
+
+			}
+
+		});
 	}
 
 }

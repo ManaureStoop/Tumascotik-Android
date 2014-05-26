@@ -54,11 +54,11 @@ public class ItemPetGridAdapter extends BaseAdapter {
 
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.item_pet_view, null);
+			convertView = inflater.inflate(R.layout.item_picker_view, null);
 			holder = new ViewHolder();
 			
-			holder.petName = (TextView) convertView.findViewById(R.id.pet_item_textv_pet_name);
-			holder.petAvatar = (ImageView) convertView.findViewById(R.id.pet_item_imagev_pet_avatar);
+			holder.petName = (TextView) convertView.findViewById(R.id.picker_item_textv_name);
+			holder.petAvatar = (ImageView) convertView.findViewById(R.id.picker_item_imagev_avatar);
 			
 
 			convertView.setTag(holder);
@@ -67,10 +67,10 @@ public class ItemPetGridAdapter extends BaseAdapter {
 			//If view used to add pet
 			
 			if (holder == null) {
-				convertView = inflater.inflate(R.layout.item_pet_view, null);
+				convertView = inflater.inflate(R.layout.item_picker_view, null);
 				holder =  new ViewHolder();
-				holder.petName = (TextView) convertView.findViewById(R.id.pet_item_textv_pet_name);
-				holder.petAvatar = (ImageView) convertView.findViewById(R.id.pet_item_imagev_pet_avatar);
+				holder.petName = (TextView) convertView.findViewById(R.id.picker_item_textv_name);
+				holder.petAvatar = (ImageView) convertView.findViewById(R.id.picker_item_imagev_avatar);
 				convertView.setTag(holder);
 			}
 			

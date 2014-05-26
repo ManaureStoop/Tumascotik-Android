@@ -76,6 +76,7 @@ public class ViewRequestBaseAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
+		
 		String path = new String("mini_"+ String.valueOf(requests.get(position).getPet().getBreed().getSpecie().getName()));
 		holder.petName.setText(requests.get(position).getPet().getName().toString());
 		Service service = requests.get(position).getService();
@@ -87,7 +88,8 @@ public class ViewRequestBaseAdapter extends BaseAdapter {
 		holder.day.setText(totalDate);
 		
 		holder.time.setText(CalendarUtil.getDateFormated(requests.get(position).getStart_date(), "hh:mm a"));
-		holder.status.setText(status[requests.get(position).getStatus()-1]);
+		
+		
 		if (requests.get(position).getStatus() == Request.STATUS_ACCEPTED) {
 			holder.status.setTextColor(contxt.getResources().getColor(R.color.request_status_accepted));
 		}else if (requests.get(position).getStatus() == Request.STATUS_PENDING) {
@@ -95,9 +97,15 @@ public class ViewRequestBaseAdapter extends BaseAdapter {
 		}else if (requests.get(position).getStatus() == Request.STATUS_CANCELED) {
 			holder.status.setTextColor(contxt.getResources().getColor(R.color.request_status_canceled));
 		}
-		holder.status.setText(status[requests.get(position).getStatus()-1]);
 		holder.petAvatar.setImageResource(BitMapUtil.getImageId(contxt, path));
 		
+		  int statusIndex = requests.get(position).getStatus()-1;
+		    if (statusIndex == -1) {
+		    	Log.d("RequesttAdapter", "request : "+requests.get(position).getSystem_id()+" came with status 0");
+		    	statusIndex = 3;
+			}
+		    holder.status.setText(status[statusIndex]);
+			
 		return convertView;
 	}
 

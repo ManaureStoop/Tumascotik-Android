@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -150,11 +151,29 @@ public class ViewBudgets extends FragmentActivity implements ParseBudgetListener
 		
 		if (services.size()== selectedBudget.getServices().size()) {
 			progressDialog.dismiss();
-			DialogFragment newFragment = new BudgetItemDialog(getApplicationContext(), services);
+			DialogFragment newFragment = new BudgetItemDialog(getApplicationContext(), services, selectedBudget, this);
 			newFragment
 					.show(getSupportFragmentManager(), "itemdetails");	
 		}
 
+		
+	}
+	@Override
+	public void onBudgetStatusChanged(Budget budget) {
+//		progressDialog = ProgressDialog.show(
+//				ViewBudgets.this, "Tumascotik",
+//				getResources().getString(R.string.));
+		
+		ParseBudgetProvider.updateBugetStatus(this, this, budget);
+		
+	}
+	@Override
+	public void OnStatusChangedFinished(boolean b, Budget budget) {
+		if (b) {
+			BudgetProvider.updateBudget(this, budget);
+		}
+		progressDialog.dismiss();
+		refreshListView();
 		
 	}
 }

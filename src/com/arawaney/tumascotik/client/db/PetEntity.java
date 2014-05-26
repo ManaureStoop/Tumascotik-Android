@@ -25,7 +25,7 @@ public class PetEntity {
 			+ COLUMN_NAME 
 			+ " TEXT, "
 			+ COLUMN_USER_ID 
-			+ " INTEGER, "
+			+ " TEXT, "
 			+ COLUMN_COMMENT 
 			+ " TEXT, " 
 			+ COLUMN_BREED_ID 

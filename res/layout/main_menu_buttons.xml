@@ -13,6 +13,8 @@
         android:background="@drawable/buton_yellow"
         android:clickable="true"
         android:gravity="center"
+        android:paddingRight="@dimen/menu_buttons_padding"
+        android:paddingLeft="@dimen/menu_buttons_padding"
         android:text="@string/menu_make_appointment"
         android:textColor="@color/text_white"
         android:textSize="@dimen/big_oval_buttons" />
@@ -22,11 +24,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginBottom="@dimen/menu_buttons_margin"
+        android:layout_marginTop="@dimen/menu_buttons_margin"
         android:background="@drawable/buton_magenta"
         android:clickable="true"
         android:gravity="center"
+         android:paddingRight="@dimen/menu_buttons_padding"
+        android:paddingLeft="@dimen/menu_buttons_padding"
         android:text="@string/menu_view_appointment"
         android:textColor="@color/text_white"
         android:textSize="@dimen/big_oval_buttons" />
@@ -40,6 +44,8 @@
         android:clickable="true"
         android:gravity="center"
         android:text="@string/menu_budget"
+         android:paddingRight="@dimen/menu_buttons_padding"
+        android:paddingLeft="@dimen/menu_buttons_padding"
         android:textColor="@color/text_white"
         android:textSize="@dimen/big_oval_buttons" />
 

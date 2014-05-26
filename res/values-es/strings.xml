@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Tumascotikmenu</string>
+    <string name="app_name">Tumascotik</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_tumascotik">Tumascotik</string>
     <string name="menu_pedircita"> Pedir Cita </string>
@@ -85,8 +85,11 @@
     <!-- MENU -->
     <string name="menu_my_profile">Mi Perfil</string>
     <string name="menu_my_pets">Mis Mascotas</string>
+    <string name="menu_view_pets">Ver Mascotas</string>
+    <string name="menu_my_clients">Mis Clientes</string>
     <string name="menu_make_appointment">Pedir Cita</string>
     <string name="menu_view_appointment">Mis Citas</string>
+    <string name="menu_my_orders">Ver Pedidos</string>
     <string name="menu_budget">Presupuestos</string>
     <string name="main_load_backend_data_dialog">Cargando datos de Tumascotik. Este proceso puede tomar algunos minutos.</string>
 
@@ -117,15 +120,27 @@
 
     <!-- User Info -->
     <string name="user_info_button_edit">Editar</string>
-    <string name="user_info_button_save">GUardar</string>
+    <string name="user_info_button_save">Guardar</string>
+    <string name="user_info_button_saving">Guardando usuario</string>
     <string name="user_info_title_name">Nombres</string>
     <string name="user_info_title_lastname">Apellidos</string>
+    <string name="user_info_title_username">Username</string>
+    <string name="user_info_title_password">Contraseña</string>
+    <string name="user_info_title_confirm_password">Confirmar Contraseña</string>
     <string name="user_info_title_email">Email</string>
     <string name="user_info_title_address">Dirección</string>
     <string name="user_info_title_gender">Sexo</string>
     <string name="user_info_title_phone_home">Teléfono Fijo</string>
     <string name="user_info_title_phone_mobile">Teléfono Celular</string>
     <string name="user_info_user_not_updated">En este momento no es posible actualizar tus datos</string>
+    <string name="user_info_user_not_inserted">En este momento no es posible agregar al usuario</string>
+    <string name="user_info_data_missing_name">Por favor pon el nombre</string>
+    <string name="user_info_data_missing_lastname">Por favor pon el apellido</string>
+    <string name="user_info_data_missing_username">Por favor pon el username</string>
+    <string name="user_info_data_missing_password">Por favor pon el password</string>
+    <string name="user_info_data_no_match_password">Las contraseñas no coniciden</string>
+    <string name="user_info_data_missing_address">Por favor pon una dirección</string>
+    <string name="user_info_data_missing_cellphone">Por favor pon un celular válido</string>
 
     <!-- Set Date -->
     <string name="set_date_time_title">Hora: </string>
@@ -151,17 +166,26 @@
 
     <!-- Send Request -->
     <string name="send_request_sending">Enviando...</string>
-    <string name="send_request_details_title">Resumen</string>
-    <string name="send_request_details_text_1">Estimado/a </string>
-    <string name="send_request_details_text_2">,\n la cita para </string>
-    <string name="send_request_details_text_3"> se pautará para el día : \n</string>
+    <string name="send_request_details_title">Coco</string>
+    <string name="send_request_details_text_motive">Cita para :  </string>
+    <string name="send_request_details_text_date">Fecha :  </string>
+    <string name="send_request_details_text_time">Hora :</string>
+    <string name="send_request_details_text_price"> Precio: Bs. </string>
+    <string name="send_request_details_text_duration"> Duración : </string>
+    <string name="send_request_details_text_delivery_yes"> A Domicilio : No</string>
+    <string name="send_request_details_text_delvery_no"> A Domicilio : Si</string>
+    <string name="send_request_details_hour_sufix"> horas</string>
+    <string name="send_request_details_motive_missing">Por favor selecciona un motivo</string>
 
     <!-- Request View -->
     <string name="request_view_title">Cita para : </string>
     <string name="request_view_day">Dia: </string>
     <string name="request_view_time">Hora: </string>
     <string name="request_view_dialog_conector">para</string>
-    <string name="request_view_dialog_cancel_button">Cancelar Cita</string>
+    <string name="request_view_dialog_cancel_button">Rechazar Cita</string>
+    <string name="request_view_dialog_accept_button">Aceptar Cita</string>
+    <string name="request_view_process_cancelling">Cancelando Cita...</string>
+    <string name="request_view_process_accepting">Aceptando Cita...</string>
     <string name="request_view_zero_data">No has \n generado ninguna cita aún...</string>
 
     <!-- Request Notification -->
@@ -177,19 +201,27 @@
     <string name="budget_zero_data">No has \n agregado nada aún...</string>
     <string name="budget_updating_prices">Actualizando precios</string>
     <string name="budget_downloading_prices">Descargando precios...</string>
+    <string name="budget_updating_budgets">Actualizando estado de presupuesto...</string>
     <string name="budget_dialog_ok">OK</string>
     <string name="budget_dialog_cancel">Cancelar</string>
     <string name="budget_dialog_send">Enviar</string>
     <string name="budget_dialog_send_title">Estimado cliente</string>
     <string name="budget_dialog_send_body">¿Desea hacer el pedido a su veterinario por un total de Bs.</string>
     <string name="budget_dialog_delete_from_list">Eliminar de la lista</string>
-     <string name="budget_sending_order">Enviando orden...</string>
+    <string name="budget_sending_order">Enviando pedido...</string>
+    <string name="budget_send_order">Enviar pedido</string>
 
-     <!-- Budget View -->
-     <string name="budget_dialog_title">Productos</string>
+    <!-- Budget View -->
+    <string name="budget_dialog_title">Productos</string>
     <string name="budget_date_title">Fecha de emisión : </string>
     <string name="budget_actionbar_title">Mis Pedidos</string>
-     
+    <string name="budget_dialog_order_ready">Pedido Listo</string>
+    <string name="budget_dialog_cancel_order">Cancelar Pedido</string>
+    <string name="budget_dialog_order_delivered">Pedido Entregado</string>
+
+    <!-- Budget/Request View -->
+    <string name="budget_request_dialog__back">Volver</string>
+
     <string-array name="Genders">
         <item>--Elija--</item>
         <item>Macho</item>

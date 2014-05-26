@@ -163,7 +163,7 @@ public class ServiceProvider {
 		ArrayList<Service> motives = new ArrayList<Service>();
 
 		final Cursor cursor = context.getContentResolver().query(URI_SERVICE,
-				null, null, null, null);
+				null, null, null, ServiceEntity.COLUMN_NAME +" ASC");
 
 		Service motive = null;
 
@@ -227,7 +227,7 @@ public class ServiceProvider {
 
 
 		final Cursor cursor = context.getContentResolver().query(URI_SERVICE,
-				null, condition, null, null);
+				null, condition, null, ServiceEntity.COLUMN_NAME +" ASC");
 
 		Service motive = null;
 
@@ -291,7 +291,8 @@ public class ServiceProvider {
 
 
 		final Cursor cursor = context.getContentResolver().query(URI_SERVICE,
-				null, condition, null, null);
+				null, condition, null, ServiceEntity.COLUMN_NAME +" ASC"
+				);
 
 		Service motive = null;
 

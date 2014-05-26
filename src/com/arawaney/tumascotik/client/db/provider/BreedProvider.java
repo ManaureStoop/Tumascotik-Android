@@ -318,7 +318,7 @@ public class BreedProvider {
 				+ "'";
 
 		final Cursor cursor = context.getContentResolver().query(URI_BREED,
-				null, condition, null, null);
+				null, condition, null, BreedEntity.COLUMN_NAME+" ASC");
 
 		Breed breed = null;
 

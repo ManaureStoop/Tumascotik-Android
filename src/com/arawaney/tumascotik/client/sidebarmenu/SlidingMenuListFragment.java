@@ -14,9 +14,11 @@ import android.widget.ListView;
 
 import com.arawaney.tumascotik.client.MainActivity;
 import com.arawaney.tumascotik.client.R;
+import com.arawaney.tumascotik.client.activity.ClientPicker;
 import com.arawaney.tumascotik.client.activity.PetPicker;
 import com.arawaney.tumascotik.client.activity.UserInfoActivity;
 import com.arawaney.tumascotik.client.control.MainController;
+import com.arawaney.tumascotik.client.db.provider.UserProvider;
 import com.arawaney.tumascotik.client.model.User;
 import com.arawaney.tumascotik.client.sidebarmenu.SlidingMenuListAdapter;
 import com.arawaney.tumascotik.client.sidebarmenu.SlidingMenuListItem;
@@ -75,16 +77,17 @@ public class SlidingMenuListFragment extends ListFragment {
 		List<SlidingMenuListItem> menuList = new ArrayList<SlidingMenuListItem>();
 		if (user != null) {
 			if (user.getisAdmin() == User.IS_ADMIN) {
+				Intent petIntent = new Intent(getActivity(), ClientPicker.class);
+				SlidingMenuListItem myPetItem = new SlidingMenuListItem(1,
+						getString(R.string.menu_my_clients),
+						getResources().getDrawable(
+								R.drawable.ic_users),
+						petIntent);
+
+				menuList.add(myPetItem);
 
 			} else if (user.getisAdmin() == User.NOT_ADMIN) {
-				Intent profileIntent = new Intent(getActivity(),
-						UserInfoActivity.class);
-				SlidingMenuListItem myProfileItem = new SlidingMenuListItem(0,
-						getString(R.string.menu_my_profile),
-						getResources().getDrawable(
-								R.drawable.ic_menu_user),
-						profileIntent);
-
+				
 				Intent petIntent = new Intent(getActivity(), PetPicker.class);
 				SlidingMenuListItem myPetItem = new SlidingMenuListItem(1,
 						getString(R.string.menu_my_pets),
@@ -93,8 +96,18 @@ public class SlidingMenuListFragment extends ListFragment {
 						petIntent);
 
 				menuList.add(myPetItem);
-				menuList.add(myProfileItem);
+				
 			}
+			MainController.setCLIENTUSER(UserProvider.readMainUser(context));
+			Intent profileIntent = new Intent(getActivity(),
+					UserInfoActivity.class);
+			SlidingMenuListItem myProfileItem = new SlidingMenuListItem(0,
+					getString(R.string.menu_my_profile),
+					getResources().getDrawable(
+							R.drawable.ic_menu_user),
+					profileIntent);
+			menuList.add(myProfileItem);
+
 		}else{
 			
 		}

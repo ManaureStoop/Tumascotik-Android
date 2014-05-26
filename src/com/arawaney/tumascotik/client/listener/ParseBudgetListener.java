@@ -18,5 +18,10 @@ public interface ParseBudgetListener {
 	void onBudgetRemoveFinished(Budget budget);
 
 	void onOnePriceQueryFinished(BudgetService budgetService);
+	
+	void onBudgetStatusChanged(Budget budget);
+
+	void OnStatusChangedFinished(boolean b, Budget budget);
+	
 
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import android.R.string;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.UserManager;
@@ -39,6 +40,7 @@ import com.arawaney.tumascotik.client.listener.ParsePetListener;
 import com.arawaney.tumascotik.client.listener.ParseUserListener;
 import com.arawaney.tumascotik.client.model.Pet;
 import com.arawaney.tumascotik.client.model.User;
+import com.arawaney.tumascotik.client.util.BitMapUtil;
 import com.arawaney.tumascotik.client.util.FontUtil;
 import com.arawaney.tumascotik.client.util.NetworkUtil;
 
@@ -55,8 +57,15 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 	TextView userPhoneMobileSeparator;
 	TextView userPhoneLocalSeparator;
 	TextView userAddress;
+	TextView username;
+	TextView password;
+	TextView confirmPassword;
+
 	LinearLayout nameLayout;
 	LinearLayout lastnameLayout;
+	LinearLayout usernameLayout;
+	LinearLayout passwordLayout;
+	LinearLayout confirmPasswordLayout;
 
 	EditText edituserName;
 	EditText edituserLastName;
@@ -66,8 +75,11 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 	EditText edituserPhoneMobile;
 	EditText edituserPhoneMobilePrefix;
 	EditText edituserAddress;
-	ImageView alertUserCellphone;
-	ImageView alertUserAdress;
+	EditText editUsername;
+	EditText editPassword;
+	EditText editConfirmPassword;
+
+	Button buttonViewPets;
 
 	Spinner edituserGender;
 
@@ -95,11 +107,12 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 
 		setContentView(R.layout.activity_user_info);
 
-		user = UserProvider.readUser(this);
+		user = MainController.getCLIENTUSER();
 
 		if (user != null) {
-
-			getUpdatedUser();
+			if (!newUser()) {
+				getUpdatedUser();
+			}
 
 			loadViews();
 			loadButton();
@@ -127,6 +140,9 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 		userPhoneLocalSeparator = (TextView) findViewById(R.id.text_user_info_phone_local_separator);
 		userPhoneMobileSeparator = (TextView) findViewById(R.id.text_user_info_phone_mobile_separator);
 		userAddress = (TextView) findViewById(R.id.text_user_info_address);
+		username = (TextView) findViewById(R.id.TextView_user_ifo_username_title);
+		password = (TextView) findViewById(R.id.TextView_user_ifo_password_title);
+		confirmPassword = (TextView) findViewById(R.id.TextView_user_ifo_confirm_password_title);
 
 		edituserName = (EditText) findViewById(R.id.edit_text_user_info_name);
 		edituserLastName = (EditText) findViewById(R.id.edit_text_user_info_lastname);
@@ -137,45 +153,89 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 		edituserPhoneLocalPrefix = (EditText) findViewById(R.id.edittext_user_info_phone_local_prefix);
 		edituserPhoneMobilePrefix = (EditText) findViewById(R.id.edittext_user_info_phone_mobile_prefix);
 		edituserAddress = (EditText) findViewById(R.id.edittext_user_info_address);
-		alertUserAdress = (ImageView) findViewById(R.id.imageView_alert_user_info_address);
-		alertUserCellphone =  (ImageView) findViewById(R.id.imageView_alert_user_info_phone_mobile);
-		
-		
-		
+		buttonViewPets = (Button) findViewById(R.id.button_pet_info_view_pets);
+		editUsername = (EditText) findViewById(R.id.EditText_user_ifo_username);
+		editPassword = (EditText) findViewById(R.id.EditText_user_ifo_password);
+		editConfirmPassword = (EditText) findViewById(R.id.EditText_user_ifo_confirm_password);
+
 		nameLayout = (LinearLayout) findViewById(R.id.tlayout_user_info_name);
 		lastnameLayout = (LinearLayout) findViewById(R.id.tlayout_user_info_lastname);
-
+		usernameLayout = (LinearLayout) findViewById(R.id.LinearLayout_user_info_username);
+		passwordLayout = (LinearLayout) findViewById(R.id.LinearLayout_user_info_password);
+		confirmPasswordLayout = (LinearLayout) findViewById(R.id.LinearLayout_user_info_confirm_password);
 		saveEditButton = (ImageView) findViewById(R.id.button_user_info_edit_save);
 
 		GenderAdapter = ArrayAdapter.createFromResource(this,
 				R.array.User_Genders, android.R.layout.simple_spinner_item);
 		genders = Arrays.asList(getResources().getStringArray(
 				R.array.User_Genders));
-		
+
+		confirmPasswordLayout.setVisibility(View.GONE);
+		usernameLayout.setVisibility(View.GONE);
+		passwordLayout.setVisibility(View.GONE);
+
+		if (!newUser()) {
+			if (userIsClient()) {
+				saveEditButton.setVisibility(View.GONE);
+			}
+		}
+
 		setFonts();
 
 	}
 
-	private void setFonts() {
-		
-		userCompleteName.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_THIN));
-		userEmail.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		userGender.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		userPhoneLocal.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		userPhoneMobile.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		userPhoneLocalSeparator.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		userPhoneMobileSeparator.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		userAddress.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+	private boolean userIsClient() {
+		if (MainController.USER.getisAdmin() == User.IS_ADMIN) {
+			if (MainController.getCLIENTUSER().getisAdmin() == User.NOT_ADMIN) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-		edituserName.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		edituserLastName.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		edituserEmail.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		edituserPhoneLocal.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		edituserPhoneMobile.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		edituserPhoneLocalPrefix.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		edituserPhoneMobilePrefix.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		edituserAddress.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		
+	private void setFonts() {
+
+		userCompleteName.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_THIN));
+		userEmail
+				.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		userGender.setTypeface(FontUtil
+				.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		userPhoneLocal.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		userPhoneMobile.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		userPhoneLocalSeparator.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		userPhoneMobileSeparator.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		userAddress.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		editUsername.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		editPassword.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		editConfirmPassword.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		edituserName.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		edituserLastName.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		edituserEmail.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		edituserPhoneLocal.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		edituserPhoneMobile.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		edituserPhoneLocalPrefix.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		edituserPhoneMobilePrefix.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		edituserAddress.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+		buttonViewPets.setTypeface(FontUtil.getTypeface(this,
+				FontUtil.ROBOTO_LIGHT));
+
 	}
 
 	private void loadButton() {
@@ -188,20 +248,27 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 						viewMode = MODE_EDIT_LIST;
 						refreshView();
 					} else if (viewMode == MODE_EDIT_LIST) {
-						viewMode = MODE_INFO_LIST;
 						saveUser();
-						if (userDataChanged()) {
-							setSavingUserDialog();
-							updateUser();
-						}else{
-							refreshView();
+						if (newUser()) {
+							Log.d(LOG_TAG, "New user");
+							if (checkFields()) {
+								setSavingUserDialog();
+								insertUser();
+								Log.d(LOG_TAG, "Fields checked");
+							}
+						} else {
+							if (userDataChanged()) {
+								if (checkFields()) {
+									setSavingUserDialog();
+									updateUser();
+								}
+							} else {
+								refreshView();
+							}
 						}
-						
-					
 					}
 
 				}
-
 
 				private void saveUser() {
 					auxUser = new User(user);
@@ -209,40 +276,201 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 					auxUser.setLastname(edituserLastName.getText().toString());
 					auxUser.setEmail(edituserEmail.getText().toString());
 					auxUser.setGender(edituserGender.getSelectedItemPosition());
-					auxUser.setHouse_telephone(Long
-							.parseLong(edituserPhoneLocalPrefix.getText()
-									.toString()
-									+ edituserPhoneLocal.getText().toString()));
-					auxUser.setMobile_telephone(Long
-							.parseLong(edituserPhoneMobilePrefix.getText()
-									.toString()
-									+ edituserPhoneMobile.getText().toString()));
+
+					if (edituserPhoneLocalPrefix.getText().toString().trim()
+							.length() != 0
+							&& edituserPhoneLocal.getText().toString().trim()
+									.length() != 0) {
+						auxUser.setHouse_telephone(Long
+								.parseLong(edituserPhoneLocalPrefix.getText()
+										.toString().trim()
+										+ edituserPhoneLocal.getText()
+												.toString().trim()));
+					}
+					if (edituserPhoneMobilePrefix.getText().toString().trim()
+							.length() != 0
+							&& edituserPhoneMobile.getText().toString().trim()
+									.length() != 0) {
+						auxUser.setMobile_telephone(Long
+								.parseLong(edituserPhoneMobilePrefix.getText()
+										.toString().trim()
+										+ edituserPhoneMobile.getText()
+												.toString().trim()));
+					}
+
 					auxUser.setAddress(edituserAddress.getText().toString());
 
 				}
-				
-				private boolean userDataChanged() {	
+
+				private boolean checkFields() {
+
+					if (edituserName.getText().toString().length() == 0) {
+						edituserName.requestFocus();
+						Toast toast = Toast.makeText(
+								UserInfoActivity.this,
+								getResources().getString(
+										R.string.user_info_data_missing_name),
+								Toast.LENGTH_LONG);
+						toast.setGravity(Gravity.CENTER, 0, 0);
+						toast.show();
+						return false;
+					}
+					auxUser.setName(edituserName.getText().toString());
+
+					if (edituserLastName.getText().toString().length() == 0) {
+						edituserLastName.requestFocus();
+						Toast toast = Toast
+								.makeText(
+										UserInfoActivity.this,
+										getResources()
+												.getString(
+														R.string.user_info_data_missing_lastname),
+										Toast.LENGTH_LONG);
+						toast.setGravity(Gravity.CENTER, 0, 0);
+						toast.show();
+						return false;
+					}
+					auxUser.setLastname(edituserLastName.getText().toString());
+
+					if (newUser()) {
+						if (editUsername.getText().toString().length() == 0) {
+							editUsername.requestFocus();
+							Toast toast = Toast
+									.makeText(
+											UserInfoActivity.this,
+											getResources()
+													.getString(
+															R.string.user_info_data_missing_username),
+											Toast.LENGTH_LONG);
+							toast.setGravity(Gravity.CENTER, 0, 0);
+							toast.show();
+							return false;
+						}
+						auxUser.setUsername(editUsername.getText().toString());
+
+						if (editPassword.getText().toString().length() == 0) {
+							editPassword.requestFocus();
+							Toast toast = Toast
+									.makeText(
+											UserInfoActivity.this,
+											getResources()
+													.getString(
+															R.string.user_info_data_missing_password),
+											Toast.LENGTH_LONG);
+							toast.setGravity(Gravity.CENTER, 0, 0);
+							toast.show();
+							return false;
+						}
+						auxUser.setPassword(editPassword.getText().toString());
+
+						if (editConfirmPassword.getText().toString().length() == 0) {
+							editConfirmPassword.requestFocus();
+							Toast toast = Toast
+									.makeText(
+											UserInfoActivity.this,
+											getResources()
+													.getString(
+															R.string.user_info_data_missing_password),
+											Toast.LENGTH_LONG);
+							toast.setGravity(Gravity.CENTER, 0, 0);
+							toast.show();
+							return false;
+						}
+						if (!editPassword
+								.getText()
+								.toString()
+								.equals(editConfirmPassword.getText()
+										.toString())) {
+							editPassword.requestFocus();
+							Toast toast = Toast
+									.makeText(
+											UserInfoActivity.this,
+											getResources()
+													.getString(
+															R.string.user_info_data_no_match_password),
+											Toast.LENGTH_LONG);
+							toast.setGravity(Gravity.CENTER, 0, 0);
+							toast.show();
+							return false;
+						}
+					}
+					if (edituserAddress.getText().toString().length() == 0) {
+						edituserAddress.requestFocus();
+						Toast toast = Toast
+								.makeText(
+										UserInfoActivity.this,
+										getResources()
+												.getString(
+														R.string.user_info_data_missing_address),
+										Toast.LENGTH_LONG);
+						toast.setGravity(Gravity.CENTER, 0, 0);
+						toast.show();
+						return false;
+					}
+					auxUser.setAddress(edituserAddress.getText().toString());
+
+					if (edituserPhoneMobilePrefix.getText().toString().trim()
+							.length() == 0
+							|| edituserPhoneMobile.getText().toString().trim()
+									.length() == 0) {
+						edituserPhoneMobile.requestFocus();
+						Toast toast = Toast
+								.makeText(
+										UserInfoActivity.this,
+										getResources()
+												.getString(
+														R.string.user_info_data_missing_cellphone),
+										Toast.LENGTH_LONG);
+						toast.setGravity(Gravity.CENTER, 0, 0);
+						toast.show();
+						return false;
+					}
+					auxUser.setMobile_telephone((Long
+							.parseLong(edituserPhoneMobilePrefix.getText()
+									.toString().trim()
+									+ edituserPhoneMobile.getText().toString()
+											.trim())));
+
+					return true;
+				}
+
+				private boolean userDataChanged() {
 					boolean changed = false;
 
 					if (!auxUser.getName().equals(user.getName())) {
 						changed = true;
-					}else if (!auxUser.getLastname().equals(user.getLastname())) {
+					} else if (!auxUser.getLastname()
+							.equals(user.getLastname())) {
 						changed = true;
-					}else if (!auxUser.getEmail().equals(user.getEmail())) {
+					} else if (!auxUser.getEmail().equals(user.getEmail())) {
 						changed = true;
-					}else if (!auxUser.getHouse_telephone().equals(user.getHouse_telephone())) {
+					} else if (!auxUser.getHouse_telephone().equals(
+							user.getHouse_telephone())) {
 						changed = true;
-					}else if (!auxUser.getMobile_telephone().equals(user.getMobile_telephone())) {
+					} else if (!auxUser.getMobile_telephone().equals(
+							user.getMobile_telephone())) {
 						changed = true;
-					}else if (!auxUser.getAddress().equals(user.getAddress())) {
+					} else if (!auxUser.getAddress().equals(user.getAddress())) {
 						changed = true;
-					}else if (auxUser.getGender() != user.getGender()) {
+					} else if (auxUser.getGender() != user.getGender()) {
 						changed = true;
 					}
-					
+
 					return changed;
 				}
 
+			});
+
+			buttonViewPets.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Intent i = new Intent(UserInfoActivity.this,
+							PetPicker.class);
+					PetPicker.functionMode = PetPicker.MODE_EDIT_PET;
+					startActivity(i);
+
+				}
 			});
 
 		}
@@ -260,7 +488,8 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 	}
 
 	private void setSavingUserDialog() {
-		progressDialog = ProgressDialog.show(this, "", "Guardando user");
+		progressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.user_info_button_saving));
+		progressDialog.setCancelable(true);
 	}
 
 	private void setEditView() {
@@ -270,8 +499,7 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 		userPhoneLocal.setVisibility(View.GONE);
 		userPhoneMobile.setVisibility(View.GONE);
 		userAddress.setVisibility(View.GONE);
-		alertUserAdress.setVisibility(View.GONE);
-		alertUserCellphone.setVisibility(View.GONE);
+		buttonViewPets.setVisibility(View.GONE);
 
 		edituserName.setVisibility(View.VISIBLE);
 		edituserLastName.setVisibility(View.VISIBLE);
@@ -284,6 +512,12 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 		edituserAddress.setVisibility(View.VISIBLE);
 		userPhoneMobileSeparator.setVisibility(View.VISIBLE);
 		userPhoneLocalSeparator.setVisibility(View.VISIBLE);
+
+		if (newUser()) {
+			confirmPasswordLayout.setVisibility(View.VISIBLE);
+			usernameLayout.setVisibility(View.VISIBLE);
+			passwordLayout.setVisibility(View.VISIBLE);
+		}
 
 		nameLayout.setVisibility(View.VISIBLE);
 		lastnameLayout.setVisibility(View.VISIBLE);
@@ -311,43 +545,55 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 
 		if (user.getAddress() != null) {
 			edituserAddress.setText(user.getAddress());
-		}else{
-			alertUserAdress.setVisibility(View.VISIBLE);
 		}
 
 		if (user.getMobile_telephone() != null) {
-			if (user.getMobile_telephone()!=0) {
-				edituserPhoneMobile.setText(user
-						.getMobile_telephone()
-						.toString()
-						.subSequence(3,
-								user.getMobile_telephone().toString().length()));
+			if (user.getMobile_telephone() != 0) {
+				edituserPhoneMobile
+						.setText(user
+								.getMobile_telephone()
+								.toString()
+								.subSequence(
+										3,
+										user.getMobile_telephone().toString()
+												.length()));
 				edituserPhoneMobilePrefix.setText(user.getMobile_telephone()
 						.toString().subSequence(0, 3));
-			}else{
-			edituserPhoneMobile.setText(" ");
-			edituserPhoneMobilePrefix.setText(" ");}
+			} else {
+				edituserPhoneMobile.setText(" ");
+				edituserPhoneMobilePrefix.setText(" ");
+			}
 
-		}else{
-			alertUserCellphone.setVisibility(View.VISIBLE);
 		}
 		if (user.getHouse_telephone() != null) {
-			if (user.getHouse_telephone()!=0) {
-			edituserPhoneLocal.setText(user
-					.getHouse_telephone()
-					.toString()
-					.subSequence(3,
-							user.getHouse_telephone().toString().length()));
-			edituserPhoneLocalPrefix.setText(user.getHouse_telephone()
-					.toString().subSequence(0, 3));}
-			else{
+			if (user.getHouse_telephone() != 0) {
+				edituserPhoneLocal.setText(user
+						.getHouse_telephone()
+						.toString()
+						.subSequence(3,
+								user.getHouse_telephone().toString().length()));
+				edituserPhoneLocalPrefix.setText(user.getHouse_telephone()
+						.toString().subSequence(0, 3));
+			} else {
 				edituserPhoneLocal.setText(" ");
 				edituserPhoneLocalPrefix.setText(" ");
-				
+
+			}
+			if (newUser()) {
+				usernameLayout.setVisibility(View.VISIBLE);
+				passwordLayout.setVisibility(View.VISIBLE);
 			}
 
 		}
 		saveEditButton.setImageResource(R.drawable.buton_check);
+
+		String path;
+		if (user.getGender() == User.GENDER_WOMAN) {
+			path = "user_female";
+		} else {
+			path = "user_male";
+		}
+		userAvatar.setImageResource(BitMapUtil.getImageId(this, path));
 
 	}
 
@@ -370,13 +616,19 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 		edituserAddress.setVisibility(View.GONE);
 		userPhoneMobileSeparator.setVisibility(View.GONE);
 		userPhoneLocalSeparator.setVisibility(View.GONE);
-		alertUserAdress.setVisibility(View.GONE);
-		alertUserCellphone.setVisibility(View.GONE);
+
+		confirmPasswordLayout.setVisibility(View.GONE);
+		usernameLayout.setVisibility(View.GONE);
+		passwordLayout.setVisibility(View.GONE);
 
 		nameLayout.setVisibility(View.GONE);
 		lastnameLayout.setVisibility(View.GONE);
 
-		if (user.getName() != null && user.getLastname()!= null) {
+		if (!userIsClient()) {
+			buttonViewPets.setVisibility(View.GONE);
+		}
+
+		if (user.getName() != null && user.getLastname() != null) {
 			userCompleteName.setText(user.getName() + " " + user.getLastname());
 		}
 
@@ -404,25 +656,41 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 		}
 		saveEditButton.setImageResource(R.drawable.buton_edit);
 
+		String path;
+		if (user.getGender() == User.GENDER_WOMAN) {
+			path = "user_female";
+		} else {
+			path = "user_male";
+		}
+		userAvatar.setImageResource(BitMapUtil.getImageId(this, path));
+
 	}
 
 	private void updateUser() {
 		ParseProvider.updateUser(this, auxUser);
 	}
 
+	private void insertUser() {
+		ParseProvider.insertUser(this, auxUser);
+	}
+
+	private void updateClient() {
+		ParseProvider.updateClient(this, auxUser);
+	}
+
 	@Override
 	public void OnLoginResponse() {
-		// TODO Auto-generated method stub
+		ParseProvider.updateClient(this, auxUser);
 
 	}
 
 	@Override
 	public void onUserUpdateFinish(User user, boolean updated) {
 		if (updated) {
-			Log.d(LOG_TAG, "updated!!");
 			this.user = new User(user);
 			this.user.setUpdated_at(Calendar.getInstance());
 			UserProvider.updateUser(this, this.user);
+			viewMode = MODE_INFO_LIST;
 		} else {
 			Toast.makeText(
 					getApplicationContext(),
@@ -444,6 +712,52 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 			UserProvider.updateUser(this, this.user);
 			refreshView();
 		}
+	}
+
+	@Override
+	public void onClientsQueryFinish(ArrayList<User> users, boolean b) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private boolean newUser() {
+		return (user.getSystemId() == null);
+	}
+
+	@Override
+	public void onUserInsertFinish(User user, boolean inserted, String systemId) {
+
+		if (inserted) {
+			user.setSystemId(systemId);
+			UserProvider.insertUser(this, user);
+			viewMode = MODE_INFO_LIST;
+		} else {
+			Toast.makeText(
+					getApplicationContext(),
+					getResources().getString(
+							R.string.user_info_user_not_inserted),
+					Toast.LENGTH_LONG).show();
+		}
+		progressDialog.dismiss();
+		refreshView();
+	}
+
+	@Override
+	public void onCLientUpdateFinish(User user, boolean b) {
+		if (b) {
+			this.user = new User(user);
+			this.user.setUpdated_at(Calendar.getInstance());
+			UserProvider.updateUser(this, user);
+			viewMode = MODE_INFO_LIST;
+		} else {
+			Toast.makeText(
+					getApplicationContext(),
+					getResources().getString(
+							R.string.user_info_user_not_updated),
+					Toast.LENGTH_LONG).show();
+		}
+		progressDialog.dismiss();
+		refreshView();
 	}
 
 }

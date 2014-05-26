@@ -19,6 +19,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -48,10 +49,10 @@ public class BudgetActivity extends SherlockFragmentActivity implements
 	private static final String LOG_TAG = "Tumascotik-Client-BudgetActivity";
 
 	ImageView add;
-	ImageView sendBudget;
+	TextView sendBudget;
 	ImageView deleteall;
-	ImageView cancelAll;
 	ListView budgetsLists;
+	LinearLayout listLayout;
 	RelativeLayout zeroDataLayout;
 	TextView totalprice;
 	Boolean flagclick;
@@ -133,19 +134,6 @@ public class BudgetActivity extends SherlockFragmentActivity implements
 			}
 		});
 
-		cancelAll.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (budget != null) {
-					BudgetProvider.removeBudget(getApplicationContext(),
-							budget.getId());
-				}
-
-				finish();
-
-			}
-		});
 	}
 
 	public void refreshView() {
@@ -157,10 +145,14 @@ public class BudgetActivity extends SherlockFragmentActivity implements
 
 		if (budget == null) {
 			setEmptyDataView();
+			totalprice.setVisibility(View.GONE);
 		} else if (budget.getServices() == null) {
 			setEmptyDataView();
+			totalprice.setVisibility(View.GONE);
+
 		} else {
 			setListView();
+			totalprice.setVisibility(View.VISIBLE);
 
 		}
 
@@ -170,7 +162,7 @@ public class BudgetActivity extends SherlockFragmentActivity implements
 		deleteall.setClickable(true);
 		sendBudget.setClickable(true);
 
-		budgetsLists.setVisibility(View.VISIBLE);
+		listLayout.setVisibility(View.VISIBLE);
 		zeroDataLayout.setVisibility(View.GONE);
 
 		totalServices = budget.getServices().size();
@@ -182,6 +174,8 @@ public class BudgetActivity extends SherlockFragmentActivity implements
 	private void setUpdatingPricesDialog() {
 		progressDialog = ProgressDialog.show(this, "", getResources()
 				.getString(R.string.budget_updating_prices));
+		 progressDialog.setCancelable(true);
+
 	}
 
 	private void updatePrices() {
@@ -194,7 +188,7 @@ public class BudgetActivity extends SherlockFragmentActivity implements
 		deleteall.setClickable(false);
 		sendBudget.setClickable(false);
 
-		budgetsLists.setVisibility(View.GONE);
+		listLayout.setVisibility(View.GONE);
 		zeroDataLayout.setVisibility(View.VISIBLE);
 
 	}
@@ -208,13 +202,13 @@ public class BudgetActivity extends SherlockFragmentActivity implements
 	private void loadViews() {
 
 		add = (ImageView) findViewById(R.id.bagregpresp);
-		sendBudget = (ImageView) findViewById(R.id.bhacerpedidopresp);
+		sendBudget = (TextView) findViewById(R.id.bhacerpedidopresp);
 		deleteall = (ImageView) findViewById(R.id.bdeleteallpresp);
 		totalprice = (TextView) findViewById(R.id.txttotal);
 		budgetsLists = (ListView) findViewById(R.id.listview_budgets);
+		listLayout  = (LinearLayout) findViewById(R.id.relativeLayout_budget_list);
 		zeroDataLayout = (RelativeLayout) findViewById(R.id.layout_budget_zero_data);
 		zeroDataText = (TextView) findViewById(R.id.textView_budget_zero_data);
-		cancelAll = (ImageView) findViewById(R.id.button_budget_cancel_budget);
 
 		totalprice.setTypeface(FontUtil
 				.getTypeface(this, FontUtil.ROBOTO_LIGHT));
@@ -309,6 +303,8 @@ public class BudgetActivity extends SherlockFragmentActivity implements
 	private void setSendingOrderDialog() {
 		progressDialog = ProgressDialog.show(this, "", getResources()
 				.getString(R.string.budget_updating_prices));
+		 progressDialog.setCancelable(true);
+
 
 	}
 
@@ -338,6 +334,18 @@ public class BudgetActivity extends SherlockFragmentActivity implements
 		actionBar.setCustomView(view, params);
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
+	}
+
+	@Override
+	public void onBudgetStatusChanged(Budget budget) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void OnStatusChangedFinished(boolean b, Budget budget) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/image_pet_info_avatar"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="@dimen/pet_info_margin_between_elements"
             android:background="@drawable/label_pet_name"
             android:ems="10"
             android:gravity="center_horizontal"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/image_pet_info_avatar"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="@dimen/pet_info_margin_between_elements"
             android:background="@drawable/label_pet_name"
             android:ems="10"
             android:gravity="center_horizontal"
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="@dimen/pet_info_margin_between_elements"
             android:src="@drawable/ic_gato" />
 
         <ImageView
@@ -59,10 +59,10 @@
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/pet_info_layout_margin_top"
+        android:layout_weight="1"
         android:paddingLeft="@dimen/padding_scroll_edit_profile"
-        android:paddingRight="@dimen/padding_scroll_edit_profile"
-        android:layout_weight="1" >
+        android:paddingRight="@dimen/padding_scroll_edit_profile" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -71,14 +71,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="15dp" >
+                android:layout_height="@dimen/pet_info_layout_height"
+                android:layout_marginTop="@dimen/pet_info_layout_margin_top" >
 
                 <TextView
                     android:id="@+id/text_pet_info_specie_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/pet_info_title_margin_right"
                     android:text="@string/pet_info_title_specie"
                     android:textColor="@color/text_blue"
                     android:textSize="@dimen/blue_text" />
@@ -98,21 +98,23 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:background="@drawable/buton_profile_edit"
+                    android:padding="@dimen/general_spinner_padding"
                     android:scrollbars="horizontal"
                     android:splitMotionEvents="false"
+                    
                     android:textAlignment="center" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="15dp" >
+                android:layout_height="@dimen/pet_info_layout_height"
+                android:layout_marginTop="@dimen/pet_info_layout_margin_top" >
 
                 <TextView
                     android:id="@+id/text_pet_info_breed_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/pet_info_title_margin_right"
                     android:text="@string/pet_info_title_breed"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_blue"
@@ -133,6 +135,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:background="@drawable/buton_profile_edit"
+                    android:padding="@dimen/general_spinner_padding"
                     android:scrollbars="horizontal"
                     android:splitMotionEvents="false"
                     android:textAlignment="center" />
@@ -140,14 +143,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="15dp" >
+                android:layout_height="@dimen/pet_info_layout_height"
+                android:layout_marginTop="@dimen/pet_info_layout_margin_top" >
 
                 <TextView
                     android:id="@+id/text_pet_info_gender_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/pet_info_title_margin_right"
                     android:text="@string/pet_info_title_gender"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_blue"
@@ -169,6 +172,7 @@
                     android:layout_gravity="bottom"
                     android:background="@drawable/buton_profile_edit"
                     android:entries="@array/Genders"
+                    android:padding="@dimen/general_spinner_padding"
                     android:scrollbars="horizontal"
                     android:splitMotionEvents="false"
                     android:textAlignment="center" />
@@ -176,14 +180,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="15dp" >
+                android:layout_height="@dimen/pet_info_layout_height"
+                android:layout_marginTop="@dimen/pet_info_layout_margin_top" >
 
                 <TextView
                     android:id="@+id/text_pet_info_puppy_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/pet_info_title_margin_right"
                     android:text="@string/pet_info_title_puppy"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_blue"
@@ -205,6 +209,7 @@
                     android:layout_gravity="bottom"
                     android:background="@drawable/buton_profile_edit"
                     android:entries="@array/Age"
+                    android:padding="@dimen/general_spinner_padding"
                     android:scrollbars="horizontal"
                     android:splitMotionEvents="false"
                     android:textAlignment="center" />
@@ -212,14 +217,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="15dp" >
+                android:layout_height="@dimen/pet_info_layout_height"
+                android:layout_marginTop="@dimen/pet_info_layout_margin_top" >
 
                 <TextView
                     android:id="@+id/text_pet_info_isagressive_tittle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/pet_info_title_margin_right"
                     android:text="@string/pet_info_title_agressive"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_blue"
@@ -247,14 +252,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="15dp" >
+                android:layout_height="@dimen/pet_info_layout_height"
+                android:layout_marginTop="@dimen/pet_info_layout_margin_top" >
 
                 <TextView
                     android:id="@+id/text_pet_info_comment_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/pet_info_title_margin_right"
                     android:text="@string/pet_info_title_comment"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/text_blue"
@@ -283,11 +288,8 @@
         android:id="@+id/imageView_pet_info_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/buton_delete" 
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_margin="@dimen/general_margin_bottom"
         android:clickable="true"
-        android:layout_marginTop="20dp"
-        />
+        android:src="@drawable/buton_delete" />
 
 </LinearLayout>

@@ -15,6 +15,7 @@ import com.arawaney.tumascotik.client.model.User;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,40 +44,50 @@ public class PetPicker extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_pick_pet);
+		setContentView(R.layout.activity_picker);
 
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+Log.d(LOG_TAG, "METRICS:"+metrics.densityDpi);
 		loadViews();
 		loadPets();
 		loadAddButtons();
 
 	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-		pets = PetProvider.readPets(this);
-		if (pets == null) {
-			pets = new ArrayList<Pet>();
-		}
-		if (petGRidView!= null) {
-			adapter = new ItemPetGridAdapter(this, pets);
-			adapter.setFooterView(addPetView);
-			petGRidView.setAdapter(adapter);	
-		}
-		
+		loadPets();
 	}
 
 	private void loadViews() {
-		petGRidView = (ListView) findViewById(R.id.grid_pet_picker);
+		petGRidView = (ListView) findViewById(R.id.grid_picker);
 		inflater = (LayoutInflater) getSystemService(this.LAYOUT_INFLATER_SERVICE);
-		addPetView = inflater.inflate(R.layout.add_pet_view, null);
+		addPetView = inflater.inflate(R.layout.add_view, null);
 
 	}
 
+	private boolean userIsClient() {
+		if (MainController.USER.getisAdmin() == User.IS_ADMIN) {
+			if (MainController.getCLIENTUSER().getisAdmin() == User.NOT_ADMIN) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private void loadPets() {
-		pets = PetProvider.readPets(this);
+
+		if (userIsClient()) {
+			pets = PetProvider.readPetsByUser(this, MainController
+					.getCLIENTUSER().getSystemId());
+		} else
+			pets = PetProvider.readPets(this);
+
 		if (pets == null) {
 			pets = new ArrayList<Pet>();
 		}
+
 		adapter = new ItemPetGridAdapter(this, pets);
 		adapter.setFooterView(addPetView);
 		petGRidView.setAdapter(adapter);
@@ -90,7 +101,12 @@ public class PetPicker extends Activity {
 			public void onClick(View v) {
 				Log.d(LOG_TAG, "Add new pet!!");
 				Pet pet = new Pet();
-				User owner = UserProvider.readUser(getApplicationContext());
+				User owner;
+				if (userIsClient()) {
+					owner = MainController.getCLIENTUSER();
+				} else {
+					owner = MainController.USER;
+				}
 				pet.setOwner(owner);
 				MainController.setPET(pet);
 				PetInfoActivity.viewMode = PetInfoActivity.MODE_EDIT_LIST;
@@ -118,10 +134,11 @@ public class PetPicker extends Activity {
 								PetInfoActivity.class);
 						startActivity(i);
 					} else {
-						Intent i = new Intent(PetPicker.this, SetRequestDetails.class);
+						Intent i = new Intent(PetPicker.this,
+								SetRequestDetails.class);
 						startActivity(i);
 					}
-				} 
+				}
 
 			}
 		});
@@ -131,34 +148,46 @@ public class PetPicker extends Activity {
 
 		boolean dataComplete = true;
 
-		if (pet.getName() == null ) {
-			
+		if (pet.getName() == null) {
+
 			dataComplete = false;
+			notifyDataIncomplete();
+			return dataComplete;
 		}
-		if (pet.getName().isEmpty() ) {
-			
+		if (pet.getName().isEmpty()) {
 			dataComplete = false;
+			notifyDataIncomplete();
+			return dataComplete;
 		}
 		if (pet.getBreed() == null) {
 			dataComplete = false;
+			notifyDataIncomplete();
+			return dataComplete;
 		}
 		if (pet.getBreed().getPetPropertie() == null) {
 			dataComplete = false;
+			notifyDataIncomplete();
+			return dataComplete;
 		}
 		if (pet.getBreed().getSpecie() == null) {
 			dataComplete = false;
+			notifyDataIncomplete();
+			return dataComplete;
 		}
 		if (pet.getBreed().getSpecie().getName() == null) {
 			dataComplete = false;
+			notifyDataIncomplete();
+			return dataComplete;
 		}
 		if (pet.getBreed().getPetPropertie().getName() == null) {
 			dataComplete = false;
+			notifyDataIncomplete();
+			return dataComplete;
 		}
 		if (pet.getAgressive() == null) {
 			dataComplete = false;
-		}
-		if (!dataComplete) {
 			notifyDataIncomplete();
+			return dataComplete;
 		}
 		return dataComplete;
 	}

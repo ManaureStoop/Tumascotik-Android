@@ -1,6 +1,7 @@
 package com.arawaney.tumascotik.client.activity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import android.app.Activity;
@@ -33,7 +34,13 @@ public class SendRequest extends Activity implements ParseRequestListener {
 	
 	ImageView send;
 	ImageView cancel;
-	TextView resumen;
+	TextView textPetName;
+	TextView textMotive;
+	TextView textDate;
+	TextView textTime;
+	TextView textPrice;
+	TextView textDuration;
+	TextView textDelivery;
 	Request request;
 	private ProgressDialog progressDialog;
 
@@ -45,10 +52,20 @@ public class SendRequest extends Activity implements ParseRequestListener {
 		setContentView(R.layout.activity_send_request);
 		
 		request = MainController.getREQUEST();
-
+		 loadViews();
+		 setFonts();
 		setResume();
-		
 		loadButtons();
+	}
+
+	private void loadViews() {
+		textPetName = (TextView) findViewById(R.id.txtresumen_title_petname);
+		textMotive = (TextView) findViewById(R.id.txtresumen_motive);
+		textDate = (TextView) findViewById(R.id.txtresumen_date);
+		textTime = (TextView) findViewById(R.id.txtresumen_time);
+		textPrice = (TextView) findViewById(R.id.txtresumen_price);
+		textDuration = (TextView) findViewById(R.id.txtresumen_duration);
+		textDelivery = (TextView) findViewById(R.id.txtresumen_delivery);
 	}
 
 	private void loadButtons() {
@@ -81,23 +98,71 @@ public class SendRequest extends Activity implements ParseRequestListener {
 	private void sendRequest() {
 		progressDialog = ProgressDialog
 				.show(this, "", getResources().getString(R.string.send_request_sending));
+		 progressDialog.setCancelable(true);
 		ParseProvider.initializeParse(getApplicationContext());
 		ParseRequestProvider.sendRequest(this,this, request);
 	}
 	private void setResume() {
-		final String userName = MainController.USER.getName();
+
 		final String petName = MainController.getPET().getName();
 		final String date = CalendarUtil.getDateFormated(request.getStart_date(), "dd , MM yyyy");
+		final String time = CalendarUtil.getDateFormated(request.getStart_date(), "hh:mm a");
+		final String motive = request.getService().getName();
+		final int price;
+		if (request.getPrice() != null) {
+			price = request.getPrice();
+		}else
+		price = 0;
+		
+		final String hourSufix = getResources().getString(R.string.send_request_details_hour_sufix);
+
+		final float duration = getRequestDuration();
 	
-		resumen = (TextView) findViewById(R.id.txtresumnfinal);
-		resumen.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
-		String text1 = getResources().getString(R.string.send_request_details_text_1);
-		String text2 = getResources().getString(R.string.send_request_details_text_2);
-		String text3 = getResources().getString(R.string.send_request_details_text_3);
+		textPetName.setText(petName);
+		textMotive.setText(getResources().getString(R.string.send_request_details_text_motive)+" "+motive);
+		textDate.setText(getResources().getString(R.string.send_request_details_text_date)+" "+date);
+		textTime.setText(getResources().getString(R.string.send_request_details_text_time)+" "+time);
+		if (price == 0) {
+			textPrice.setText(getResources().getString(R.string.send_request_details_text_price)+("N/A"));
+
+		} else
+			textPrice.setText(getResources().getString(
+					R.string.send_request_details_text_price)
+					+ price);
+		textDuration.setText(getResources().getString(
+				R.string.send_request_details_text_duration)
+				+ " " + duration + " " + hourSufix);
+
+		if (request.isDelivery() == Request.IS_DELIVERY) {
+			textDelivery.setText(getResources().getString(
+					R.string.send_request_details_text_delivery_yes));
+		} else {
+			textDelivery.setText(getResources().getString(
+					R.string.send_request_details_text_delvery_no));
+
+		}
 		
+
+	}
+
+	private float getRequestDuration() {
+		float hours = 0;
+		int finishTime = request.getFinish_date().get(Calendar.HOUR_OF_DAY);
+		int startTime = request.getStart_date().get(Calendar.HOUR_OF_DAY);
+
+		hours = finishTime-startTime;
+		return hours;
+	}
+
+	private void setFonts() {
 		
-		String resum = text1+" "+userName+text2+" "+petName+" "+text3+" "+date;
-		resumen.setText(resum);
+		 textPetName.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+	     textMotive.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		 textDate.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		 textTime.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+	     textPrice.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+	     textDuration.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
+		 textDelivery.setTypeface(FontUtil.getTypeface(this, FontUtil.ROBOTO_LIGHT));
 	}
 
 	void SaveRequest(String systemId) {
@@ -135,7 +200,7 @@ public class SendRequest extends Activity implements ParseRequestListener {
 	}
 
 	@Override
-	public void onCanceledQueryFinished(boolean canceled) {
+	public void onCanceledQueryFinished(boolean canceled, Request request) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -150,6 +215,33 @@ public class SendRequest extends Activity implements ParseRequestListener {
 	public void onDayRequestsQueryFinished(Date[] initialScheduledDates,
 			Date[] finalScheduledDates) {
 		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void cancelRequest(Request request) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void acceptRequest(Request request) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onRequestAccept(Request request, boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onOnePriceQueryFinished(int price) {
+		if (price!= 0) {
+			request.setPrice(price);
+		}
 		
 	}
 }

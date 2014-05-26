@@ -10,8 +10,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="@dimen/budget_view_margin"
         android:text="Peluquería"
+        android:singleLine="true"
         android:textColor="@color/text_blue"
         android:textSize="@dimen/blue_text" />
 
@@ -21,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/budget_item_service"
         android:layout_below="@+id/budget_item_service"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/budget_view_margin"
         android:background="@drawable/label_pet_name_appointment"
         android:gravity="center"
         android:text="BsF. 500"

@@ -12,13 +12,17 @@ import com.arawaney.tumascotik.client.activity.PetInfoActivity;
 import com.arawaney.tumascotik.client.control.MainController;
 import com.arawaney.tumascotik.client.db.provider.PetProvider;
 import com.arawaney.tumascotik.client.db.provider.RequestProvider;
+import com.arawaney.tumascotik.client.listener.ParseBudgetListener;
 import com.arawaney.tumascotik.client.listener.ParseRequestListener;
+import com.arawaney.tumascotik.client.model.BudgetService;
 import com.arawaney.tumascotik.client.model.Pet;
+import com.arawaney.tumascotik.client.model.PetPropertie;
 import com.arawaney.tumascotik.client.model.Request;
 import com.arawaney.tumascotik.client.model.Service;
 import com.arawaney.tumascotik.client.util.CalendarUtil;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -46,12 +50,10 @@ public class ParseRequestProvider {
 	private static final String REQUEST_TABLE = "Request";
 	private static final String STATUS_TABLE = "Status";
 	private static final String REQUEST_SERVICE_TABLE = "Service_Request";
-	private static final String PRICE_TABLE = "Price";		
-	
+	private static final String PRICE_TABLE = "Price";
+
 	static Date[] initialScheduledDates = null;
-	 static Date[] finalScheduledDates = null; 
-	
-	
+	static Date[] finalScheduledDates = null;
 
 	public static void sendRequest(Context context,
 			final ParseRequestListener listener, final Request request) {
@@ -77,7 +79,6 @@ public class ParseRequestProvider {
 			parseRequest.put(ACTIVE_TAG, true);
 		} else
 			parseRequest.put(ACTIVE_TAG, false);
-
 
 		parseRequest.saveInBackground(new SaveCallback() {
 
@@ -125,15 +126,14 @@ public class ParseRequestProvider {
 			private void saveRequestService() {
 				final ParseObject parseRequestService = new ParseObject(
 						REQUEST_SERVICE_TABLE);
-				parseRequestService.put(SERVICE_ID_TAG, request.getService().getSystem_id());
+				parseRequestService.put(SERVICE_ID_TAG, request.getService()
+						.getSystem_id());
 				parseRequestService.put(REQUEST_ID_TAG,
 						parseRequest.getObjectId());
 
 				ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
 						PRICE_TABLE);
-				query.whereEqualTo(SERVICE_ID_TAG, request.getService().getSystem_id());
-				query.whereEqualTo(PET_PROPERTIE_ID_TAG, request.getPet()
-						.getBreed().getPetPropertie().getSystem_id());
+				query.whereEqualTo(SERVICE_ID_TAG, request.getService());
 
 				// Log.d(LOG_TAG, "serviceid: "+ request.getServiceID() +
 				// " petprotid: "+request.getPet().getBreed().getPetPropertie().getSystem_id());
@@ -144,8 +144,22 @@ public class ParseRequestProvider {
 					public void done(List<ParseObject> prices, ParseException e) {
 						if (e == null) {
 							if (!prices.isEmpty()) {
-								parseRequestService.put(PRICE_TAG, prices
-										.get(0).get(PRICE_TAG));
+								if (prices.size() == 1) {
+									parseRequestService.put(PRICE_TAG, prices
+											.get(0).get(PRICE_TAG));
+								} else {
+									for (ParseObject parseObject : prices) {
+										if (parseObject
+												.get(PET_PROPERTIE_ID_TAG).equals(request
+												.getPet().getBreed()
+												.getPetPropertie()
+												.getSystem_id())) {
+											parseRequestService.put(PRICE_TAG,
+													parseObject.get(PRICE_TAG));
+										}
+									}
+								}
+
 							}
 
 						} else {
@@ -204,109 +218,6 @@ public class ParseRequestProvider {
 
 					}
 
-					private Request readRequestFromCursor(
-							ParseObject parsedRequest, Pet pet,
-							final ParseRequestListener listener) {
-						final Request request = new Request();
-
-						if (parsedRequest.getBoolean(ACTIVE_TAG)) {
-							request.setActive(Request.ACTIVE);
-						} else
-							request.setActive(Request.INACTIVE);
-
-						if (parsedRequest.getBoolean(DELIVERY_TAG)) {
-							request.setDelivery(Request.IS_DELIVERY);
-						} else
-							request.setDelivery(Request.IS__NOT_DELIVERY);
-
-						if (parsedRequest.getString(COMMENT_TAG) != null) {
-							request.setComment(parsedRequest
-									.getString(COMMENT_TAG));
-						}
-
-						Calendar startDate = Calendar.getInstance();
-						startDate.setTimeInMillis(parsedRequest.getDate(
-								INITIAL_DATE_TAG).getTime());
-						request.setStart_date(startDate);
-
-						Calendar finishDate = Calendar.getInstance();
-						finishDate.setTimeInMillis(parsedRequest.getDate(
-								END_DATE_TAG).getTime());
-						request.setFinish_date(finishDate);
-
-						Calendar updateCalendar = Calendar.getInstance();
-
-						updateCalendar.setTimeInMillis(parsedRequest
-								.getUpdatedAt().getTime());
-
-						request.setUpdated_at(updateCalendar);
-
-						request.setPet(pet);
-
-						request.setSystem_id(parsedRequest.getObjectId());
-						Service service = new Service();
-						service.setSystem_id(parsedRequest
-								.getString(SERVICE_ID_TAG));
-						request.setService(service);
-
-						String statusId = parsedRequest
-								.getString(STATUS_ID_TAG);
-
-						ParseQuery<ParseObject> statusQuery = new ParseQuery<ParseObject>(
-								STATUS_TABLE);
-						statusQuery.whereEqualTo("objectId", statusId);
-
-						statusQuery
-								.findInBackground(new FindCallback<ParseObject>() {
-
-									@Override
-									public void done(List<ParseObject> status,
-											ParseException e) {
-										if (e == null) {
-											request.setStatus(status.get(0)
-													.getInt(STATUS_NUMBER_TAG));
-											listener.onRequestQueryFInished(request);
-										} else {
-											Log.d(LOG_TAG,
-													"Error getting status from request: "
-															+ request
-																	.getSystem_id()
-															+ " "
-															+ e.getMessage());
-										}
-									}
-								});
-						ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
-								REQUEST_SERVICE_TABLE);
-						query.whereEqualTo(REQUEST_ID_TAG,
-								parsedRequest.getObjectId());
-						query.findInBackground(new FindCallback<ParseObject>() {
-
-							@Override
-							public void done(List<ParseObject> serviceRequests,
-									ParseException e) {
-								if (e == null) {
-									if (serviceRequests.size() > 0) {
-										request.setPrice(serviceRequests.get(0)
-												.getInt(PRICE_TAG));
-									} else {
-										request.setPrice(0);
-									}
-
-									listener.onRequestQueryFInished(request);
-
-								} else
-									Log.d(LOG_TAG,
-											"Error getting Service_Requests from request: "
-													+ request.getSystem_id()
-													+ " " + e.getMessage());
-
-							}
-						});
-
-						return request;
-					}
-
 				});
 
 			}
@@ -315,30 +226,72 @@ public class ParseRequestProvider {
 
 	}
 
-	public static void cancelRequest(Context context,
-			final ParseRequestListener listener, Request request) {
+	public static void changeRequestStatus(Context context,
+			final ParseRequestListener listener, final Request request) {
 
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
 				REQUEST_TABLE);
-		query.whereEqualTo("objectId", request.getSystem_id());
-		query.findInBackground(new FindCallback<ParseObject>() {
 
-			@Override
-			public void done(List<ParseObject> parsedRequest, ParseException e) {
-				if (e == null) {
-					parsedRequest.get(0).put(STATUS_ID_TAG,
-							Request.STATUS_CANCELED);
-					parsedRequest.get(0).saveInBackground();
-					listener.onCanceledQueryFinished(true);
-				} else {
-					Log.d(LOG_TAG,
-							"Error getting request to cancel : "
-									+ e.getMessage());
-					listener.onCanceledQueryFinished(false);
+		query.getInBackground(request.getSystem_id(),
+				new GetCallback<ParseObject>() {
 
-				}
-			}
-		});
+					@Override
+					public void done(ParseObject parsedRequest, ParseException e) {
+
+						if (e == null) {
+
+							saveNewRequestStatus(parsedRequest);
+
+						} else {
+							listener.onCanceledQueryFinished(false, request);
+							Log.d(LOG_TAG, " Query error getting Requests"
+									+ ": " + e.getMessage());
+						}
+
+					}
+
+					private void saveNewRequestStatus(
+							final ParseObject parsedRequest) {
+
+						int statusNUm = request.getStatus();
+						ParseQuery<ParseObject> innerQuery = new ParseQuery<ParseObject>(
+								STATUS_TABLE);
+						innerQuery.whereEqualTo(STATUS_NUMBER_TAG, statusNUm);
+						innerQuery
+								.findInBackground(new FindCallback<ParseObject>() {
+
+									@Override
+									public void done(List<ParseObject> status,
+											ParseException e) {
+										if (e == null) {
+											parsedRequest
+													.put(STATUS_ID_TAG, status
+															.get(0)
+															.getObjectId());
+											parsedRequest.saveInBackground();
+
+											if (request.getStatus() == request.STATUS_CANCELED) {
+												listener.onCanceledQueryFinished(
+														true, request);
+											} else if (request.getStatus() == request.STATUS_ACCEPTED) {
+												listener.onRequestAccept(
+														request, true);
+											}
+
+										} else {
+											Log.e(LOG_TAG,
+													"No status matches cancelling/accepting request "
+															+ e.getMessage());
+											listener.onCanceledQueryFinished(
+													false, request);
+
+										}
+
+									}
+								});
+
+					}
+				});
 
 	}
 
@@ -360,24 +313,26 @@ public class ParseRequestProvider {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-//					ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
-//							REQUEST_SERVICE_TABLE);
-//					query.whereMatches(REQUEST_ID_TAG, request.getSystem_id());
-//					query.findInBackground(new FindCallback<ParseObject>() {
-//
-//						@Override
-//						public void done(List<ParseObject> list,
-//								ParseException arg1) {
-//							try {
-//								list.get(0).delete();
-//							} catch (ParseException e) {
-//								// TODO Auto-generated catch block
-//								e.printStackTrace();
-//							}
-//
-//						}
-//					});
-				
+					// ParseQuery<ParseObject> query = new
+					// ParseQuery<ParseObject>(
+					// REQUEST_SERVICE_TABLE);
+					// query.whereMatches(REQUEST_ID_TAG,
+					// request.getSystem_id());
+					// query.findInBackground(new FindCallback<ParseObject>() {
+					//
+					// @Override
+					// public void done(List<ParseObject> list,
+					// ParseException arg1) {
+					// try {
+					// list.get(0).delete();
+					// } catch (ParseException e) {
+					// // TODO Auto-generated catch block
+					// e.printStackTrace();
+					// }
+					//
+					// }
+					// });
+
 					listener.onRequestRemoveFinished(request);
 
 				} else {
@@ -393,7 +348,6 @@ public class ParseRequestProvider {
 
 	public static void geRequestByDay(Date dayInitialDate, Date dayFinalDate,
 			final ParseRequestListener listener) {
-
 
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Request");
 		query.whereGreaterThan(INITIAL_DATE_TAG, dayInitialDate);
@@ -423,17 +377,17 @@ public class ParseRequestProvider {
 
 						}
 					}
-					 for (i = 0; i < numberOfScheduledAppointments; i++) {
-					 Log.d("TEST", String.valueOf(initialScheduledDates[i]
-					 .toString()));
-					 Log.d("TEST", String.valueOf(finalScheduledDates[i]
-					 .toString()));
+					for (i = 0; i < numberOfScheduledAppointments; i++) {
+						Log.d("TEST", String.valueOf(initialScheduledDates[i]
+								.toString()));
+						Log.d("TEST", String.valueOf(finalScheduledDates[i]
+								.toString()));
 
-					 }
-					
+					}
+
 					listener.onDayRequestsQueryFinished(initialScheduledDates,
 							finalScheduledDates);
-				
+
 				} else {
 					Log.d(LOG_TAG,
 							"Error loading scheduled time blocks: "
@@ -454,21 +408,216 @@ public class ParseRequestProvider {
 			@Override
 			public void done(List<ParseObject> parsedRequest, ParseException e) {
 				if (e == null) {
-					try {
-						for (ParseObject parseObject : parsedRequest) {
-							parseObject.delete();
-						}
-						
-					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					for (ParseObject parseObject : parsedRequest) {
+						parseObject.put(ACTIVE_TAG, false);
+						parseObject.saveInBackground();
 					}
-					
+
 				} else {
 					Log.d(LOG_TAG,
 							"Error getting requests to delete : "
 									+ e.getMessage());
-					
+
+				}
+			}
+		});
+
+	}
+
+	public static void updateAllRequests(Context context,
+			final ParseRequestListener listener) {
+		Date updateAt = RequestProvider.getLastUpdate(context);
+
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+				REQUEST_TABLE);
+
+		if (updateAt != null) {
+			query.whereGreaterThan(UPDATED_AT_TAG, updateAt);
+		}
+
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> parsedRequests, ParseException e) {
+
+				if (e == null) {
+					ArrayList<Request> requests = new ArrayList<Request>();
+
+					for (ParseObject parsedRequest : parsedRequests) {
+						Pet pet = new Pet();
+						pet.setSystem_id(parsedRequest.getString(PET_ID_TAG)
+								.toString());
+						Request request = readRequestFromCursor(parsedRequest,
+								pet, listener);
+						request.setSystem_id(parsedRequest.getObjectId());
+						requests.add(request);
+					}
+
+					listener.OnAllRequestsQueryFinished(requests);
+
+				} else {
+					listener.OnAllRequestsQueryFinished(null);
+					Log.d(LOG_TAG,
+							" Query error getting Requests " + ": "
+									+ e.getMessage());
+				}
+
+			}
+
+		});
+
+	}
+
+	private static Request readRequestFromCursor(ParseObject parsedRequest,
+			Pet pet, final ParseRequestListener listener) {
+		final Request request = new Request();
+
+		if (parsedRequest.getBoolean(ACTIVE_TAG)) {
+			request.setActive(Request.ACTIVE);
+		} else
+			request.setActive(Request.INACTIVE);
+
+		if (parsedRequest.getBoolean(DELIVERY_TAG)) {
+			request.setDelivery(Request.IS_DELIVERY);
+		} else
+			request.setDelivery(Request.IS__NOT_DELIVERY);
+
+		if (parsedRequest.getString(COMMENT_TAG) != null) {
+			request.setComment(parsedRequest.getString(COMMENT_TAG));
+		}
+
+		Calendar startDate = Calendar.getInstance();
+		startDate.setTimeInMillis(parsedRequest.getDate(INITIAL_DATE_TAG)
+				.getTime());
+		request.setStart_date(startDate);
+
+		Calendar finishDate = Calendar.getInstance();
+		finishDate.setTimeInMillis(parsedRequest.getDate(END_DATE_TAG)
+				.getTime());
+		request.setFinish_date(finishDate);
+
+		Calendar updateCalendar = Calendar.getInstance();
+
+		updateCalendar.setTimeInMillis(parsedRequest.getUpdatedAt().getTime());
+
+		request.setUpdated_at(updateCalendar);
+
+		request.setPet(pet);
+
+		request.setSystem_id(parsedRequest.getObjectId());
+		Service service = new Service();
+		service.setSystem_id(parsedRequest.getString(SERVICE_ID_TAG));
+		request.setService(service);
+
+		String statusId = parsedRequest.getString(STATUS_ID_TAG);
+
+		if (request.isActive() == Request.ACTIVE) {
+			ParseQuery<ParseObject> statusQuery = new ParseQuery<ParseObject>(
+					STATUS_TABLE);
+			statusQuery.whereEqualTo("objectId", statusId);
+
+			statusQuery.findInBackground(new FindCallback<ParseObject>() {
+
+				@Override
+				public void done(List<ParseObject> status, ParseException e) {
+					if (e == null) {
+						request.setStatus(status.get(0).getInt(
+								STATUS_NUMBER_TAG));
+						listener.onRequestQueryFInished(request);
+					} else {
+						Log.d(LOG_TAG, "Error getting status from request: "
+								+ request.getSystem_id() + " " + e.getMessage());
+					}
+				}
+			});
+			ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+					REQUEST_SERVICE_TABLE);
+			query.whereEqualTo(REQUEST_ID_TAG, parsedRequest.getObjectId());
+			query.findInBackground(new FindCallback<ParseObject>() {
+
+				@Override
+				public void done(List<ParseObject> serviceRequests,
+						ParseException e) {
+					if (e == null) {
+						if (serviceRequests.size() > 0) {
+							request.setPrice(serviceRequests.get(0).getInt(
+									PRICE_TAG));
+						} else {
+							request.setPrice(0);
+						}
+
+						listener.onRequestQueryFInished(request);
+
+					} else
+						Log.d(LOG_TAG,
+								"Error getting Service_Requests from request: "
+										+ request.getSystem_id() + " "
+										+ e.getMessage());
+
+				}
+			});
+		}
+
+		return request;
+	}
+
+	public static void readPrices(Service service,
+			final ParseRequestListener listener, final PetPropertie petPropertie) {
+
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(PRICE_TABLE);
+		query.whereEqualTo(SERVICE_ID_TAG, service.getSystem_id());
+
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> prices, ParseException e) {
+				if (e == null) {
+					if (!prices.isEmpty()) {
+						if (prices.size() == 1) {
+							listener.onOnePriceQueryFinished(prices.get(0)
+									.getInt(PRICE_TAG));
+						}else{
+							for (ParseObject parseObject : prices) {			
+
+								if (parseObject
+										.get(PET_PROPERTIE_ID_TAG).equals(petPropertie
+										.getSystem_id())) {
+									
+									listener.onOnePriceQueryFinished(parseObject
+											.getInt(PRICE_TAG));
+								}
+							}
+						
+						}
+
+					}
+
+				} else {
+					e.printStackTrace();
+				}
+
+			}
+		});
+
+	}
+
+	public static void deactivateRequest(Context context, Request request) {
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+				REQUEST_TABLE);
+		query.whereEqualTo("objectId", request.getSystem_id());
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> parsedRequest, ParseException e) {
+				if (e == null) {
+					for (ParseObject parseObject : parsedRequest) {
+						parseObject.put(ACTIVE_TAG, false);
+						parseObject.saveInBackground();
+					}
+
+				} else {
+					Log.d(LOG_TAG, "Error getting requests to inactivate : "
+							+ e.getMessage());
 
 				}
 			}

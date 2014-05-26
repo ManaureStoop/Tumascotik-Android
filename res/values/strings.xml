@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Tumascotikmenu</string>
+    <string name="app_name">Tumascotik</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_tumascotik">Tumascotik</string>
@@ -75,9 +75,12 @@
 
     <!-- MENU -->
     <string name="menu_my_profile">My Profile</string>
-    <string name="menu_my_pets">My pets</string>
+    <string name="menu_my_pets">My Pets</string>
+    <string name="menu_view_pets">View Pets</string>
+    <string name="menu_my_clients">My Clients</string>
     <string name="menu_make_appointment">Make Appointment</string>
     <string name="menu_view_appointment">My Appointments</string>
+    <string name="menu_my_orders">View Orders</string>
     <string name="menu_budget">Budgets</string>
     <string name="main_load_backend_data_dialog">Loading data from Tumascotik. This process can take several minutes</string>
 
@@ -105,13 +108,15 @@
     <string name="pet_info_pet_data_incomplete">There is some important information missing on your pet profile...</string>
     <string name="pet_info_data_missing_name">Please insert a name for your pet</string>
     <string name="pet_info_data_missing_agresive">You should tell us if your pet is aggresive</string>
-    
-     
 
     <!-- User Info -->
     <string name="user_info_button_edit">Edit</string>
     <string name="user_info_button_save">Save</string>
+    <string name="user_info_button_saving">Saving user</string>
     <string name="user_info_title_name">Name</string>
+    <string name="user_info_title_username">Userame</string>
+    <string name="user_info_title_password">Password</string>
+    <string name="user_info_title_confirm_password">Confirm Password</string>
     <string name="user_info_title_lastname">Lastname</string>
     <string name="user_info_title_email">Email</string>
     <string name="user_info_title_address">Address</string>
@@ -119,6 +124,14 @@
     <string name="user_info_title_phone_home">Phone Number</string>
     <string name="user_info_title_phone_mobile">Cellphone</string>
     <string name="user_info_user_not_updated">It is not possible to update your information at the moment</string>
+    <string name="user_info_user_not_inserted">It is not possible to this user at the moment</string>
+    <string name="user_info_data_missing_name">Please insert a name t</string>
+    <string name="user_info_data_missing_lastname">Please insert a lastname</string>
+    <string name="user_info_data_missing_username">Please insert a username</string>
+    <string name="user_info_data_missing_password">Please insert a password</string>
+    <string name="user_info_data_no_match_password">Passwords dont match</string>
+    <string name="user_info_data_missing_address">Please insert a address</string>
+    <string name="user_info_data_missing_cellphone">Please insert a valid cellphone</string>
 
     <!-- Set Date -->
     <string name="set_date_time_title">Time: </string>
@@ -144,10 +157,16 @@
 
     <!-- Send Request -->
     <string name="send_request_sending">Sending...</string>
-    <string name="send_request_details_title">Details</string>
-    <string name="send_request_details_text_1">Dear </string>
-    <string name="send_request_details_text_2">,\n the appointment for </string>
-    <string name="send_request_details_text_3"> will be scheduled for the  : \n</string>
+    <string name="send_request_details_title">Coco</string>
+    <string name="send_request_details_text_motive">Appointment for :  </string>
+    <string name="send_request_details_text_date">Date :  </string>
+    <string name="send_request_details_text_time">Time :</string>
+    <string name="send_request_details_text_price"> Price: Bs. </string>
+    <string name="send_request_details_text_duration"> Duration : </string>
+    <string name="send_request_details_text_delivery_yes"> Delivery : No</string>
+    <string name="send_request_details_text_delvery_no"> Delivery : Yes</string>
+    <string name="send_request_details_hour_sufix"> hours</string>
+    <string name="send_request_details_motive_missing">Please select a motive</string>
 
     <!-- Request View -->
     <string name="request_view_title">Appointment for : </string>
@@ -155,6 +174,9 @@
     <string name="request_view_time">Time: </string>
     <string name="request_view_dialog_conector">for</string>
     <string name="request_view_dialog_cancel_button">Cancel Appointment</string>
+    <string name="request_view_dialog_accept_button">Accept Appointment</string>
+    <string name="request_view_process_cancelling">Cancelling Appointment...</string>
+    <string name="request_view_process_accepting">Accepting Appointment...</string>
     <string name="request_view_zero_data">You havent made any \n appointments yet...</string>
 
     <!-- Request Notification -->
@@ -170,6 +192,7 @@
     <string name="budget_zero_data">You havent \n added anything yet...</string>
     <string name="budget_updating_prices">Updating prices...</string>
     <string name="budget_downloading_prices">Downloading prices...</string>
+    <string name="budget_updating_budgets">Updating Budget Status...</string>
     <string name="budget_dialog_ok">OK</string>
     <string name="budget_dialog_cancel">Cancel</string>
     <string name="budget_dialog_delete_from_list">Delete from list</string>
@@ -177,11 +200,18 @@
     <string name="budget_dialog_send_title">Dear client</string>
     <string name="budget_dialog_send_body">Do you want to send the order for a total of Bs. </string>
     <string name="budget_sending_order">Sending order...</string>
+    <string name="budget_send_order">Send Order</string>
 
     <!-- Budget View -->
     <string name="budget_dialog_title">Requested Products</string>
     <string name="budget_date_title">Emission Date : </string>
     <string name="budget_actionbar_title">My Orders</string>
+    <string name="budget_dialog_order_ready">Order Ready</string>
+    <string name="budget_dialog_cancel_order">Cancel Order</string>
+    <string name="budget_dialog_order_delivered">Order Delivered</string>
+
+    <!-- Budget/Request View -->
+    <string name="budget_request_dialog__back">Go Back</string>
 
     <string-array name="Genders">
         <item>--Choose--</item>

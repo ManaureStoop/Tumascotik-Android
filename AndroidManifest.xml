@@ -14,17 +14,17 @@
     </uses-permission>
 
     <application
+        android:name="Tumascotik"
         android:allowBackup="true"
-        android:icon="@drawable/logo"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.arawaney.tumascotik.client.MainActivity"
-            android:label="Tumascotik Client"
+            android:label="Tumascotik"
             android:screenOrientation="sensorPortrait" >
-            <intent-filter>
+            <intent-filter android:label="@string/app_name" >
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -73,9 +73,14 @@
             android:label="PetPicker"
             android:screenOrientation="sensorPortrait" >
         </activity>
-         <activity
+        <activity
             android:name="com.arawaney.tumascotik.client.activity.ViewBudgets"
             android:label="ViewBudgets"
+            android:screenOrientation="sensorPortrait" >
+        </activity>
+        <activity
+            android:name="com.arawaney.tumascotik.client.activity.ClientPicker"
+            android:label="ClientPicker"
             android:screenOrientation="sensorPortrait" >
         </activity>
 
@@ -83,8 +88,12 @@
             android:name=".db.TumascotikProvider"
             android:authorities="com.arawaney.tumascotik.client.db.contentprovider" >
         </provider>
-        
-           <service android:name="com.arawaney.tumascotik.client.control.BackEndDataUpdater" android:enabled="true" android:exported="true" > </service>
+
+        <service
+            android:name="com.arawaney.tumascotik.client.control.BackEndDataUpdater"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

@@ -12,13 +12,14 @@ public class MainController {
 	private final static String LOG_TAG = "Tumascotik-Client-Main Controller";
 	Context context;
 	public static User USER;
+	static User CLIENTUSER;
 	static Pet PET;
 	static Request 	REQUEST;
 
 	public static boolean Initialize(Context context) {
 		Log.d(LOG_TAG, "Initialize");
 		try {
-			USER = UserProvider.readUser(context);
+			USER = UserProvider.readMainUser(context);
 
 		} catch (Exception e) {
 
@@ -51,6 +52,14 @@ public class MainController {
 
 	public static void setREQUEST(Request request) {
 		REQUEST = request;
+	}
+
+	public static User getCLIENTUSER() {
+		return  CLIENTUSER;
+	}
+
+	public static void setCLIENTUSER(User clienUser) {
+		CLIENTUSER = clienUser;
 	}
 
 }

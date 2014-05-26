@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- General -->
+    <dimen name="general_padding_small">7dp</dimen>
+    <dimen name="general_padding_medium">16dp</dimen>
+    <dimen name="general_spinner_padding">3dp</dimen>
+    <dimen name="general_margin_bottom">33dp</dimen>
+    <dimen name="padding_scroll_edit_profile">4dp</dimen>
+
+    <!-- Texts -->
+    <dimen name="big_oval_buttons">35sp</dimen>
+    <dimen name="log_in">33sp</dimen>
+    <dimen name="pet_names_blue_bckg">38sp</dimen>
+    <dimen name="pet_names_gray_bckg">33sp</dimen>
+    <dimen name="profile_data">25sp</dimen>
+    <dimen name="blue_text">35sp</dimen>
+    <dimen name="user_edit_text">33sp</dimen>
+    <dimen name="request_item_title">24sp</dimen>
+    <dimen name="request_items">16sp</dimen>
+    <dimen name="zero_data_text">25sp</dimen>
+
+    <!-- MainActivity -->
+    <dimen name="main_activity_logo_margin_top">33dp</dimen>
+    <dimen name="main_activity_social_media_layout_margin">60dp</dimen>
+    <dimen name="main_activity_social_elements_margin">25dp</dimen>
+
+    <!-- SlidingMenu -->
+    <dimen name="sliding_menu_shadow_width">23dp</dimen>
+    <dimen name="sliding_menu_offset">116dp</dimen>
+    <dimen name="sliding_menu_list_padding">15dp</dimen>
+    <dimen name="sliding_menu_list_widh">350dp</dimen>
+
+    <!-- User Info -->
+    <dimen name="user_info_min_width_names">65dp</dimen>
+    <dimen name="user_info_min_width_address">150dp</dimen>
+
+    <!-- Make  Appointment -->
+    <dimen name="make_appointment_title">80sp</dimen>
+    <dimen name="send_request_field">35sp</dimen>
+
+    <!-- Budget -->
+    <dimen name="budget_activity_list_height">600dp</dimen>
+    <dimen name="budget_activity_total_margin_right">45dp</dimen>
+    <dimen name="budget_activity_deleteall_margin_right">35dp</dimen>
+    <dimen name="budget_activity_deleteall_margin_bottom">7dp</dimen>
+    <dimen name="budget_activity_view_divider_height">15.0sp</dimen>
+    <dimen name="budget_view_margin">24dp</dimen>
+
+    <!-- Pet Info -->
+    <dimen name="pet_info_margin_between_elements">7dp</dimen>
+    <dimen name="pet_info_layout_height">70dp</dimen>
+    <dimen name="pet_info_layout_margin_top">23dp</dimen>
+    <dimen name="pet_info_title_margin_right">15dp</dimen>
+
+    <!-- Activity Picker -->
+    <dimen name="activity_picker_margin_top">15dp</dimen>
+    <dimen name="activity_picker_list_padding">23dp</dimen>
+
+    <!-- Send Request -->
+    <dimen name="send_request_title_margin_top">75dp</dimen>
+    <dimen name="send_request_list_margin_top">33dp</dimen>
+
+    <!-- Set Date -->
+    <dimen name="set_date_alert_text_margin">15dp</dimen>
+    <dimen name="set_date_set_date_margin_top">80dp</dimen>
+    <dimen name="set_date_text_margin_top">35dp</dimen>
+
+    <!-- Set Request Details -->
+    <dimen name="set_request_details_toggle_margin_top">33dp</dimen>
+    <dimen name="set_request_details_motive_margin_top">50dp</dimen>
+    <dimen name="set_request_details_elements_margin">23dp</dimen>
+
+    <!-- User Info -->
+    <dimen name="user_info_margin_between_elements">7dp</dimen>
+    <dimen name="user_info_layout_height">70dp</dimen>
+    <dimen name="user_info_layout_margin_top">23dp</dimen>
+    <dimen name="user_info_title_margin_right">15dp</dimen>
+    <dimen name="user_info_phone_field_width">85dp</dimen>
+
+    <!-- Pet Picker -->
+    <dimen name="pet_picker_space_between_name_and_image_petpicker">24dp</dimen>
+    <dimen name="pet_picker_space_between_items">33dp</dimen>
+
+    <!-- Request View -->
+    <dimen name="request_view_layout_height">160dp</dimen>
+    <dimen name="request_view_layout_margin_left">7dp</dimen>
+    <dimen name="request_view_layout_inner_margin_top">7dp</dimen>
+    <dimen name="request_view_layout_element_margin_left">4dp</dimen>
+
+    <!-- Send Budget -->
+    <dimen name="send_budget_item_gneneral_margin">7dp</dimen>
+    <dimen name="send_budget_layout_margin_left">23dp</dimen>
+
+    <!-- Log In -->
+    <dimen name="log_in_margin_top">23dp</dimen>
+    <dimen name="log_in_widh">70dp</dimen>
+
+    <!-- Menu Buttons -->
+    <dimen name="menu_buttons_margin">23dp</dimen>
+    <dimen name="menu_buttons_padding">7dp</dimen>
+
+    <!-- ActionBar -->
+    <dimen name="actionbar_margin">33dp</dimen>
+
+    <!-- Zero Data -->
+    <dimen name="zero_data_image_margin_top">60dp</dimen>
+    <dimen name="zero_data_text_margin_bottom">80dp</dimen>
+
+</resources>

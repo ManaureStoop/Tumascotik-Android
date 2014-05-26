@@ -27,6 +27,10 @@ public class ActivityBase extends SherlockActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		onCreateActivityBase();
+	}
+
+	public void onCreateActivityBase() {
 		createSlidingMenu();
 
 		if (enableHomeIconActionBack() || enableHomeIconActionSlidingMenu()) {
@@ -75,7 +79,7 @@ public class ActivityBase extends SherlockActivity {
 		}
 	}
 
-	private void createSlidingMenu() {
+	public void createSlidingMenu() {
 		// If nothing is set, than sliding menu wont be created.
 		if (setSlidingMenu() != null) {
 			Class<?> builder = setSlidingMenu();

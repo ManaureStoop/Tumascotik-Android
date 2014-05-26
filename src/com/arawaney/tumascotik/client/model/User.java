@@ -19,12 +19,17 @@ public class User {
 	private Long house_telephone;
 	private Calendar updated_at;
 	private Integer admin;
+	private Integer isCurrentUser;
 	
 	public final static int GENDER_MAN= 1;
 	public final static int GENDER_WOMAN = 2;
 	
 	public final static int IS_ADMIN = 1;
 	public final static int NOT_ADMIN = 0 ;
+	
+	public final static int IS_CURRENT_USER = 1;
+	public final static int NOT_CURRENT_USER = 0 ;
+	
 	
 	public User(User user) {
 		id = user.getId();
@@ -156,6 +161,14 @@ public class User {
 
 	public void setUpdated_at(Calendar updated_at) {
 		this.updated_at = updated_at;
+	}
+
+	public Integer getIsCurrentUser() {
+		return isCurrentUser;
+	}
+
+	public void setIsCurrentUser(Integer isCurrentUser) {
+		this.isCurrentUser = isCurrentUser;
 	}
 
 }

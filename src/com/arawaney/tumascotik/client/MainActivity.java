@@ -23,6 +23,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,6 +37,7 @@ import com.arawaney.tumascotik.client.activity.BudgetActivity;
 import com.arawaney.tumascotik.client.activity.PetPicker;
 import com.arawaney.tumascotik.client.activity.SetRequestDetails;
 import com.arawaney.tumascotik.client.activity.UserInfoActivity;
+import com.arawaney.tumascotik.client.activity.ViewBudgets;
 import com.arawaney.tumascotik.client.activity.ViewRequests;
 import com.arawaney.tumascotik.client.backend.ParseBudgetProvider;
 import com.arawaney.tumascotik.client.backend.ParsePetProvider;
@@ -44,6 +46,7 @@ import com.arawaney.tumascotik.client.backend.ParseRequestProvider;
 import com.arawaney.tumascotik.client.control.BackEndDataUpdater;
 import com.arawaney.tumascotik.client.control.CalendarController;
 import com.arawaney.tumascotik.client.control.MainController;
+import com.arawaney.tumascotik.client.control.Updater;
 import com.arawaney.tumascotik.client.db.provider.BreedProvider;
 import com.arawaney.tumascotik.client.db.provider.BudgetProvider;
 import com.arawaney.tumascotik.client.db.provider.PetPropertieProvider;
@@ -51,6 +54,7 @@ import com.arawaney.tumascotik.client.db.provider.PetProvider;
 import com.arawaney.tumascotik.client.db.provider.RequestProvider;
 import com.arawaney.tumascotik.client.db.provider.ServiceProvider;
 import com.arawaney.tumascotik.client.db.provider.SpecieProvider;
+import com.arawaney.tumascotik.client.db.provider.UserProvider;
 import com.arawaney.tumascotik.client.dialog.ConnectionDialog;
 import com.arawaney.tumascotik.client.listener.ParseBudgetListener;
 import com.arawaney.tumascotik.client.listener.ParsePetListener;
@@ -73,9 +77,9 @@ import com.arawaney.tumascotik.client.util.NetworkUtil;
 
 //import com.arawaney.tumascotik.client.R
 
-public class MainActivity extends ActivityBase implements
-		ParsePetListener, ParseUserListener, ParseRequestListener,
-		ParseServiceListener, ParseBudgetListener {
+public class MainActivity extends ActivityBase implements ParsePetListener,
+		ParseUserListener, ParseRequestListener, ParseServiceListener,
+		ParseBudgetListener {
 	Date fechainicio;
 	ProgressDialog progressDialog;
 	SharedPreferences savedpendingappoint;
@@ -119,7 +123,7 @@ public class MainActivity extends ActivityBase implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
 
@@ -130,14 +134,13 @@ public class MainActivity extends ActivityBase implements
 		loadButtons();
 
 		if (MainController.Initialize(this)) {
-
 			setMainMenu();
 			if (checkingInternetConnections()) {
 				loadActionBar();
 				ParseProvider.getCurrentUser(this);
-				updatePets();
-				updateRequests();
-				updateBudgets();
+				updateData();
+				Updater.requestExpiredUpdater(this);
+				Updater.budgetExpiredUpdater(this);
 			}
 
 		} else {
@@ -146,7 +149,36 @@ public class MainActivity extends ActivityBase implements
 
 		}
 
-		// reset_DataBase_SharedP();
+	}
+
+	private void updateData() {
+		if (userIsVet()) {
+			updateVetData();
+		} else {
+			updateClientData();
+		}
+	}
+
+	private void updateVetData() {
+		updateClients();
+		vetUpdateRequests();
+		vetUpdateBudgets();
+	}
+
+	private void vetUpdateBudgets() {
+		ParseBudgetProvider.updateAllBudgets(this, this);
+
+	}
+
+	private void vetUpdateRequests() {
+		ParseRequestProvider.updateAllRequests(this, this);
+
+	}
+
+	private void updateClientData() {
+		clientUpdatePets();
+		clientUpdateBudgets();
+		// Requests are updated afet pets are done.
 
 	}
 
@@ -156,43 +188,50 @@ public class MainActivity extends ActivityBase implements
 		actionBar.setDisplayUseLogoEnabled(false);
 		actionBar.setDisplayShowHomeEnabled(false);
 
-		View view = getLayoutInflater().inflate(R.layout.view_actionbar_main, null);
-		ImageView menu = (ImageView)view.findViewById(R.id.imageView_actionbar_menu);     
-		ImageView syncRequest = (ImageView)view.findViewById(R.id.imageView_actionbar_sync);   
+		View view = getLayoutInflater().inflate(R.layout.view_actionbar_main,
+				null);
+		ImageView menu = (ImageView) view
+				.findViewById(R.id.imageView_actionbar_menu);
+		ImageView syncRequest = (ImageView) view
+				.findViewById(R.id.imageView_actionbar_sync);
 		syncRequest.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				updateRequests();
-				updateBudgets();
+				updateData();
 			}
 		});
-		menu.setOnClickListener(new OnClickListener()
-		{
-		        @Override
-		        public void onClick(View v)
-		        {
-		        	toggleMenu();
-		        }
+		menu.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				toggleMenu();
+			}
 		});
-		ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+		ActionBar.LayoutParams params = new ActionBar.LayoutParams(
+				ActionBar.LayoutParams.MATCH_PARENT,
+				ActionBar.LayoutParams.MATCH_PARENT, Gravity.CENTER);
 		actionBar.setCustomView(view, params);
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
 	}
 
-	private void updateBudgets() {
+	private void clientUpdateBudgets() {
 		ParseBudgetProvider.updateBudgets(this, this);
 
 	}
 
-	private void updateRequests() {
+	private void clientUpdateRequests() {
 		ParseRequestProvider.updateRequests(this, this);
 
 	}
 
-	private void updatePets() {
-		ParsePetProvider.updatePets(this, MainController.USER, this);
+	private void clientUpdatePets() {
+		ParsePetProvider.updateClientPets(this, MainController.USER, this);
+
+	}
+
+	private void vetUpdatePets() {
+		ParsePetProvider.updateAllPets(this, this);
 
 	}
 
@@ -205,6 +244,12 @@ public class MainActivity extends ActivityBase implements
 	private void setMainMenu() {
 		login_layout.setVisibility(View.GONE);
 		main_buttons_layout.setVisibility(View.VISIBLE);
+
+		if (userIsVet()) {
+			makeRequest.setVisibility(View.GONE);
+			makeBudget.setText(getResources()
+					.getString(R.string.menu_my_orders));
+		}
 
 	}
 
@@ -260,9 +305,15 @@ public class MainActivity extends ActivityBase implements
 
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(MainActivity.this,
-						BudgetActivity.class);
-				startActivity(i);
+				if (userIsVet()) {
+					Intent i = new Intent(MainActivity.this, ViewBudgets.class);
+					startActivity(i);
+				} else {
+					Intent i = new Intent(MainActivity.this,
+							BudgetActivity.class);
+					startActivity(i);
+				}
+
 			}
 		});
 		youtube.setOnClickListener(new OnClickListener() {
@@ -298,9 +349,8 @@ public class MainActivity extends ActivityBase implements
 			public void onClick(View v) {
 
 				if (pendingApointments != 0) {
-					progressDialog = ProgressDialog.show(
-							MainActivity.this, "Tumascotik",
-							"Actualizando citas...");
+					progressDialog = ProgressDialog.show(MainActivity.this,
+							"Tumascotik", "Actualizando citas...");
 					calledfromlogobuton = true;
 					// loadPendingObjects();
 				}
@@ -325,9 +375,16 @@ public class MainActivity extends ActivityBase implements
 				String username = text_username.getText().toString();
 				String password = text_password.getText().toString();
 
-				ParseProvider.logIn(username, password,
-						MainActivity.this, MainActivity.this);
+				ParseProvider.logIn(username, password, MainActivity.this,
+						MainActivity.this);
+				
+				hideCurrentKeyboard();
 
+			}
+
+			private void hideCurrentKeyboard() {
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 			}
 		});
 	}
@@ -345,7 +402,7 @@ public class MainActivity extends ActivityBase implements
 		facebook = (ImageView) findViewById(R.id.bfacebookmenu);
 		twitter = (ImageView) findViewById(R.id.btwittermenu);
 		youtube = (ImageView) findViewById(R.id.byoutubemenu);
-		logorefresh = (Button) findViewById(R.id.blogorefreshmenu);
+		logorefresh = (Button) findViewById(R.id.mainlogo);
 		emergencia = (ImageView) findViewById(R.id.bemergenciamenu);
 
 		setFonts();
@@ -383,7 +440,7 @@ public class MainActivity extends ActivityBase implements
 		String notificationtitle;
 		String notificationcontent;
 		Class tapclass;
-
+		Log.d("TEST2", "REQUEST: " + request.getSystem_id());
 		String petName = request.getPet().getName();
 
 		if (vetAccepted) {
@@ -420,10 +477,10 @@ public class MainActivity extends ActivityBase implements
 	private void showToastStatusBarNotif(String toasttext,
 			String notificationtitle, String notificationcontent, Class tapclass) {
 		// Generating Toast notification
-//		Toast toast = Toast.makeText(MainActivity.this, toasttext,
-//				Toast.LENGTH_LONG);
-//		toast.setGravity(Gravity.CENTER, 0, 0);
-//		toast.show();
+		// Toast toast = Toast.makeText(MainActivity.this, toasttext,
+		// Toast.LENGTH_LONG);
+		// toast.setGravity(Gravity.CENTER, 0, 0);
+		// toast.show();
 		// Generating Status Bar notification
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				this)
@@ -512,13 +569,23 @@ public class MainActivity extends ActivityBase implements
 	public void OnLoginResponse() {
 		mainController.Initialize(this);
 		if (mainController.isActive()) {
-			loadActionBar();
-			setMainMenu();
 			loadBackEndData();
-			updatePets();
 		} else {
 			text_username.setText("Error haciendo login");
 		}
+
+	}
+
+	private void updateClients() {
+		ParseProvider.updateClients(this, this);
+
+	}
+
+	private boolean userIsVet() {
+		if (mainController.isActive()) {
+			return MainController.USER.getisAdmin() == User.IS_ADMIN;
+		} else
+			return false;
 
 	}
 
@@ -528,8 +595,7 @@ public class MainActivity extends ActivityBase implements
 		petPropertiesDone = false;
 		motivesDone = false;
 
-		progressDialog = ProgressDialog.show(MainActivity.this,
-				"Tumascotik",
+		progressDialog = ProgressDialog.show(MainActivity.this, "Tumascotik",
 				getResources()
 						.getString(R.string.main_load_backend_data_dialog));
 
@@ -595,14 +661,20 @@ public class MainActivity extends ActivityBase implements
 		if (pets != null) {
 			for (Pet pet : pets) {
 				Pet savedPet = PetProvider.readPet(this, pet.getSystem_id());
-				if (savedPet == null) {
+				if (savedPet == null && pet.isActive()) {
 					PetProvider.insertPet(this, pet);
 				} else {
-					pet.setId(savedPet.getId());
-					PetProvider.updatePet(this, pet);
+					if (pet.isActive()) {
+						pet.setId(savedPet.getId());
+						PetProvider.updatePet(this, pet);
+					} else {
+						PetProvider.removePet(this, pet.getSystem_id());
+					}
+
 				}
 
 			}
+			clientUpdateRequests();
 		}
 	}
 
@@ -638,28 +710,36 @@ public class MainActivity extends ActivityBase implements
 
 					Request savedRequest = RequestProvider.readRequest(this,
 							request.getSystem_id());
-					if (savedRequest == null) {
+					if (savedRequest == null
+							&& request.isActive() == Request.ACTIVE) {
 						RequestProvider.insertRequest(this, request);
 					} else {
-						if (requestAccepted(request, savedRequest)) {
-							notifyUser(true, savedRequest);
-							Date startDate = savedRequest.getStart_date()
-									.getTime();
-							Date finishDate = savedRequest.getFinish_date()
-									.getTime();
+						if (request.isActive() == Request.ACTIVE) {
+							if (requestAccepted(request, savedRequest)) {
+								notifyUser(true, savedRequest);
+								Date startDate = savedRequest.getStart_date()
+										.getTime();
+								Date finishDate = savedRequest.getFinish_date()
+										.getTime();
 
-							CalendarController.writeToCalendar(savedRequest
-									.getPet().getName(), startDate, finishDate,
-									this);
+								CalendarController.writeToCalendar(savedRequest
+										.getPet().getName(), startDate,
+										finishDate, this);
 
-						} else if (requestCanceled(request, savedRequest)) {
-							notifyUser(false, savedRequest);
-							savedRequest.setStatus(Request.STATUS_CANCELED);
-							RequestProvider.updateRequest(this, savedRequest);
+							} else if (requestCanceled(request, savedRequest)) {
+								notifyUser(false, savedRequest);
+								savedRequest.setStatus(Request.STATUS_CANCELED);
+								RequestProvider.updateRequest(this,
+										savedRequest);
+							}
+
+							request.setId(savedRequest.getId());
+							RequestProvider.updateRequest(this, request);
+						} else {
+							RequestProvider.removeRequest(this,
+									request.getSystem_id());
 						}
 
-						request.setId(savedRequest.getId());
-						RequestProvider.updateRequest(this, request);
 					}
 
 				}
@@ -726,6 +806,8 @@ public class MainActivity extends ActivityBase implements
 		if (breedsDone && speciesDone && motivesDone && petPropertiesDone) {
 			progressDialog.dismiss();
 			setUpBackendUpdateServiceAlarm();
+			finish();
+			startActivity(getIntent());
 		}
 	}
 
@@ -742,6 +824,8 @@ public class MainActivity extends ActivityBase implements
 		if (breedsDone && speciesDone && motivesDone && petPropertiesDone) {
 			progressDialog.dismiss();
 			setUpBackendUpdateServiceAlarm();
+			finish();
+			startActivity(getIntent());
 		}
 
 	}
@@ -759,6 +843,8 @@ public class MainActivity extends ActivityBase implements
 		if (breedsDone && speciesDone && motivesDone && petPropertiesDone) {
 			progressDialog.dismiss();
 			setUpBackendUpdateServiceAlarm();
+			finish();
+			startActivity(getIntent());
 		}
 
 	}
@@ -782,6 +868,8 @@ public class MainActivity extends ActivityBase implements
 		if (breedsDone && speciesDone && motivesDone && petPropertiesDone) {
 			progressDialog.dismiss();
 			setUpBackendUpdateServiceAlarm();
+			finish();
+			startActivity(getIntent());
 		}
 
 	}
@@ -895,7 +983,7 @@ public class MainActivity extends ActivityBase implements
 		// Set alarm for 1 week
 		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 1000
 				* 60 * 60 * 24 * 7, pintent);
-		
+
 		startService(new Intent(getBaseContext(), BackEndDataUpdater.class));
 
 	}
@@ -903,6 +991,80 @@ public class MainActivity extends ActivityBase implements
 	@Override
 	public void onPetRemoveFinished(boolean b) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void onClientsQueryFinish(ArrayList<User> users, boolean querySucces) {
+		if (querySucces) {
+			for (User user : users) {
+				User savedUser = UserProvider
+						.readUser(this, user.getSystemId());
+				if (savedUser == null) {
+					UserProvider.insertUser(this, user);
+				} else {
+					user.setId(savedUser.getId());
+					UserProvider.updateUser(this, user);
+				}
+
+			}
+			vetUpdatePets();
+		}
+
+	}
+
+	@Override
+	public void onBudgetStatusChanged(Budget budget) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void OnStatusChangedFinished(boolean b, Budget budget) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onCanceledQueryFinished(boolean canceled, Request request) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void cancelRequest(Request request) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void acceptRequest(Request request) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onRequestAccept(Request request, boolean b) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onUserInsertFinish(User updatedUSer, boolean updated,
+			String systemId) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onCLientUpdateFinish(User user, boolean b) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onOnePriceQueryFinished(int price) {
+		// TODO Auto-generated method stub
+
 	}
 }

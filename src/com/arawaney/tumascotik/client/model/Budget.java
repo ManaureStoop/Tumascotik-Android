@@ -17,7 +17,7 @@ public class Budget {
 	private String userId;
 	private List<Service> services;
 
-	
+	public final static int STATUS_CANCELED = 2 ;	
 	public final static int STATUS_WORKING = 5;
 	public final static int STATUS_IN_PROCESS = 6;
 	public final static int STATUS_READY = 7;

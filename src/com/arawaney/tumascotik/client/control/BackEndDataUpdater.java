@@ -227,7 +227,7 @@ public class BackEndDataUpdater extends Service implements ParsePetListener,
 	}
 	
 	private void updatePets() {
-		ParsePetProvider.updatePets(this, MainController.USER, this);
+		ParsePetProvider.updateClientPets(this, MainController.USER, this);
 
 	}
 

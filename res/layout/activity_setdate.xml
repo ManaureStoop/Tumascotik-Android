@@ -10,8 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txthorasetd"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="@dimen/set_date_alert_text_margin"
+        android:layout_marginTop="@dimen/set_date_alert_text_margin"
         android:gravity="center"
         android:text="@string/set_date_price_alert"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/bsigsetd"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="@dimen/general_margin_bottom"
         android:src="@drawable/buton_cancel" />
 
     <ImageView
@@ -33,8 +33,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="14dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginBottom="@dimen/general_margin_bottom"
+        android:layout_marginRight="@dimen/general_margin_bottom"
         android:src="@drawable/buton_foward" />
 
     <Button
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="78dp"
+        android:layout_marginTop="@dimen/set_date_set_date_margin_top"
         android:background="@drawable/buton_yellow"
         android:text="@string/set_date_date_title"
         android:textColor="@color/text_white"
@@ -66,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/bfechasetd"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="@dimen/set_date_text_margin_top"
         android:text="@string/set_date_date_text"
         android:textColor="@color/text_edit_profiles"
         android:textSize="@dimen/profile_data" />
@@ -77,7 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/bhorasetd"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="@dimen/set_date_text_margin_top"
         android:text="@string/set_date_time_datefirst_text"
         android:textColor="@color/text_edit_profiles"
         android:textSize="@dimen/profile_data" />

@@ -14,7 +14,7 @@
             android:id="@+id/button_user_info_edit_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-           android:layout_centerVertical="true"
+            android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/image_user_info_avatar"
             android:gravity="center"
             android:src="@drawable/buton_edit" />
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="@dimen/user_info_margin_between_elements"
             android:src="@drawable/ic_perro" />
 
         <TextView
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/image_user_info_avatar"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="@dimen/user_info_margin_between_elements"
             android:background="@drawable/label_pet_name"
             android:ems="10"
             android:gravity="center_horizontal"
@@ -44,8 +44,9 @@
     <ScrollView
         android:id="@+id/scrollView_user_info"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/user_info_layout_margin_top"
+        android:layout_weight="1"
         android:paddingLeft="@dimen/padding_scroll_edit_profile"
         android:paddingRight="@dimen/padding_scroll_edit_profile" >
 
@@ -57,14 +58,14 @@
             <LinearLayout
                 android:id="@+id/tlayout_user_info_name"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="15dp" >
+                android:layout_height="@dimen/user_info_layout_height"
+                android:layout_marginTop="@dimen/user_info_layout_margin_top" >
 
                 <TextView
                     android:id="@+id/text_user_info_name_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/user_info_title_margin_right"
                     android:text="@string/user_info_title_name"
                     android:textColor="@color/text_blue"
                     android:textSize="@dimen/blue_text" />
@@ -75,6 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:inputType="textPersonName"
+                    android:minWidth="@dimen/user_info_min_width_names"
                     android:textColor="@color/text_edit_profiles"
                     android:textSize="@dimen/user_edit_text" >
 
@@ -85,14 +87,14 @@
             <LinearLayout
                 android:id="@+id/tlayout_user_info_lastname"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="15dp" >
+                android:layout_height="@dimen/user_info_layout_height"
+                android:layout_marginTop="@dimen/user_info_layout_margin_top" >
 
                 <TextView
                     android:id="@+id/text_user_info_lastname_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/user_info_title_margin_right"
                     android:text="@string/user_info_title_lastname"
                     android:textColor="@color/text_blue"
                     android:textSize="@dimen/blue_text" />
@@ -103,20 +105,21 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:inputType="textPersonName"
+                    android:minWidth="@dimen/user_info_min_width_names"
                     android:textColor="@color/text_edit_profiles"
                     android:textSize="@dimen/user_edit_text" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="15dp" >
+                android:layout_height="@dimen/user_info_layout_height"
+                android:layout_marginTop="@dimen/user_info_layout_margin_top" >
 
                 <TextView
                     android:id="@+id/text_user_info_email_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/user_info_title_margin_right"
                     android:text="@string/user_info_title_email"
                     android:textColor="@color/text_blue"
                     android:textSize="@dimen/blue_text" />
@@ -136,20 +139,21 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:inputType="textEmailAddress"
+                    android:minWidth="@dimen/user_info_min_width_names"
                     android:textColor="@color/text_edit_profiles"
                     android:textSize="@dimen/user_edit_text" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="15dp" >
+                android:layout_height="@dimen/user_info_layout_height"
+                android:layout_marginTop="@dimen/user_info_layout_margin_top" >
 
                 <TextView
                     android:id="@+id/text_user_info_phone_local_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/user_info_title_margin_right"
                     android:text="@string/user_info_title_phone_home"
                     android:textColor="@color/text_blue"
                     android:textSize="@dimen/blue_text" />
@@ -165,7 +169,7 @@
 
                 <EditText
                     android:id="@+id/edittext_user_info_phone_local_prefix"
-                    android:layout_width="70dp"
+                    android:layout_width="@dimen/user_info_phone_field_width"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:inputType="phone"
@@ -183,7 +187,7 @@
 
                 <EditText
                     android:id="@+id/edittext_user_info_phone_local"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/user_info_phone_field_width"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:inputType="phone"
@@ -193,23 +197,17 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="15dp" >
+                android:layout_height="@dimen/user_info_layout_height"
+                android:layout_marginTop="@dimen/user_info_layout_margin_top" >
 
                 <TextView
                     android:id="@+id/text_user_info_phone_mobile_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/user_info_title_margin_right"
                     android:text="@string/user_info_title_phone_mobile"
                     android:textColor="@color/text_blue"
                     android:textSize="@dimen/blue_text" />
-
-                <ImageView
-                    android:id="@+id/imageView_alert_user_info_phone_mobile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/buton_edit" />
 
                 <TextView
                     android:id="@+id/text_user_info_phone_mobile"
@@ -222,7 +220,7 @@
 
                 <EditText
                     android:id="@+id/edittext_user_info_phone_mobile_prefix"
-                    android:layout_width="70dp"
+                    android:layout_width="@dimen/user_info_phone_field_width"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:inputType="phone"
@@ -240,7 +238,7 @@
 
                 <EditText
                     android:id="@+id/edittext_user_info_phone_mobile"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/user_info_phone_field_width"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:inputType="phone"
@@ -250,23 +248,17 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="15dp" >
+                android:layout_height="@dimen/user_info_layout_height"
+                android:layout_marginTop="@dimen/user_info_layout_margin_top" >
 
                 <TextView
                     android:id="@+id/text_user_info_address_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/user_info_title_margin_right"
                     android:text="@string/user_info_title_address"
                     android:textColor="@color/text_blue"
                     android:textSize="@dimen/blue_text" />
-
-                <ImageView
-                    android:id="@+id/imageView_alert_user_info_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/buton_edit" />
 
                 <TextView
                     android:id="@+id/text_user_info_address"
@@ -283,20 +275,21 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:inputType="textMultiLine"
+                    android:minWidth="@dimen/user_info_min_width_address"
                     android:textColor="@color/text_edit_profiles"
                     android:textSize="@dimen/user_edit_text" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="15dp" >
+                android:layout_height="@dimen/user_info_layout_height"
+                android:layout_marginTop="@dimen/user_info_layout_margin_top" >
 
                 <TextView
                     android:id="@+id/text_user_info_gender_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/user_info_title_margin_right"
                     android:text="@string/user_info_title_gender"
                     android:textColor="@color/text_blue"
                     android:textSize="@dimen/blue_text" />
@@ -321,7 +314,95 @@
                     android:splitMotionEvents="false"
                     android:textAlignment="center" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LinearLayout_user_info_username"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/user_info_layout_height"
+                android:layout_marginTop="@dimen/user_info_layout_margin_top" >
+
+                <TextView
+                    android:id="@+id/TextView_user_ifo_username_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/user_info_title_margin_right"
+                    android:text="@string/user_info_title_username"
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
+
+                <EditText
+                    android:id="@+id/EditText_user_ifo_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LinearLayout_user_info_password"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/user_info_layout_height"
+                android:layout_marginTop="@dimen/user_info_layout_margin_top" >
+
+                <TextView
+                    android:id="@+id/TextView_user_ifo_password_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/user_info_title_margin_right"
+                    android:text="@string/user_info_title_password"
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
+
+                <EditText
+                    android:id="@+id/EditText_user_ifo_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:inputType="textPassword"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LinearLayout_user_info_confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/user_info_layout_height"
+                android:layout_marginTop="@dimen/user_info_layout_margin_top" >
+
+                <TextView
+                    android:id="@+id/TextView_user_ifo_confirm_password_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/user_info_title_margin_right"
+                    android:text="@string/user_info_title_confirm_password"
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
+
+                <EditText
+                    android:id="@+id/EditText_user_ifo_confirm_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:inputType="textPassword"
+                    android:textColor="@color/text_edit_profiles"
+                    android:textSize="@dimen/user_edit_text" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/button_pet_info_view_pets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/general_margin_bottom"
+        android:layout_marginTop="@dimen/general_margin_bottom"
+        android:background="@drawable/buton_yellow"
+        android:text="@string/menu_view_pets"
+        android:textColor="@color/white" />
 
 </LinearLayout>

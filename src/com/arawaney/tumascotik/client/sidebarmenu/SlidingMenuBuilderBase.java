@@ -1,16 +1,20 @@
 package com.arawaney.tumascotik.client.sidebarmenu;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.sax.StartElementListener;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.Toast;
-
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.arawaney.tumascotik.client.R;
+import com.arawaney.tumascotik.client.activity.ClientPicker;
 import com.arawaney.tumascotik.client.activity.PetPicker;
 import com.arawaney.tumascotik.client.activity.UserInfoActivity;
+import com.arawaney.tumascotik.client.control.MainController;
+import com.arawaney.tumascotik.client.model.User;
 
 /**
  * @author Andrius Baruckis http://www.baruckis.com
@@ -33,15 +37,17 @@ public abstract class SlidingMenuBuilderBase {
 	 *            This is Activity to which sliding menu is attached.
 	 * 
 	 */
+	@SuppressLint("NewApi")
 	public void createSlidingMenu(Activity activity) {
 		this.activity = activity;
 		// For actual sliding menu creation we use an external open source
 		// Android library called "SlidingMenu". It can be found at
 		// "https://github.com/jfeinstein10/SlidingMenu".
 		// We configure the SlidingMenu to our needs.
-		 DisplayMetrics displaymetrics = new DisplayMetrics();
-		   activity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-		
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		activity.getWindowManager().getDefaultDisplay()
+				.getMetrics(displaymetrics);
+
 		menu = new SlidingMenu(activity);
 		menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 		menu.setShadowWidthRes(R.dimen.sliding_menu_shadow_width);
@@ -49,7 +55,7 @@ public abstract class SlidingMenuBuilderBase {
 		menu.setBehindOffsetRes(R.dimen.sliding_menu_offset);
 		menu.setFadeDegree(0.35f);
 		menu.attachToActivity(activity, SlidingMenu.SLIDING_WINDOW);
-		menu.setBehindWidth((3*displaymetrics.widthPixels)/5);
+		menu.setBehindWidth((3 * displaymetrics.widthPixels) / 5);
 		menu.setMenu(R.layout.sliding_menu_frame);
 
 		SlidingMenuListFragment slidingMenuListFragment = new SlidingMenuListFragment();
@@ -70,21 +76,28 @@ public abstract class SlidingMenuBuilderBase {
 	// actions, which will be called when we press on separate list items.
 	public void onListItemClick(SlidingMenuListItem selectedSlidingMenuListItem) {
 		CharSequence text;
-		switch (selectedSlidingMenuListItem.id) {
-		case 0:
-			UserInfoActivity.viewMode = UserInfoActivity.MODE_INFO_LIST;
-			this.activity.startActivity(selectedSlidingMenuListItem.intent);
-			break;
-		case 1:
-			PetPicker.functionMode = PetPicker.MODE_EDIT_PET;
-			this.activity.startActivity(selectedSlidingMenuListItem.intent);
-			break;
-		default:
-			text = "Clicked item. "
-					+ "NOTHING CLICKED";
-			Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
-			break;
-		}
+
+		
+			switch (selectedSlidingMenuListItem.id) {
+			case 0:
+				MainController.setCLIENTUSER(MainController.USER);
+				UserInfoActivity.viewMode = UserInfoActivity.MODE_INFO_LIST;
+				this.activity.startActivity(selectedSlidingMenuListItem.intent);
+				break;
+			case 1:
+				if (MainController.USER.getisAdmin() == User.IS_ADMIN) {
+					this.activity.startActivity(selectedSlidingMenuListItem.intent);
+				}else{
+					PetPicker.functionMode = PetPicker.MODE_EDIT_PET;
+					this.activity.startActivity(selectedSlidingMenuListItem.intent);
+				}
+				break;
+			default:
+				text = "Clicked item. " + "NOTHING CLICKED";
+				Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
+				break;
+			}
+		
 	}
 
 }

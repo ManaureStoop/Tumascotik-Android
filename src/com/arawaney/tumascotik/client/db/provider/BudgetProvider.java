@@ -408,6 +408,7 @@ public class BudgetProvider {
 
 		if (cursor.getCount() == 0) {
 			cursor.close();
+			Log.d("test 14", "no hay services");
 			return null;
 		}
 
@@ -420,6 +421,7 @@ public class BudgetProvider {
 							.getString(cursor
 									.getColumnIndex(ServiceBudgetEntity.COLUMN_SERVICE_SYSTEM_ID));
 
+					Log.d("TEST13 PARA BUDGET : ",budgetId +" "+serviceSystemId);
 					Service service = ServiceProvider.readMotive(context,
 							serviceSystemId);
 

@@ -13,93 +13,97 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/background" >
 
-        <RelativeLayout
-            android:id="@+id/relativeLayout1"
+        <include
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/textview_budget_total_title"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="3dp" >
+            android:layout_height="match_parent"
+            layout="@layout/zero_data_budget_list_view" />
 
-            <ListView
-                android:id="@+id/listview_budgets"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:divider="@null" >
-            </ListView>
+        <LinearLayout
+            android:id="@+id/relativeLayout_budget_list"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/budget_activity_list_height"
+            android:orientation="vertical" >
 
-            <include
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                layout="@layout/zero_data_budget_list_view" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"
+                android:orientation="horizontal" >
 
-        </RelativeLayout>
+                <ListView
+                    android:id="@+id/listview_budgets"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="@null" >
+                </ListView>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/general_padding_small" >
+
+                <TextView
+                    android:id="@+id/textview_budget_total_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/budget_activity_total_margin_right"
+                    android:text="@string/budget_total_title"
+                    android:textColor="@color/text_blue"
+                    android:textSize="@dimen/blue_text" />
+
+                <TextView
+                    android:id="@+id/txttotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/textview_budget_total_title"
+                    android:background="@drawable/buton_yellow"
+                    android:gravity="center"
+                    android:padding="@dimen/general_padding_small"
+                    android:text="0 Bs"
+                    android:textColor="@color/text_white"
+                    android:textSize="@dimen/big_oval_buttons" />
+            </RelativeLayout>
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/textview_budget_total_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/txttotal"
-            android:layout_alignRight="@+id/relativeLayout1"
-            android:layout_marginRight="31dp"
-            android:text="@string/budget_total_title"
-            android:textColor="@color/text_blue"
-            android:textSize="@dimen/blue_text" />
-
-        <ImageView
             android:id="@+id/bhacerpedidopresp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textview_budget_total_title"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="9dp"
-            android:src="@drawable/buton_check" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/general_margin_bottom"
+            android:background="@drawable/buton_cyan"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingBottom="@dimen/general_padding_small"
+            android:padding="@dimen/general_padding_small"
+            android:text="@string/budget_send_order"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/big_oval_buttons" />
 
         <ImageView
             android:id="@+id/bdeleteallpresp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/bagregpresp"
-            android:layout_marginRight="10dp"
+            android:layout_above="@+id/bhacerpedidopresp"
+            android:layout_marginBottom="@dimen/budget_activity_deleteall_margin_bottom"
+            android:layout_marginRight="@dimen/budget_activity_deleteall_margin_right"
             android:layout_toLeftOf="@+id/bagregpresp"
             android:src="@drawable/buton_delete" />
-
-        <TextView
-            android:id="@+id/txttotal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/bhacerpedidopresp"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="72dp"
-            android:background="@drawable/buton_yellow"
-            android:gravity="center"
-            android:paddingBottom="5dp"
-            android:paddingTop="10dp"
-            android:text="0 Bs"
-            android:textColor="@color/text_white"
-            android:textSize="@dimen/big_oval_buttons" />
 
         <ImageView
             android:id="@+id/bagregpresp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/bhacerpedidopresp"
-            android:layout_alignRight="@+id/bhacerpedidopresp"
-            android:layout_marginBottom="14dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/budget_activity_deleteall_margin_bottom"
+            android:layout_marginRight="@dimen/budget_activity_deleteall_margin_right"
             android:src="@drawable/buton_add" />
-
-        <ImageView
-            android:id="@+id/button_budget_cancel_budget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/relativeLayout1"
-            android:layout_alignTop="@+id/bhacerpedidopresp"
-            android:layout_marginLeft="16dp"
-            android:src="@drawable/buton_cancel" />
-
     </RelativeLayout>
 
 </RelativeLayout>

@@ -16,6 +16,7 @@ import com.arawaney.tumascotik.client.model.BudgetService;
 import com.arawaney.tumascotik.client.model.Service;
 import com.arawaney.tumascotik.client.model.User;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -41,7 +42,6 @@ public class ParseBudgetProvider {
 	private static final String STATUS_TABLE = "Status";
 	private static final String PRICE_TABLE = "Price";
 
-
 	public static void sendBudget(Context context,
 			final ParseBudgetListener listener, final Budget budget) {
 		final ParseObject parseBudget = new ParseObject(BUDGET_TABLE);
@@ -56,8 +56,8 @@ public class ParseBudgetProvider {
 			parseBudget.put(ACTIVE_TAG, true);
 		} else
 			parseBudget.put(ACTIVE_TAG, false);
-		
-		parseBudget.put(TOTAL_TAG,	budget.getTotal());
+
+		parseBudget.put(TOTAL_TAG, budget.getTotal());
 
 		parseBudget.saveInBackground(new SaveCallback() {
 
@@ -145,7 +145,7 @@ public class ParseBudgetProvider {
 			final ParseBudgetListener listener) {
 		Date updateAt = BudgetProvider.getLastUpdate(context);
 		User user = MainController.USER;
-		
+
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
 				BUDGET_TABLE);
 		query.whereEqualTo(USER_ID_TAG, user.getSystemId());
@@ -161,8 +161,7 @@ public class ParseBudgetProvider {
 					ArrayList<Budget> budgets = new ArrayList<Budget>();
 
 					for (ParseObject object : cList) {
-						Budget budget = readBudgetFromCursor(object,
-								listener);
+						Budget budget = readBudgetFromCursor(object, listener);
 						budget.setSystem_id(object.getObjectId());
 						budgets.add(budget);
 					}
@@ -172,133 +171,42 @@ public class ParseBudgetProvider {
 				} else {
 					listener.OnAllBudgetsQueryFinished(null);
 					Log.d(LOG_TAG,
-							" Query error getting Budgets"
-									 + ": " + e.getMessage());
+							" Query error getting Budgets" + ": "
+									+ e.getMessage());
 				}
 
-			}
-
-			private Budget readBudgetFromCursor(ParseObject parsedBudget,
-				 final ParseBudgetListener listener) {
-				final Budget budget = new Budget();
-
-				if (parsedBudget.getBoolean(ACTIVE_TAG)) {
-					budget.setActive(Budget.ACTIVE);
-				} else
-					budget.setActive(Budget.INACTIVE);
-
-				if (parsedBudget.getBoolean(DELIVERY_TAG)) {
-					budget.setDelivery(Budget.IS_DELIVERY);
-				} else
-					budget.setDelivery(Budget.IS__NOT_DELIVERY);
-
-			
-
-				Calendar updateCalendar = Calendar.getInstance();
-
-				updateCalendar.setTimeInMillis(parsedBudget.getUpdatedAt()
-						.getTime());
-				
-				Calendar createCalendar = Calendar.getInstance();
-
-				createCalendar.setTimeInMillis(parsedBudget.getCreatedAt()
-						.getTime());
-
-
-				budget.setUpdated_at(updateCalendar);
-				
-				budget.setCreatedAt(createCalendar);
-				
-				budget.setTotal(parsedBudget.getInt(TOTAL_TAG));
-
-				budget.setUserId(MainController.USER.getSystemId());
-
-				budget.setSystem_id(parsedBudget.getObjectId());
-
-				String statusId = parsedBudget.getString(STATUS_ID_TAG);
-
-				ParseQuery<ParseObject> statusQuery = new ParseQuery<ParseObject>(
-						STATUS_TABLE);
-				statusQuery.whereEqualTo("objectId", statusId);
-
-				statusQuery.findInBackground(new FindCallback<ParseObject>() {
-
-					@Override
-					public void done(List<ParseObject> status, ParseException e) {
-						if (e == null) {
-							budget.setStatus(status.get(0).getInt(
-									STATUS_NUMBER_TAG));
-							listener.onBudgetQueryFInished(budget);
-						} else {
-							Log.d(LOG_TAG,
-									"Error getting status from budget: "
-											+ budget.getSystem_id() + " "
-											+ e.getMessage());
-						}
-					}
-				});
-				ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
-						SERVICE_BUDGET_TABLE);
-				query.whereEqualTo(BUDGET_ID_TAG, parsedBudget.getObjectId());
-				query.findInBackground(new FindCallback<ParseObject>() {
-
-					@Override
-					public void done(List<ParseObject> serviceBudgets,
-							ParseException e) {
-						if (e == null) {
-							if (serviceBudgets.size() > 0) {
-								for (ParseObject parseObject : serviceBudgets) {
-									Service service = new Service();
-									service.setSystem_id(parseObject.getString(SERVICE_ID_TAG));
-									budget.addService(service);
-								}
-							} else {
-								
-							}
-							listener.onBudgetQueryFInished(budget);
-
-						} else
-							Log.d(LOG_TAG,
-									"Error getting Service_Budgets from budget: "
-											+ budget.getSystem_id() + " "
-											+ e.getMessage());
-
-					}
-				});
-
-				return budget;
 			}
 
 		});
 
 	}
 
-//	public static void cancelBudget(Context context,
-//			final ParseBudgetListener listener, Budget budget) {
-//
-//		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
-//				BUDGET_TABLE);
-//		query.whereEqualTo("objectId", budget.getSystem_id());
-//		query.findInBackground(new FindCallback<ParseObject>() {
-//
-//			@Override
-//			public void done(List<ParseObject> parsedBudget, ParseException e) {
-//				if (e == null) {
-//					parsedBudget.get(0).put(STATUS_ID_TAG,
-//							Budget.STATUS_CANCELED);
-//					parsedBudget.get(0).saveInBackground();
-//					listener.onCanceledQueryFinished(true);
-//				} else {
-//					Log.d(LOG_TAG,
-//							"Error getting budget to cancel : "
-//									+ e.getMessage());
-//					listener.onCanceledQueryFinished(false);
-//
-//				}
-//			}
-//		});
-//
-//	}
+	// public static void cancelBudget(Context context,
+	// final ParseBudgetListener listener, Budget budget) {
+	//
+	// ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+	// BUDGET_TABLE);
+	// query.whereEqualTo("objectId", budget.getSystem_id());
+	// query.findInBackground(new FindCallback<ParseObject>() {
+	//
+	// @Override
+	// public void done(List<ParseObject> parsedBudget, ParseException e) {
+	// if (e == null) {
+	// parsedBudget.get(0).put(STATUS_ID_TAG,
+	// Budget.STATUS_CANCELED);
+	// parsedBudget.get(0).saveInBackground();
+	// listener.onCanceledQueryFinished(true);
+	// } else {
+	// Log.d(LOG_TAG,
+	// "Error getting budget to cancel : "
+	// + e.getMessage());
+	// listener.onCanceledQueryFinished(false);
+	//
+	// }
+	// }
+	// });
+	//
+	// }
 
 	public static void removeBudget(final Budget budget,
 			final ParseBudgetListener listener) {
@@ -361,13 +269,13 @@ public class ParseBudgetProvider {
 			query.findInBackground(new FindCallback<ParseObject>() {
 
 				@Override
-				public void done(List<ParseObject> prices,
-						ParseException e) {
+				public void done(List<ParseObject> prices, ParseException e) {
 					if (e == null) {
 						if (!prices.isEmpty()) {
 							BudgetService budgetService = new BudgetService();
 							budgetService.setService(service);
-							budgetService.setPrice(prices.get(0).getInt(PRICE_TAG));
+							budgetService.setPrice(prices.get(0).getInt(
+									PRICE_TAG));
 							listener.onOnePriceQueryFinished(budgetService);
 						}
 
@@ -379,41 +287,254 @@ public class ParseBudgetProvider {
 			});
 
 		}
+
+	}
+
+	public static void readSavedPrices(List<Service> services, Budget budget,
+			final ParseBudgetListener listener) {
+		if (services != null && services.size() != 0) {
+			for (final Service service : services) {
+
+				ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+						SERVICE_BUDGET_TABLE);
+				query.whereEqualTo(SERVICE_ID_TAG, service.getSystem_id());
+				query.whereEqualTo(BUDGET_ID_TAG, budget.getSystem_id());
+
+				query.findInBackground(new FindCallback<ParseObject>() {
+
+					@Override
+					public void done(List<ParseObject> prices, ParseException e) {
+						if (e == null) {
+							if (!prices.isEmpty()) {
+								BudgetService budgetService = new BudgetService();
+								budgetService.setService(service);
+								budgetService.setPrice(prices.get(0).getInt(
+										PRICE_TAG));
+								listener.onOnePriceQueryFinished(budgetService);
+							}
+
+						} else {
+							e.printStackTrace();
+						}
+
+					}
+				});
+
+			}
+		}
+
+	}
+
+	public static void updateAllBudgets(Context context,
+			final ParseBudgetListener listener) {
+		Date updateAt = BudgetProvider.getLastUpdate(context);
+
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+				BUDGET_TABLE);
+		if (updateAt != null) {
+			query.whereGreaterThan(UPDATED_AT_TAG, updateAt);
+		}
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> cList, ParseException e) {
+
+				if (e == null) {
+					ArrayList<Budget> budgets = new ArrayList<Budget>();
+
+					for (ParseObject object : cList) {
+						Budget budget = readBudgetFromCursor(object, listener);
+						budget.setSystem_id(object.getObjectId());
+						budgets.add(budget);
+					}
+
+					listener.OnAllBudgetsQueryFinished(budgets);
+
+				} else {
+					listener.OnAllBudgetsQueryFinished(null);
+					Log.d(LOG_TAG,
+							" Query error getting Budgets" + ": "
+									+ e.getMessage());
+				}
+
+			}
+
+		});
+
+	}
+
+	private static Budget readBudgetFromCursor(ParseObject parsedBudget,
+			final ParseBudgetListener listener) {
+		final Budget budget = new Budget();
+
+		if (parsedBudget.getBoolean(ACTIVE_TAG)) {
+			budget.setActive(Budget.ACTIVE);
+		} else
+			budget.setActive(Budget.INACTIVE);
+
+		if (parsedBudget.getBoolean(DELIVERY_TAG)) {
+			budget.setDelivery(Budget.IS_DELIVERY);
+		} else
+			budget.setDelivery(Budget.IS__NOT_DELIVERY);
+
+		Calendar updateCalendar = Calendar.getInstance();
+
+		updateCalendar.setTimeInMillis(parsedBudget.getUpdatedAt().getTime());
+
+		Calendar createCalendar = Calendar.getInstance();
+
+		createCalendar.setTimeInMillis(parsedBudget.getCreatedAt().getTime());
+
+		budget.setUpdated_at(updateCalendar);
+
+		budget.setCreatedAt(createCalendar);
+
+		budget.setTotal(parsedBudget.getInt(TOTAL_TAG));
+
+		budget.setUserId(parsedBudget.getString(USER_ID_TAG).toString());
+
+		budget.setSystem_id(parsedBudget.getObjectId());
+
+		String statusId = parsedBudget.getString(STATUS_ID_TAG);
+
+		ParseQuery<ParseObject> statusQuery = new ParseQuery<ParseObject>(
+				STATUS_TABLE);
+		statusQuery.whereEqualTo("objectId", statusId);
+		Log.e(LOG_TAG, " getting status from budget: "
+				+ budget.getSystem_id() );
+		statusQuery.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> status, ParseException e) {
+				if (e == null) {
+					budget.setStatus(status.get(0).getInt(STATUS_NUMBER_TAG));
+					Log.e(LOG_TAG, " getting status from budget: "
+							+ budget.getSystem_id()+"STATUS:"+budget.getStatus() );
+					listener.onBudgetQueryFInished(budget);
+				} else {
+					Log.e(LOG_TAG, "Error getting status from budget: "
+							+ budget.getSystem_id() + " " + e.getMessage());
+				}
+			}
+		});
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+				SERVICE_BUDGET_TABLE);
+		query.whereEqualTo(BUDGET_ID_TAG, parsedBudget.getObjectId());
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> serviceBudgets, ParseException e) {
+				if (e == null) {
+					if (serviceBudgets.size() > 0) {
+						for (ParseObject parseObject : serviceBudgets) {
+							Service service = new Service();
+							service.setSystem_id(parseObject
+									.getString(SERVICE_ID_TAG));
+							budget.addService(service);
+						}
+					} else {
+
+					}
+					listener.onBudgetQueryFInished(budget);
+
+				} else
+					Log.d(LOG_TAG,
+							"Error getting Service_Budgets from budget: "
+									+ budget.getSystem_id() + " "
+									+ e.getMessage());
+
+			}
+		});
+
+		return budget;
+	}
+
+	public static void updateBugetStatus(Context context,
+			final ParseBudgetListener listener, final Budget budget) {
+
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+				BUDGET_TABLE);
+		
+		query.getInBackground(budget.getSystem_id(), new GetCallback<ParseObject>() {
+
+			@Override
+			public void done(ParseObject parsedBudget, ParseException e) {
+
+				if (e == null) {
+
+					saveNewBudgetStatus(parsedBudget);
+
+				} else {
+					listener.OnStatusChangedFinished(false, budget);
+					Log.d(LOG_TAG,
+							" Query error getting Budgets" + ": "
+									+ e.getMessage());
+				}
+
+			}
+			
+
+			private void saveNewBudgetStatus(final ParseObject parsedBudget) {
+
+				int statusNUm = budget.getStatus();
+				ParseQuery<ParseObject> innerQuery = new ParseQuery<ParseObject>(
+						STATUS_TABLE);
+				innerQuery.whereEqualTo(STATUS_NUMBER_TAG, statusNUm);
+				innerQuery.findInBackground(new FindCallback<ParseObject>() {
+
+					@Override
+					public void done(List<ParseObject> status, ParseException e) {
+						if (e == null) {
+							parsedBudget.put(STATUS_ID_TAG, status.get(0)
+									.getObjectId());
+							parsedBudget.saveInBackground();
+							
+							listener.OnStatusChangedFinished(true, budget);
+
+						} else {
+							Log.e(LOG_TAG,
+									"No status matches changing budget status "
+											+ e.getMessage());
+							listener.OnStatusChangedFinished(false, budget);
+
+						}
+
+					}
+				});
+
+			}
+
+		});
+		
+
+	}
+
+	public static void deactivateBudget(Context context, Budget budget) {
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+				BUDGET_TABLE);
+		query.whereEqualTo("objectId", budget.getSystem_id());
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> parsedBudget, ParseException e) {
+				if (e == null) {
+					for (ParseObject parseObject : parsedBudget) {
+						parseObject.put(ACTIVE_TAG, false);
+						parseObject.saveInBackground();
+					}
+
+				} else {
+					Log.d(LOG_TAG,
+							"Error getting budgets to inactivate: "
+									+ e.getMessage());
+
+				}
+			}
+		});
+
 		
 	}
 	
-	public static void readSavedPrices(List<Service> services,Budget budget, 
-			final ParseBudgetListener listener) {
-
-		for (final Service service : services) {
-
-			ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
-					SERVICE_BUDGET_TABLE);
-			query.whereEqualTo(SERVICE_ID_TAG, service.getSystem_id());
-			query.whereEqualTo(BUDGET_ID_TAG, budget.getSystem_id());
-
-			query.findInBackground(new FindCallback<ParseObject>() {
-
-				@Override
-				public void done(List<ParseObject> prices,
-						ParseException e) {
-					if (e == null) {
-						if (!prices.isEmpty()) {
-							BudgetService budgetService = new BudgetService();
-							budgetService.setService(service);
-							budgetService.setPrice(prices.get(0).getInt(PRICE_TAG));
-							listener.onOnePriceQueryFinished(budgetService);
-						}
-
-					} else {
-						e.printStackTrace();
-					}
-
-				}
-			});
-
-		}
-		
-	}
+	
 
 }

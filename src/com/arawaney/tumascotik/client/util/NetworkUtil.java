@@ -11,7 +11,17 @@ public static boolean ConnectedToInternet(Context context){
 	
 	ConnectivityManager conma = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 	wifi = conma.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting(); 
-	mobiledata = conma.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
+	if (conma.getNetworkInfo(ConnectivityManager.TYPE_WIFI) != null) {
+		wifi = conma.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting(); 
+
+	}else 
+		wifi = false;
+	
+	if (conma.getNetworkInfo(ConnectivityManager.TYPE_MOBILE) != null) {
+		mobiledata = conma.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
+
+	}else 
+		mobiledata = false;
 	
 	return (wifi | mobiledata);
 	

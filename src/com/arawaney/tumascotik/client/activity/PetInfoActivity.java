@@ -203,7 +203,9 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 			}
 		}
 		BreedAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, breedsNames);
+				R.layout.spinner_layout, breedsNames);
+		BreedAdapter.setDropDownViewResource(R.layout.spinner_layout);
+
 		editPetBreed.setAdapter(BreedAdapter);
 	}
 
@@ -232,17 +234,24 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 		saveEditButton = (ImageView) findViewById(R.id.button_pet_info_edit_save);
 
 		GenderAdapter = ArrayAdapter.createFromResource(this, R.array.Genders,
-				android.R.layout.simple_spinner_item);
+				R.layout.spinner_layout);
+		GenderAdapter.setDropDownViewResource(R.layout.spinner_layout);
+
 		genders = Arrays.asList(getResources().getStringArray(R.array.Genders));
 
 		AgeAdapter = ArrayAdapter.createFromResource(this, R.array.Age,
-				android.R.layout.simple_spinner_item);
+				R.layout.spinner_layout);
+		AgeAdapter.setDropDownViewResource(R.layout.spinner_layout);
+
 		ages = Arrays.asList(getResources().getStringArray(R.array.Age));
 
 		SpecieAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, speciesNames);
+				R.layout.spinner_layout, speciesNames);
+		SpecieAdapter.setDropDownViewResource(R.layout.spinner_layout);
+
 		BreedAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, breedsNames);
+				R.layout.spinner_layout, breedsNames);
+		BreedAdapter.setDropDownViewResource(R.layout.spinner_layout);
 		if (newPet()) {
 			deletePet.setVisibility(View.GONE);
 		}
@@ -430,11 +439,15 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 	private void setSavingPetDialog() {
 		progressDialog = ProgressDialog.show(this, "", getResources()
 				.getString(R.string.pet_info_saving_pet));
+		 progressDialog.setCancelable(true);
+
 	}
 
 	private void setDeletingPetDialog() {
 		progressDialog = ProgressDialog.show(this, "", getResources()
 				.getString(R.string.pet_info_deleting_pet));
+		 progressDialog.setCancelable(true);
+
 	}
 
 	@SuppressLint("NewApi")
@@ -554,13 +567,14 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 			petName.setText(pet.getName());
 		}
 
-		if (pet.getBreed().getSpecie() != null) {
-			petSpecie.setText(pet.getBreed().getSpecie().getName());
-
-		}
+		
 
 		if (pet.getBreed() != null) {
 			petBreed.setText(pet.getBreed().getName());
+			if (pet.getBreed().getSpecie() != null) {
+				petSpecie.setText(pet.getBreed().getSpecie().getName());
+
+			}
 		}
 
 		if (pet.getGender() > 0) {

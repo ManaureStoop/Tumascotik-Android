@@ -16,13 +16,20 @@ public interface ParseRequestListener {
 
 	public void onRequestQueryFInished(Request request);
 	
-	public void onCanceledQueryFinished(boolean canceled);
+	public void onCanceledQueryFinished(boolean canceled, Request request);
 
 	public void onRequestRemoveFinished(Request request);
 	
 	public void onDayRequestsQueryFinished(Date[] initialScheduledDates, Date[] finalScheduledDates);
 	
+	public void cancelRequest(Request request);
+	
+	public void acceptRequest(Request request);
+	
+	public void onRequestAccept(Request request, boolean b);
 
+	public void onOnePriceQueryFinished(int price);
+	
 }
 
 

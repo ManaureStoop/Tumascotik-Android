@@ -60,6 +60,7 @@ public class ParsePetProvider {
 	private static final String BREED_ID_TAG = "breedId";
 	private static final String SPECIE_ID_TAG = "specieId";
 	private static final String PET_PROPERTIE_ID_TAG = "petPropertiesId";
+	private static final String ACTIVE_TAG = "active";
 
 	private static final String PET_TABLE = "Pet";
 	private static final String BREED_TABLE = "Breed";
@@ -274,6 +275,8 @@ public class ParsePetProvider {
 		Breed breed = new Breed();
 		breed.setSystem_id(parsedPet.getString(BREED_ID_TAG));
 		pet.setBreed(breed);
+		
+		pet.setActive(parsedPet.getBoolean(ACTIVE_TAG));
 
 		return pet;
 
@@ -347,7 +350,7 @@ public class ParsePetProvider {
 
 	}
 
-	public static void updatePets(final ParsePetListener listener,
+	public static void updateClientPets(final ParsePetListener listener,
 			final User user, Context context) {
 
 		Date lastUpdate = PetProvider.getLastUpdate(context);
@@ -411,6 +414,7 @@ public class ParsePetProvider {
 			parsePet.put(PUPPY_TAG, false);
 		}
 		parsePet.put(COMMENT_TAG, auxPet.getComment());
+		parsePet.put(ACTIVE_TAG, true);
 
 		parsePet.saveInBackground(new SaveCallback() {
 
@@ -582,14 +586,9 @@ public class ParsePetProvider {
 			@Override
 			public void done(List<ParseObject> parsedPet, ParseException e) {
 				if (e == null) {
-					try {
 					if (parsedPet.size() != 0) {
-						parsedPet.get(0).delete();
-					}
-						
-					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						parsedPet.get(0).put(ACTIVE_TAG, false);
+						parsedPet.get(0).saveInBackground();
 					}
 					ParseRequestProvider.deleteRequestsByPet(pet);
 					listener.onPetRemoveFinished(true);
@@ -601,6 +600,44 @@ public class ParsePetProvider {
 					listener.onPetRemoveFinished(false);
 
 				}
+			}
+		});
+
+	}
+
+	public static void updateAllPets(final ParsePetListener listener, Context context) {
+
+		Date lastUpdate = PetProvider.getLastUpdate(context);
+
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(PET_TABLE);
+
+		if (lastUpdate == null) {
+			lastUpdate = new Date(0);
+		}
+
+		query.whereGreaterThan(UPDATED_AT_TAG, lastUpdate);
+		query.findInBackground(new FindCallback<ParseObject>() {
+			@Override
+			public void done(List<ParseObject> parsedPets, ParseException e) {
+				ArrayList<Pet> pets = new ArrayList<Pet>();
+				if (e == null) {
+					for (ParseObject parseObject : parsedPets) {
+
+						Pet pet = new Pet();
+						pet = readPetfromParsedObject(parseObject, listener);
+						
+						User user = new User();
+						user.setSystemId(parseObject.getString(USER_ID_TAG));
+						pet.setOwner(user);
+						
+						pets.add(pet);
+					}
+				} else {
+					Log.e(LOG_TAG, e.getMessage());
+					pets = null;
+				}
+
+				listener.onGetAllPets(pets);
 			}
 		});
 

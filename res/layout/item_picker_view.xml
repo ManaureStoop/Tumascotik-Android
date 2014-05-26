@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="@dimen/pet_picker_space_between_items" >
+
+    <ImageView
+        android:id="@+id/picker_item_imagev_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_perro" 
+        android:layout_marginTop="@dimen/pet_picker_space_between_name_and_image_petpicker"/>
+
+    <TextView
+        android:id="@+id/picker_item_textv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/label_pet_name"
+        android:gravity="center"
+        android:text="TextView"
+         android:layout_marginTop="@dimen/pet_picker_space_between_name_and_image_petpicker"
+        android:textColor="@color/text_white"
+        android:textSize="@dimen/pet_names_blue_bckg" />
+
+</LinearLayout>
