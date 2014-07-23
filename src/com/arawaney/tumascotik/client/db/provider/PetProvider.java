@@ -397,6 +397,7 @@ public class PetProvider {
 
 			if (rows == 1) {
 				Log.i(LOG_TAG, "Pet : " + petId + "has been deleted");
+				RequestProvider.removeRequestsByPet(context, petId);
 				return true;
 			}
 		} catch (Exception e) {

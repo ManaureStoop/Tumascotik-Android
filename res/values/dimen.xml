@@ -19,6 +19,7 @@
     <dimen name="request_item_title">16sp</dimen>
     <dimen name="request_items">12sp</dimen>
     <dimen name="zero_data_text">18sp</dimen>
+    <dimen name="about_small_text">12sp</dimen>
 
     <!-- MainActivity -->
     <dimen name="main_activity_logo_margin_top">20dp</dimen>
@@ -58,8 +59,9 @@
     <dimen name="activity_picker_list_padding">15dp</dimen>
 
     <!-- Send Request -->
-    <dimen name="send_request_title_margin_top">50dp</dimen>
+    <dimen name="send_request_title_margin_top">30dp</dimen>
     <dimen name="send_request_list_margin_top">20dp</dimen>
+     <dimen name="send_request_list_margin_top_small">10dp</dimen>
 
     <!-- Set Date -->
     <dimen name="set_date_alert_text_margin">10dp</dimen>

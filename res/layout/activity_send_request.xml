@@ -92,9 +92,9 @@
         android:layout_marginLeft="@dimen/general_margin_bottom"
         android:clickable="true"
         android:src="@drawable/buton_cancel" />
-
-    <TextView
-        android:id="@+id/txtresumen_motive"
+    
+     <TextView
+        android:id="@+id/txtresumen_motive_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtresumen_title_petname"
@@ -102,7 +102,24 @@
         android:layout_marginTop="@dimen/send_request_list_margin_top"
         android:text="@string/send_request_details_text_motive"
         android:textColor="@color/text_edit_profiles"
+        android:textSize="@dimen/send_request_field" />
+
+    <TextView
+        android:id="@+id/txtresumen_motive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtresumen_motive_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/send_request_list_margin_top_small"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:freezesText="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
         android:singleLine="true"
+        android:text="Baño"
+        android:textColor="@color/text_edit_profiles"
         android:textSize="@dimen/send_request_field" />
 
 </RelativeLayout>

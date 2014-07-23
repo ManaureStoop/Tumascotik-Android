@@ -218,7 +218,7 @@ public class ParseProvider {
 			int gender = user.getGender();
 			if (gender == User.GENDER_MAN) {
 				parsedUser.put(GENDER_TAG, SEX_MALE);
-			} else if (gender == User.GENDER_MAN) {
+			} else if (gender == User.GENDER_WOMAN) {
 				parsedUser.put(GENDER_TAG, SEX_FEMALE);
 			}
 

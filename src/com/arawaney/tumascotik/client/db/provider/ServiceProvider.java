@@ -31,6 +31,7 @@ public class ServiceProvider {
 		try {
 			ContentValues values = new ContentValues();
 			values.put(ServiceEntity.COLUMN_SYSTEM_ID, motive.getSystem_id());
+			motive.setName(filterServiceName(motive.getName()));
 			values.put(ServiceEntity.COLUMN_NAME, motive.getName());
 			values.put(ServiceEntity.COLUMN_NEED_REQUEST,
 					motive.getNeedsRequest());
@@ -62,6 +63,11 @@ public class ServiceProvider {
 
 	}
 
+	private static String filterServiceName(String name) {
+		
+		return name.replace("+", ", ");
+	}
+
 	public static boolean updateMotive(Context context, Service motive) {
 
 		if (context == null || motive == null)
@@ -71,6 +77,9 @@ public class ServiceProvider {
 			ContentValues values = new ContentValues();
 			values.put(ServiceEntity.COLUMN_ID, motive.getId());
 			values.put(ServiceEntity.COLUMN_SYSTEM_ID, motive.getSystem_id());
+			
+			motive.setName(filterServiceName(motive.getName()));
+
 			values.put(ServiceEntity.COLUMN_NAME, motive.getName());
 			values.put(ServiceEntity.COLUMN_NEED_REQUEST,
 					motive.getNeedsRequest());

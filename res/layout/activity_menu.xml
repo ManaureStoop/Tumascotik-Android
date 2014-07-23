@@ -17,8 +17,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:gravity="center" >
 
         <include
@@ -39,7 +39,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_marginTop="@dimen/main_activity_social_media_layout_margin"
         android:layout_marginBottom="@dimen/main_activity_social_media_layout_margin">
 
@@ -47,7 +48,7 @@
             android:id="@+id/btwittermenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:clickable="true"
             android:src="@drawable/buton_twiter" />
@@ -56,7 +57,7 @@
             android:id="@+id/bfacebookmenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
             android:layout_marginRight="@dimen/main_activity_social_elements_margin"
             android:layout_toLeftOf="@+id/btwittermenu"
             android:clickable="true"
@@ -66,7 +67,7 @@
             android:id="@+id/byoutubemenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/main_activity_social_elements_margin"
             android:layout_toRightOf="@+id/btwittermenu"
             android:clickable="true"

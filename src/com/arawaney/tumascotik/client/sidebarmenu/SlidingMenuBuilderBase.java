@@ -92,6 +92,9 @@ public abstract class SlidingMenuBuilderBase {
 					this.activity.startActivity(selectedSlidingMenuListItem.intent);
 				}
 				break;
+			case 2:
+				this.activity.startActivity(selectedSlidingMenuListItem.intent);
+				break;
 			default:
 				text = "Clicked item. " + "NOTHING CLICKED";
 				Toast.makeText(activity, text, Toast.LENGTH_LONG).show();

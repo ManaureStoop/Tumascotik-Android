@@ -130,46 +130,50 @@ public class ParseRequestProvider {
 						.getSystem_id());
 				parseRequestService.put(REQUEST_ID_TAG,
 						parseRequest.getObjectId());
+				parseRequestService.put(PRICE_TAG, request.getPrice());
+				parseRequestService.saveInBackground();
 
-				ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
-						PRICE_TABLE);
-				query.whereEqualTo(SERVICE_ID_TAG, request.getService());
-
-				// Log.d(LOG_TAG, "serviceid: "+ request.getServiceID() +
+				// ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+				// PRICE_TABLE);
+				// query.whereEqualTo(SERVICE_ID_TAG, request.getService());
+				//
+				// // Log.d(LOG_TAG, "serviceid: "+ request.getServiceID() +
+				// //
 				// " petprotid: "+request.getPet().getBreed().getPetPropertie().getSystem_id());
-
-				query.findInBackground(new FindCallback<ParseObject>() {
-
-					@Override
-					public void done(List<ParseObject> prices, ParseException e) {
-						if (e == null) {
-							if (!prices.isEmpty()) {
-								if (prices.size() == 1) {
-									parseRequestService.put(PRICE_TAG, prices
-											.get(0).get(PRICE_TAG));
-								} else {
-									for (ParseObject parseObject : prices) {
-										if (parseObject
-												.get(PET_PROPERTIE_ID_TAG).equals(request
-												.getPet().getBreed()
-												.getPetPropertie()
-												.getSystem_id())) {
-											parseRequestService.put(PRICE_TAG,
-													parseObject.get(PRICE_TAG));
-										}
-									}
-								}
-
-							}
-
-						} else {
-							e.printStackTrace();
-						}
-
-						parseRequestService.saveInBackground();
-
-					}
-				});
+				//
+				// query.findInBackground(new FindCallback<ParseObject>() {
+				//
+				// @Override
+				// public void done(List<ParseObject> prices, ParseException e)
+				// {
+				// if (e == null) {
+				// if (!prices.isEmpty()) {
+				// if (prices.size() == 1) {
+				// parseRequestService.put(PRICE_TAG, prices
+				// .get(0).get(PRICE_TAG));
+				// } else {
+				// for (ParseObject parseObject : prices) {
+				// if (parseObject
+				// .get(PET_PROPERTIE_ID_TAG).equals(request
+				// .getPet().getBreed()
+				// .getPetPropertie()
+				// .getSystem_id())) {
+				// parseRequestService.put(PRICE_TAG,
+				// parseObject.get(PRICE_TAG));
+				// }
+				// }
+				// }
+				//
+				// }
+				//
+				// } else {
+				// e.printStackTrace();
+				// }
+				//
+				// parseRequestService.saveInBackground();
+				//
+				// }
+				// });
 
 			}
 
@@ -178,9 +182,12 @@ public class ParseRequestProvider {
 
 	public static void updateRequests(Context context,
 			final ParseRequestListener listener) {
+
 		Date updateAt = RequestProvider.getLastUpdate(context);
 
 		ArrayList<Pet> pets = PetProvider.readPets(context);
+
+		final ArrayList<Request> requests = new ArrayList<Request>();
 
 		if (pets != null) {
 			for (final Pet pet : pets) {
@@ -194,19 +201,16 @@ public class ParseRequestProvider {
 				query.findInBackground(new FindCallback<ParseObject>() {
 
 					@Override
-					public void done(List<ParseObject> cList, ParseException e) {
+					public void done(List<ParseObject> parsedRequests, ParseException e) {
 
 						if (e == null) {
-							ArrayList<Request> requests = new ArrayList<Request>();
 
-							for (ParseObject object : cList) {
-								Request request = readRequestFromCursor(object,
+							for (ParseObject parsedRequest : parsedRequests) {
+								Request request = readRequestFromCursor(parsedRequest,
 										pet, listener);
-								request.setSystem_id(object.getObjectId());
+								request.setSystem_id(parsedRequest.getObjectId());
 								requests.add(request);
 							}
-
-							listener.OnAllRequestsQueryFinished(requests);
 
 						} else {
 							listener.OnAllRequestsQueryFinished(null);
@@ -221,7 +225,11 @@ public class ParseRequestProvider {
 				});
 
 			}
+			listener.OnAllRequestsQueryFinished(requests);
 
+		} else {
+			listener.OnAllRequestsQueryFinished(null);
+			Log.d(LOG_TAG, " Pets are null");
 		}
 
 	}
@@ -352,7 +360,6 @@ public class ParseRequestProvider {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Request");
 		query.whereGreaterThan(INITIAL_DATE_TAG, dayInitialDate);
 		query.whereLessThan(END_DATE_TAG, dayFinalDate);
-		query.whereEqualTo(IS_APPOINTMENT_TAG, true);
 		query.whereEqualTo(ACTIVE_TAG, true);
 		query.findInBackground(new FindCallback<ParseObject>() {
 
@@ -510,53 +517,49 @@ public class ParseRequestProvider {
 		request.setService(service);
 
 		String statusId = parsedRequest.getString(STATUS_ID_TAG);
+		
+		ParseQuery<ParseObject> statusQuery = new ParseQuery<ParseObject>(
+				STATUS_TABLE);
+		statusQuery.whereEqualTo("objectId", statusId);
 
-		if (request.isActive() == Request.ACTIVE) {
-			ParseQuery<ParseObject> statusQuery = new ParseQuery<ParseObject>(
-					STATUS_TABLE);
-			statusQuery.whereEqualTo("objectId", statusId);
+		statusQuery.findInBackground(new FindCallback<ParseObject>() {
 
-			statusQuery.findInBackground(new FindCallback<ParseObject>() {
+			@Override
+			public void done(List<ParseObject> status, ParseException e) {
+				if (e == null) {
+					request.setStatus(status.get(0).getInt(STATUS_NUMBER_TAG));
+					listener.onRequestQueryFInished(request);
+				} else {
+					Log.d(LOG_TAG, "Error getting status from request: "
+							+ request.getSystem_id() + " " + e.getMessage());
+				}
+			}
+		});
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+				REQUEST_SERVICE_TABLE);
+		query.whereEqualTo(REQUEST_ID_TAG, parsedRequest.getObjectId());
+		query.findInBackground(new FindCallback<ParseObject>() {
 
-				@Override
-				public void done(List<ParseObject> status, ParseException e) {
-					if (e == null) {
-						request.setStatus(status.get(0).getInt(
-								STATUS_NUMBER_TAG));
-						listener.onRequestQueryFInished(request);
+			@Override
+			public void done(List<ParseObject> serviceRequests, ParseException e) {
+				if (e == null) {
+					if (serviceRequests.size() > 0) {
+						request.setPrice(serviceRequests.get(0).getInt(
+								PRICE_TAG));
 					} else {
-						Log.d(LOG_TAG, "Error getting status from request: "
-								+ request.getSystem_id() + " " + e.getMessage());
+						request.setPrice(0);
 					}
-				}
-			});
-			ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
-					REQUEST_SERVICE_TABLE);
-			query.whereEqualTo(REQUEST_ID_TAG, parsedRequest.getObjectId());
-			query.findInBackground(new FindCallback<ParseObject>() {
 
-				@Override
-				public void done(List<ParseObject> serviceRequests,
-						ParseException e) {
-					if (e == null) {
-						if (serviceRequests.size() > 0) {
-							request.setPrice(serviceRequests.get(0).getInt(
-									PRICE_TAG));
-						} else {
-							request.setPrice(0);
-						}
+					listener.onRequestQueryFInished(request);
 
-						listener.onRequestQueryFInished(request);
+				} else
+					Log.d(LOG_TAG,
+							"Error getting Service_Requests from request: "
+									+ request.getSystem_id() + " "
+									+ e.getMessage());
 
-					} else
-						Log.d(LOG_TAG,
-								"Error getting Service_Requests from request: "
-										+ request.getSystem_id() + " "
-										+ e.getMessage());
-
-				}
-			});
-		}
+			}
+		});
 
 		return request;
 	}
@@ -576,18 +579,17 @@ public class ParseRequestProvider {
 						if (prices.size() == 1) {
 							listener.onOnePriceQueryFinished(prices.get(0)
 									.getInt(PRICE_TAG));
-						}else{
-							for (ParseObject parseObject : prices) {			
+						} else {
+							for (ParseObject parseObject : prices) {
 
-								if (parseObject
-										.get(PET_PROPERTIE_ID_TAG).equals(petPropertie
-										.getSystem_id())) {
-									
+								if (parseObject.get(PET_PROPERTIE_ID_TAG)
+										.equals(petPropertie.getSystem_id())) {
+
 									listener.onOnePriceQueryFinished(parseObject
 											.getInt(PRICE_TAG));
 								}
 							}
-						
+
 						}
 
 					}

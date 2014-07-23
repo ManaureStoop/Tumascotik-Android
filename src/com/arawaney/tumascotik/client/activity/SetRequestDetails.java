@@ -94,7 +94,6 @@ public class SetRequestDetails extends FragmentActivity implements ParseRequestL
 			private void saveRequest() {
 
 				Service service = getSelectedService();
-
 				request.setService(service);
 
 				if (comments.getText() != null) {
@@ -210,6 +209,7 @@ public class SetRequestDetails extends FragmentActivity implements ParseRequestL
 		if (services != null) {
 			if (!services.isEmpty()) {
 				for (Service service : services) {
+					Log.d(LOG_TAG, service.getName() );
 					motives.add(service.getName());
 				}
 			} else {

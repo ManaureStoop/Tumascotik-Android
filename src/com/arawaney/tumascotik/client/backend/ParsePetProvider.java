@@ -69,6 +69,8 @@ public class ParsePetProvider {
 
 	private static final String SEX_MALE = "M";
 	private static final String SEX_FEMALE = "F";
+	private static final int BREED_QUERY_LIMIT = 250;
+
 
 	public static void getAllSpecies(final ParsePetListener listener) {
 
@@ -107,7 +109,9 @@ public class ParsePetProvider {
 
 	public static void getAllBreeds(final ParsePetListener listener) {
 
+		
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(BREED_TABLE);
+		query.setLimit(BREED_QUERY_LIMIT);
 		query.findInBackground(new FindCallback<ParseObject>() {
 
 			@Override
@@ -353,6 +357,7 @@ public class ParsePetProvider {
 	public static void updateClientPets(final ParsePetListener listener,
 			final User user, Context context) {
 
+		
 		Date lastUpdate = PetProvider.getLastUpdate(context);
 
 		String systemId = user.getSystemId();
@@ -442,7 +447,7 @@ public class ParsePetProvider {
 		if (lastUpdate != null) {
 			query.whereGreaterThan(UPDATED_AT_TAG, lastUpdate);
 		}
-
+		query.setLimit(BREED_QUERY_LIMIT);
 		query.findInBackground(new FindCallback<ParseObject>() {
 
 			@Override

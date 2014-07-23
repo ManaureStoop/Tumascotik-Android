@@ -730,7 +730,6 @@ public class PetInfoActivity extends Activity implements ParsePetListener {
 	@Override
 	public void onPetRemoveFinished(boolean b) {
 		if (b) {
-			RequestProvider.removeRequestsByPet(this, pet.getSystem_id());
 			PetProvider.removePet(this, pet.getSystem_id());
 		}
 

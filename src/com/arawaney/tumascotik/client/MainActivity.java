@@ -7,6 +7,8 @@ import java.util.Date;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -17,6 +19,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.sax.StartElementListener;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,11 +31,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.arawaney.tumascotik.client.activity.AboutActivity;
 import com.arawaney.tumascotik.client.activity.BudgetActivity;
 import com.arawaney.tumascotik.client.activity.PetPicker;
 import com.arawaney.tumascotik.client.activity.SetRequestDetails;
@@ -96,11 +101,13 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 	boolean calledfromlogobuton;
 	// Main Layouts
 	LinearLayout main_buttons_layout;
-	LinearLayout login_layout;
+	RelativeLayout login_layout;
 	// Log in views
 	EditText text_username;
 	EditText text_password;
 	TextView button_login;
+	ImageView button_about;
+
 	// Main menu views
 	TextView makeRequest;
 	TextView viewRequest;
@@ -161,8 +168,8 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 
 	private void updateVetData() {
 		updateClients();
-		vetUpdateRequests();
 		vetUpdateBudgets();
+		// Requests are updated after pets are done.
 	}
 
 	private void vetUpdateBudgets() {
@@ -170,15 +177,11 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 
 	}
 
-	private void vetUpdateRequests() {
-		ParseRequestProvider.updateAllRequests(this, this);
-
-	}
-
 	private void updateClientData() {
+
 		clientUpdatePets();
 		clientUpdateBudgets();
-		// Requests are updated afet pets are done.
+		// Requests are updated after pets are done.
 
 	}
 
@@ -220,7 +223,7 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 
 	}
 
-	private void clientUpdateRequests() {
+	private void UpdateRequestsByPet() {
 		ParseRequestProvider.updateRequests(this, this);
 
 	}
@@ -283,7 +286,9 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 
 			private boolean userDataIsComplete() {
 				if (MainController.USER.getAddress() != null
-						&& MainController.USER.getMobile_telephone() != null) {
+						&& MainController.USER.getMobile_telephone() != null
+						&& !MainController.USER.getAddress().equals("")
+						&& MainController.USER.getMobile_telephone() != 0) {
 					return true;
 				} else
 					return false;
@@ -331,7 +336,7 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 			@Override
 			public void onClick(View v) {
 
-				startActivity(getOpenFacebookIntent(MainActivity.this));
+				getOpenFacebookIntent(MainActivity.this);
 			}
 		});
 
@@ -340,23 +345,10 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 			@Override
 			public void onClick(View v) {
 
-				startActivity(getOpenTwitterIntent(MainActivity.this));
+				getOpenTwitterIntent(MainActivity.this);
 			}
 		});
-		logorefresh.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-
-				if (pendingApointments != 0) {
-					progressDialog = ProgressDialog.show(MainActivity.this,
-							"Tumascotik", "Actualizando citas...");
-					calledfromlogobuton = true;
-					// loadPendingObjects();
-				}
-
-			}
-		});
 		emergencia.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -377,25 +369,39 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 
 				ParseProvider.logIn(username, password, MainActivity.this,
 						MainActivity.this);
-				
+
 				hideCurrentKeyboard();
 
 			}
 
 			private void hideCurrentKeyboard() {
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+				if (imm!= null && getCurrentFocus()!= null ) {
+					imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+							0);
+				}
+				
+			}
+		});
+
+		button_about.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(MainActivity.this, AboutActivity.class);
+				startActivity(i);
 			}
 		});
 	}
 
 	private void loadViews() {
 		main_buttons_layout = (LinearLayout) findViewById(R.id.main_buttons_menu);
-		login_layout = (LinearLayout) findViewById(R.id.log_in_main_menu);
+		login_layout = (RelativeLayout) findViewById(R.id.log_in_main_menu);
 
 		text_password = (EditText) findViewById(R.id.text_login_passw);
 		text_username = (EditText) findViewById(R.id.text_login_username);
 		button_login = (TextView) findViewById(R.id.button_login);
+		button_about = (ImageView) findViewById(R.id.button_about_help);
 		makeRequest = (TextView) findViewById(R.id.pdrcitamenu);
 		viewRequest = (TextView) findViewById(R.id.bvercitasmenu);
 		makeBudget = (TextView) findViewById(R.id.bpedirpresmenu);
@@ -435,7 +441,7 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 	}
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-	public void notifyUser(boolean vetAccepted, Request request) {
+	public void notifyUser(boolean accepted, Request request) {
 		String toasttext;
 		String notificationtitle;
 		String notificationcontent;
@@ -443,7 +449,7 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 		Log.d("TEST2", "REQUEST: " + request.getSystem_id());
 		String petName = request.getPet().getName();
 
-		if (vetAccepted) {
+		if (accepted) {
 			toasttext = getResources().getString(
 					R.string.request_notification_toast_accepted)
 					+ " " + petName;
@@ -461,8 +467,13 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 			notificationtitle = getResources().getString(
 					R.string.request_notification_rejected_title)
 					+ " " + petName;
-			notificationcontent = getResources().getString(
-					R.string.request_notification_rejected_content);
+			if (userIsVet()) {
+				notificationcontent = getResources().getString(
+						R.string.request_notification_rejected_content_vet);
+			} else {
+				notificationcontent = getResources().getString(
+						R.string.request_notification_rejected_content);
+			}
 			PetPicker.functionMode = PetPicker.MODE_MAKE_APPOINTMENT;
 			tapclass = PetPicker.class;
 
@@ -491,28 +502,36 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 						Uri.parse("android.resource://" + this.getPackageName()
 								+ "/" + R.raw.bark));
 		// Add event to
-		Intent resultIntent = new Intent(this, tapclass);
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-		stackBuilder.addParentStack(SetRequestDetails.class);
-		stackBuilder.addNextIntent(resultIntent);
-		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,
-				PendingIntent.FLAG_UPDATE_CURRENT);
-		mBuilder.setContentIntent(resultPendingIntent);
+
+		if (!userIsVet()) {
+			Intent resultIntent = new Intent(this, tapclass);
+			TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+			stackBuilder.addParentStack(SetRequestDetails.class);
+			stackBuilder.addNextIntent(resultIntent);
+			PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
+					0, PendingIntent.FLAG_UPDATE_CURRENT);
+			mBuilder.setContentIntent(resultPendingIntent);
+		}
+
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 		mNotificationManager.notify(0, mBuilder.build());
 	}
 
 	public static Intent getOpenFacebookIntent(Context context) {
-
+		Intent intent;
 		try {
 			context.getPackageManager()
 					.getPackageInfo("com.facebook.katana", 0);
-			return new Intent(Intent.ACTION_VIEW,
+			intent = new Intent(Intent.ACTION_VIEW,
 					Uri.parse("fb://profile/100000796583747"));
+			context.startActivity(intent);
+			return intent;
 		} catch (Exception e) {
-			return new Intent(Intent.ACTION_VIEW,
+			intent = new Intent(Intent.ACTION_VIEW,
 					Uri.parse("https://www.facebook.com/tumascotik"));
+			context.startActivity(intent);
+			return intent;
 		}
 	}
 
@@ -521,10 +540,13 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 		try {
 			intent = new Intent(Intent.ACTION_VIEW,
 					Uri.parse("twitter://user?user_id=289100088"));
+			context.startActivity(intent);
 
 		} catch (Exception e) {
 			intent = new Intent(Intent.ACTION_VIEW,
 					Uri.parse("https://twitter.com/#!/[tumascotik]"));
+			context.startActivity(intent);
+
 		}
 		return intent;
 	}
@@ -658,6 +680,7 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 
 	@Override
 	public void onGetAllPets(ArrayList<Pet> pets) {
+
 		if (pets != null) {
 			for (Pet pet : pets) {
 				Pet savedPet = PetProvider.readPet(this, pet.getSystem_id());
@@ -674,7 +697,7 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 				}
 
 			}
-			clientUpdateRequests();
+			UpdateRequestsByPet();
 		}
 	}
 
@@ -715,6 +738,7 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 						RequestProvider.insertRequest(this, request);
 					} else {
 						if (request.isActive() == Request.ACTIVE) {
+
 							if (requestAccepted(request, savedRequest)) {
 								notifyUser(true, savedRequest);
 								Date startDate = savedRequest.getStart_date()
@@ -747,11 +771,19 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 			}
 
 		}
+		FragmentManager fm = getFragmentManager();
+		Updater.updateOldRequests(this, this, fm);
 	}
 
 	private boolean requestCanceled(Request request, Request savedRequest) {
-		return savedRequest.getStatus() != Request.STATUS_CANCELED
-				&& request.getStatus() == Request.STATUS_CANCELED;
+		return (savedRequest.getStatus() != Request.STATUS_CANCELED)
+				&& (request.getStatus() == Request.STATUS_CANCELED)
+				&& !requestIsExpired(request);
+	}
+
+	private boolean requestIsExpired(Request request) {
+		Calendar today = Calendar.getInstance();
+		return request.getFinish_date().before(today);
 	}
 
 	private boolean requestAccepted(Request request, Request savedRequest) {
@@ -765,24 +797,36 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 
 			Request savedRequest = RequestProvider.readRequest(this,
 					request.getSystem_id());
+			if (savedRequest == null && request.isActive() == Request.ACTIVE) {
 
-			if (requestAccepted(request, savedRequest)) {
-				notifyUser(true, savedRequest);
+				RequestProvider.insertRequest(this, request);
+			} else {
+				if (request.isActive() == Request.ACTIVE) {
 
-				Date startDate = savedRequest.getStart_date().getTime();
-				Date finishDate = savedRequest.getFinish_date().getTime();
+					if (requestAccepted(request, savedRequest)) {
+						notifyUser(true, savedRequest);
+						Date startDate = savedRequest.getStart_date().getTime();
+						Date finishDate = savedRequest.getFinish_date()
+								.getTime();
 
-				CalendarController.writeToCalendar(savedRequest.getPet()
-						.getName(), startDate, finishDate, this);
+						CalendarController.writeToCalendar(savedRequest
+								.getPet().getName(), startDate, finishDate,
+								this);
 
-			} else if (requestCanceled(request, savedRequest)) {
-				notifyUser(false, savedRequest);
-				savedRequest.setStatus(Request.STATUS_CANCELED);
-				RequestProvider.updateRequest(this, savedRequest);
+					} else if (requestCanceled(request, savedRequest)) {
+						notifyUser(false, savedRequest);
+						savedRequest.setStatus(Request.STATUS_CANCELED);
+						RequestProvider.updateRequest(this, savedRequest);
+					}
+
+					request.setId(savedRequest.getId());
+					RequestProvider.updateRequest(this, request);
+				} else {
+					RequestProvider.removeRequest(this, request.getSystem_id());
+				}
+
 			}
 
-			request.setId(savedRequest.getId());
-			RequestProvider.updateRequest(this, request);
 		}
 
 	}

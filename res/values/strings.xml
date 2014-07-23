@@ -140,11 +140,12 @@
     <string name="set_date_time_text">Time</string>
     <string name="set_date_time_datefirst_text">Pick Date First</string>
     <string name="set_date_pick_time_block">Pick a Time BLock :</string>
+    <string name="set_date_pick_motive">Please choose the reason of the appointment :</string>
     <string name="set_date_pick_checkfields_message1">Sorry, but the field </string>
     <string name="set_date_pick_checkfields_message3"> is incomplete.</string>
     <string name="set_date_pick_checkfields_message4">Sorry, but the fields </string>
     <string name="set_date_pick_checkfields_message5"> are incomplete.</string>
-    <string name="set_date_price_alert">The choosen time block price can be higher due to the time </string>
+    <string name="set_date_price_alert">The chosen time block price can be higher due to the time </string>
     <string name="set_date_dialog_loading_timeblocks">Loading... </string>
 
     <!-- Set Request Details -->
@@ -163,8 +164,8 @@
     <string name="send_request_details_text_time">Time :</string>
     <string name="send_request_details_text_price"> Price: Bs. </string>
     <string name="send_request_details_text_duration"> Duration : </string>
-    <string name="send_request_details_text_delivery_yes"> Delivery : No</string>
-    <string name="send_request_details_text_delvery_no"> Delivery : Yes</string>
+    <string name="send_request_details_text_delivery_yes"> Delivery :Yes</string>
+    <string name="send_request_details_text_delvery_no"> Delivery : No</string>
     <string name="send_request_details_hour_sufix"> hours</string>
     <string name="send_request_details_motive_missing">Please select a motive</string>
 
@@ -172,6 +173,11 @@
     <string name="request_view_title">Appointment for : </string>
     <string name="request_view_day">Day: </string>
     <string name="request_view_time">Time: </string>
+    <string name="request_view_yes">Yes</string>
+    <string name="request_view_no">No</string>
+    <string name="request_view_passed_date1">"Was the appointment for "</string>
+    <string name="request_view_passed_date2">" of "</string>
+    <string name="request_view_passed_date3">" held?"</string>
     <string name="request_view_dialog_conector">for</string>
     <string name="request_view_dialog_cancel_button">Cancel Appointment</string>
     <string name="request_view_dialog_accept_button">Accept Appointment</string>
@@ -186,6 +192,7 @@
     <string name="request_notification_toast_rejected">Your vet can not attend </string>
     <string name="request_notification_rejected_title">Appointment rejected for : </string>
     <string name="request_notification_rejected_content">We are sorry, please choose another date/time </string>
+    <string name="request_notification_rejected_content_vet">The client has cancelled the appointment </string>
 
     <!-- Budget -->
     <string name="budget_total_title">Total</string>
@@ -212,6 +219,11 @@
 
     <!-- Budget/Request View -->
     <string name="budget_request_dialog__back">Go Back</string>
+
+    <!-- About View -->
+    <string name="about_view_developed_by">Developed by Arawanaey</string>
+    <string name="about_view_contact">Contact us vía e-mail: manaurestoop@gmail.com</string>
+    <string name="about_view_about_menu_title">About</string>
 
     <string-array name="Genders">
         <item>--Choose--</item>

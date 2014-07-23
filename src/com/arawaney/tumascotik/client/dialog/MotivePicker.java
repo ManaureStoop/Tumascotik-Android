@@ -48,7 +48,7 @@ public class MotivePicker extends DialogFragment {
 	
 
 	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	    builder.setTitle(R.string.set_date_pick_time_block);
+	    builder.setTitle(R.string.set_date_pick_motive);
 //	    builder.setIcon(R.drawable.mascotiklogodialog);
 	    builder.setItems(motives, new DialogInterface.OnClickListener() {
 	               public void onClick(DialogInterface dialog, int which) {

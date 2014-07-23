@@ -76,11 +76,15 @@ public class ViewRequestBaseAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		
+		if (requests.get(position).getPet() != null) {
+			Log.d("PRUEBA REQUEST", "PET IS NULL");
+		}
 		String path = new String("mini_"+ String.valueOf(requests.get(position).getPet().getBreed().getSpecie().getName()));
 		holder.petName.setText(requests.get(position).getPet().getName().toString());
 		Service service = requests.get(position).getService();
 		holder.serviceName.setText(service.getName());
+		holder.serviceName.setSelected(true);
+		holder.serviceName.requestFocus();
 		Log.d("LOG", "path");
 		String dayOfWeek = CalendarUtil.getDateFormated(requests.get(position).getStart_date(), "EEEE");
 		String date = CalendarUtil.getDateFormated(requests.get(position).getStart_date(), "dd MMMM yyyy");
@@ -96,6 +100,8 @@ public class ViewRequestBaseAdapter extends BaseAdapter {
 			holder.status.setTextColor(contxt.getResources().getColor(R.color.request_status_pending));
 		}else if (requests.get(position).getStatus() == Request.STATUS_CANCELED) {
 			holder.status.setTextColor(contxt.getResources().getColor(R.color.request_status_canceled));
+		}else if (requests.get(position).getStatus() == Request.STATUS_ATTENDED) {
+			holder.status.setTextColor(contxt.getResources().getColor(R.color.request_status_attended));
 		}
 		holder.petAvatar.setImageResource(BitMapUtil.getImageId(contxt, path));
 		

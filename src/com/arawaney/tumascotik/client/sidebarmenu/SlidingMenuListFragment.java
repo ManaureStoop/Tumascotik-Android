@@ -10,10 +10,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
 import android.widget.ListView;
 
 import com.arawaney.tumascotik.client.MainActivity;
 import com.arawaney.tumascotik.client.R;
+import com.arawaney.tumascotik.client.activity.AboutActivity;
 import com.arawaney.tumascotik.client.activity.ClientPicker;
 import com.arawaney.tumascotik.client.activity.PetPicker;
 import com.arawaney.tumascotik.client.activity.UserInfoActivity;
@@ -107,6 +109,16 @@ public class SlidingMenuListFragment extends ListFragment {
 							R.drawable.ic_menu_user),
 					profileIntent);
 			menuList.add(myProfileItem);
+			
+			Intent aboutIntent = new Intent(getActivity(),
+					AboutActivity.class);
+			SlidingMenuListItem aboutItem = new SlidingMenuListItem(0,
+					getString(R.string.about_view_about_menu_title),
+					getResources().getDrawable(
+							R.drawable.ic_about),
+							aboutIntent);
+			menuList.add(aboutItem);
+			
 
 		}else{
 			

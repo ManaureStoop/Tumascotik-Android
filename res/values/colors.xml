@@ -21,5 +21,7 @@
     <color name="request_status_pending">#FFAF25</color>
     <color name="request_status_accepted">#B2D235</color>
     <color name="request_status_canceled">#FF4444</color>
+    <color name="request_status_attended">#00ADEF</color>
+    <color name="arawaney_bg">#383432</color>
 
 </resources>
