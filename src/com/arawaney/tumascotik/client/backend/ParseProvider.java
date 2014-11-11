@@ -22,16 +22,19 @@ import com.arawaney.tumascotik.client.control.MainController;
 import com.arawaney.tumascotik.client.db.provider.BreedProvider;
 import com.arawaney.tumascotik.client.db.provider.PetProvider;
 import com.arawaney.tumascotik.client.db.provider.ServiceProvider;
+import com.arawaney.tumascotik.client.db.provider.SocialNetworkProvider;
 import com.arawaney.tumascotik.client.db.provider.UserProvider;
 import com.arawaney.tumascotik.client.listener.ParsePetListener;
 import com.arawaney.tumascotik.client.listener.ParseRequestListener;
 import com.arawaney.tumascotik.client.listener.ParseServiceListener;
 import com.arawaney.tumascotik.client.listener.ParseUserListener;
+import com.arawaney.tumascotik.client.listener.SocialNetworkListener;
 import com.arawaney.tumascotik.client.model.Breed;
 import com.arawaney.tumascotik.client.model.PetPropertie;
 import com.arawaney.tumascotik.client.model.Service;
 import com.arawaney.tumascotik.client.model.Pet;
 import com.arawaney.tumascotik.client.model.Request;
+import com.arawaney.tumascotik.client.model.SocialNetwork;
 import com.arawaney.tumascotik.client.model.Specie;
 import com.arawaney.tumascotik.client.model.User;
 import com.arawaney.tumascotik.client.util.CalendarUtil;
@@ -66,9 +69,12 @@ public class ParseProvider {
 	private static final String IS_REQUEST_TAG = "isRequest";
 	private static final String DURATION_TAG = "duration";
 	private static final String UPDATED_AT_TAG = "updatedAt";
+	private static final String FIELD_TAG = "field";
+	private static final String ENABLED_TAG = "enabled";
 
 	private static final String USER_TABLE = "_User";
 	private static final String SERVICE_TABLE = "Service";
+	private static final String SOCIAL_NETWORK_TABLE = "Social_Network";
 
 	private static final String SEX_MALE = "M";
 	private static final String SEX_FEMALE = "F";
@@ -110,20 +116,20 @@ public class ParseProvider {
 		dbuser.setPassword(password);
 		if (user.get(NAME_TAG) != null) {
 			dbuser.setName(user.getString(NAME_TAG).toString());
-		}else
+		} else
 			Log.d("LOG IN", "Name in parse null");
 
 		if (user.get(LAST_NAME_TAG) != null) {
 
 			dbuser.setLastname(user.getString(LAST_NAME_TAG).toString());
-		}else
+		} else
 			Log.d("LOG IN", "Last Name in parse null");
 
 		dbuser.setCedula(user.getInt(IDENTIFICATION_TAG));
 
 		if (user.get(ADDRESS_TAG) != null) {
 			dbuser.setAddress(user.get(ADDRESS_TAG).toString());
-		}else
+		} else
 			Log.d("LOG IN", "Adress in parse null");
 
 		if (user.getEmail() != null) {
@@ -166,10 +172,21 @@ public class ParseProvider {
 
 					User updatedUser = user;
 
-					updatedUser.setName(parseUSer.get(NAME_TAG).toString());
-					updatedUser.setLastname(parseUSer.get(LAST_NAME_TAG)
-							.toString());
+					if (parseUSer.get(NAME_TAG) != null) {
+						updatedUser.setName(parseUSer.get(NAME_TAG).toString());
+					} else {
+						updatedUser.setName("");
+					}
+
+					if (parseUSer.get(LAST_NAME_TAG) != null) {
+						updatedUser.setLastname(parseUSer.get(LAST_NAME_TAG)
+								.toString());
+					} else {
+
+					}
+
 					updatedUser.setCedula(parseUSer.getInt(IDENTIFICATION_TAG));
+
 					if (parseUSer.get(ADDRESS_TAG) != null) {
 						updatedUser.setAddress(parseUSer.get(ADDRESS_TAG)
 								.toString());
@@ -178,11 +195,15 @@ public class ParseProvider {
 					updatedUser.setEmail(parseUSer.getString(EMAIL_TAG));
 
 					String gender = parseUSer.getString(GENDER_TAG);
+					if (gender != null) {
+						if (gender.equals(SEX_MALE)) {
+							user.setGender(User.GENDER_MAN);
+						} else if (gender.equals(SEX_FEMALE)) {
+							user.setGender(User.GENDER_WOMAN);
+						}
+					}else{
+						user.setGender(User.GENDER_MAN);
 
-					if (gender.equals(SEX_MALE)) {
-						updatedUser.setGender(User.GENDER_MAN);
-					} else if (gender.equals(SEX_FEMALE)) {
-						updatedUser.setGender(User.GENDER_WOMAN);
 					}
 
 					updatedUser.setMobile_telephone(parseUSer
@@ -275,19 +296,19 @@ public class ParseProvider {
 							parsedUser.put(ADDRESS_TAG, user.getAddress());
 
 							parsedUser.saveInBackground(new SaveCallback() {
-								
+
 								@Override
 								public void done(ParseException e) {
-									if (e!=null) {
+									if (e != null) {
 										Log.d(LOG_TAG, "Error saving new user");
 										e.printStackTrace();
-									}else{
-										
+									} else {
+
 									}
-										
+
 								}
 							});
-							
+
 							listener.onCLientUpdateFinish(user, true);
 
 						} else {
@@ -313,6 +334,7 @@ public class ParseProvider {
 		parsedUser.put(NAME_TAG, user.getName());
 		parsedUser.put(LAST_NAME_TAG, user.getLastname());
 		parsedUser.put(EMAIL_TAG, user.getEmail());
+		parsedUser.put(ADMIN_TAG, false);
 
 		int gender = user.getGender();
 		if (gender == User.GENDER_MAN) {
@@ -507,21 +529,47 @@ public class ParseProvider {
 							User user = new User();
 
 							user.setSystemId(parseUSer.getObjectId().toString());
-							user.setName(parseUSer.get(NAME_TAG).toString());
-							user.setLastname(parseUSer.get(LAST_NAME_TAG)
-									.toString());
+							if (parseUSer.get(NAME_TAG) != null) {
+								user.setName(parseUSer.get(NAME_TAG).toString());
+
+							} else {
+								user.setName("");
+
+							}
+							if (parseUSer.get(LAST_NAME_TAG) != null) {
+								user.setLastname(parseUSer.get(LAST_NAME_TAG)
+										.toString());
+							} else {
+								user.setLastname("");
+							}
+							if (parseUSer.get(ADDRESS_TAG) != null) {
+								user.setAddress(parseUSer.get(ADDRESS_TAG)
+										.toString());
+							} else {
+								user.setAddress("");
+							}
 							user.setCedula(parseUSer.getInt(IDENTIFICATION_TAG));
-							user.setAddress(parseUSer.get(ADDRESS_TAG)
-									.toString());
-							user.setEmail(parseUSer.getString(EMAIL_TAG));
+
+							if (parseUSer.get(EMAIL_TAG) != null) {
+								user.setEmail(parseUSer.getString(EMAIL_TAG));
+							} else {
+								user.setEmail("");
+							}
 
 							String gender = parseUSer.getString(GENDER_TAG);
-
-							if (gender.equals(SEX_MALE)) {
+							if (gender != null) {
+								if (gender.equals(SEX_MALE)) {
+									user.setGender(User.GENDER_MAN);
+								} else if (gender.equals(SEX_FEMALE)) {
+									user.setGender(User.GENDER_WOMAN);
+								}
+							}else{
 								user.setGender(User.GENDER_MAN);
-							} else if (gender.equals(SEX_FEMALE)) {
-								user.setGender(User.GENDER_WOMAN);
+
 							}
+							
+
+							
 
 							user.setMobile_telephone(parseUSer
 									.getLong(TELEPHONE_MOBILE_TAG));
@@ -555,6 +603,110 @@ public class ParseProvider {
 			}
 
 		});
+	}
+
+	public static void getSocialNetworks(Context context,
+			final SocialNetworkListener listener) {
+
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+				SOCIAL_NETWORK_TABLE);
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> cList, ParseException e) {
+				final ArrayList<SocialNetwork> socialNetworks;
+				if (e == null) {
+					socialNetworks = new ArrayList<SocialNetwork>();
+					for (ParseObject object : cList) {
+						SocialNetwork socialNetwork = new SocialNetwork();
+						socialNetwork.setSystemId(object.getObjectId());
+						socialNetwork.setName(object.getString(NAME_TAG));
+						socialNetwork.setField(object.getString(FIELD_TAG));
+						Calendar Updated_At = Calendar.getInstance();
+						Updated_At.setTimeInMillis(object.getUpdatedAt()
+								.getTime());
+						socialNetwork.setUpdated_at(Updated_At);
+
+						boolean enabled = object.getBoolean(ENABLED_TAG);
+						if (enabled) {
+							socialNetwork.setEnabled(SocialNetwork.ENABLED);
+						} else
+							socialNetwork.setEnabled(SocialNetwork.NOT_ENABLED);
+
+						socialNetworks.add(socialNetwork);
+					}
+					listener.onAllSocialNetworksQueryFinished(true,
+							socialNetworks);
+
+				} else {
+					socialNetworks = null;
+					Log.d(LOG_TAG, " Query Error: " + e.getMessage());
+					listener.onAllSocialNetworksQueryFinished(false,
+							socialNetworks);
+				}
+
+			}
+
+		});
+
+	}
+
+	public static void updateAllSocialNetworks(Context context,
+			final SocialNetworkListener listener) {
+
+		Date lastUpdate = SocialNetworkProvider.getLastUpdate(context);
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+				SOCIAL_NETWORK_TABLE);
+		if (lastUpdate != null) {
+			Log.d(LOG_TAG, CalendarUtil.getDateFormated(lastUpdate,
+					"hh:mm dd MM yyyy"));
+			query.whereGreaterThan(UPDATED_AT_TAG, lastUpdate);
+		} else {
+			Log.d(LOG_TAG, "null updating all Social Networks");
+		}
+
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> cList, ParseException e) {
+
+				if (e == null) {
+
+					ArrayList<SocialNetwork> socialNetworks = new ArrayList<SocialNetwork>();
+
+					for (ParseObject object : cList) {
+						SocialNetwork socialNetwork = new SocialNetwork();
+						socialNetwork.setSystemId(object.getObjectId());
+						socialNetwork.setName(object.getString(NAME_TAG));
+						socialNetwork.setField(object.getString(FIELD_TAG));
+						Calendar Updated_At = Calendar.getInstance();
+						Updated_At.setTimeInMillis(object.getUpdatedAt()
+								.getTime());
+						socialNetwork.setUpdated_at(Updated_At);
+
+						boolean enabled = object.getBoolean(ENABLED_TAG);
+						if (enabled) {
+							socialNetwork.setEnabled(SocialNetwork.ENABLED);
+						} else
+							socialNetwork.setEnabled(SocialNetwork.NOT_ENABLED);
+
+						socialNetworks.add(socialNetwork);
+					}
+
+					listener.onUpdateSocialNetworksFinished(true,
+							socialNetworks);
+
+				} else {
+					listener.onUpdateSocialNetworksFinished(true, null);
+					Log.d(LOG_TAG,
+							" Query error updating SocialNetworks: "
+									+ e.getMessage());
+				}
+
+			}
+
+		});
+
 	}
 
 }

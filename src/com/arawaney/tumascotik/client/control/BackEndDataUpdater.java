@@ -17,16 +17,19 @@ import com.arawaney.tumascotik.client.db.provider.BreedProvider;
 import com.arawaney.tumascotik.client.db.provider.PetPropertieProvider;
 import com.arawaney.tumascotik.client.db.provider.PetProvider;
 import com.arawaney.tumascotik.client.db.provider.ServiceProvider;
+import com.arawaney.tumascotik.client.db.provider.SocialNetworkProvider;
 import com.arawaney.tumascotik.client.db.provider.SpecieProvider;
 import com.arawaney.tumascotik.client.listener.ParsePetListener;
 import com.arawaney.tumascotik.client.listener.ParseServiceListener;
+import com.arawaney.tumascotik.client.listener.SocialNetworkListener;
 import com.arawaney.tumascotik.client.model.Breed;
 import com.arawaney.tumascotik.client.model.Pet;
 import com.arawaney.tumascotik.client.model.PetPropertie;
+import com.arawaney.tumascotik.client.model.SocialNetwork;
 import com.arawaney.tumascotik.client.model.Specie;
 
 public class BackEndDataUpdater extends Service implements ParsePetListener,
-		ParseServiceListener {
+		ParseServiceListener, SocialNetworkListener {
 	Context context;
 
 	private void updateAllData() {
@@ -36,9 +39,11 @@ public class BackEndDataUpdater extends Service implements ParsePetListener,
 		updatePetProperties();
 		updateSpecies();
 		updatePets();
+		updateAllSocialNetworks();
 		
 
 	}
+
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -72,6 +77,11 @@ public class BackEndDataUpdater extends Service implements ParsePetListener,
 		ParsePetProvider.updateAllSpecies(context, this);
 
 	}
+	
+	private void updateAllSocialNetworks() {
+		ParseProvider.updateAllSocialNetworks(context, this);		
+	}
+
 
 	@Override
 	public void onMotivesQueryFinished(ArrayList<String> motives) {
@@ -235,6 +245,30 @@ public class BackEndDataUpdater extends Service implements ParsePetListener,
 	public void onPetRemoveFinished(boolean b) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void onAllSocialNetworksQueryFinished(boolean b,
+			ArrayList<SocialNetwork> socialNetwork) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUpdateSocialNetworksFinished(boolean b,
+			ArrayList<SocialNetwork> socialNetworks) {
+		if (b) {
+			for (SocialNetwork socialNetwork : socialNetworks) {
+				SocialNetwork socialNetworkSaved = SocialNetworkProvider
+						.readSocialNetwork(context, socialNetwork.getSystemId());
+				if (socialNetworkSaved == null) {
+					SocialNetworkProvider.insertSocialNetwork(context, socialNetwork);
+				} else {
+					SocialNetworkProvider.updateSocialNetwork(context, socialNetwork);
+				}
+			}
+
+		}
 	}
 
 }

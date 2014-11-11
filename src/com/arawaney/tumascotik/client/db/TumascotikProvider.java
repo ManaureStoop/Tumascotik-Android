@@ -39,6 +39,8 @@ public class TumascotikProvider extends ContentProvider {
 	private static final int BUDGET_ID = 16;
 	private static final int SERVICE_BUDGETS = 17;
 	private static final int SERVICE_BUDGET_ID = 18;
+	private static final int SOCIAL_NETWORKS = 19;
+	private static final int SOCIAL_NETWORK_ID = 20;
 
 	// URIs
 
@@ -77,6 +79,10 @@ public class TumascotikProvider extends ContentProvider {
 	private static final String CONTENT_SERVICE_BUDGET = "content://" + PROVIDER_NAME
 			+ "/" + ServiceBudgetEntity.TABLE;
 	public static final Uri URI_SERVICE_BUDGET = Uri.parse(CONTENT_SERVICE_BUDGET);
+	
+	private static final String CONTENT_SOCIAL_NETWORK = "content://" + PROVIDER_NAME
+			+ "/" + SocialNetworkEntity.TABLE;
+	public static final Uri URI_SOCIAL_NETWORK = Uri.parse(CONTENT_SOCIAL_NETWORK);
 
 	// Content Types
 
@@ -116,6 +122,11 @@ public class TumascotikProvider extends ContentProvider {
 			+ PROVIDER_NAME + "." + ServiceBudgetEntity.TABLE;
 	private static final String TYPE_SERVICE_BUDGET_ITEMS = "android.cursor.item/vnd."
 			+ PROVIDER_NAME + "." + ServiceBudgetEntity.TABLE;
+	private static final String TYPE_SOCIAL_NETWORK = "android.cursor.item/vnd."
+			+ PROVIDER_NAME + "." + SocialNetworkEntity.TABLE;
+	private static final String TYPE_SOCIAL_NETWORKS = "android.cursor.item/vnd."
+			+ PROVIDER_NAME + "." + SocialNetworkEntity.TABLE;
+	
 
 	private static final UriMatcher uriMatcher;
 
@@ -155,6 +166,10 @@ public class TumascotikProvider extends ContentProvider {
 		uriMatcher.addURI(PROVIDER_NAME, ServiceBudgetEntity.TABLE, SERVICE_BUDGETS);
 		uriMatcher
 				.addURI(PROVIDER_NAME, ServiceBudgetEntity.TABLE + "/#", SERVICE_BUDGET_ID);
+		
+		uriMatcher.addURI(PROVIDER_NAME, SocialNetworkEntity.TABLE, SOCIAL_NETWORKS);
+		uriMatcher
+				.addURI(PROVIDER_NAME, SocialNetworkEntity.TABLE + "/#", SOCIAL_NETWORK_ID);
 	}
 
 	public static final String DATABASE_NAME = "tumascotik_client_db";
@@ -224,6 +239,10 @@ public class TumascotikProvider extends ContentProvider {
 			return TYPE_SERVICE_BUDGET_ITEMS;
 		case SERVICE_BUDGET_ID:
 			return TYPE_SERVICE_BUDGET_ITEM;
+		case SOCIAL_NETWORKS:
+			return TYPE_SOCIAL_NETWORKS;
+		case SOCIAL_NETWORK_ID:
+			return TYPE_SOCIAL_NETWORK;
 		default:
 			throw new IllegalArgumentException("Unsupported UR" + uri);
 		}
@@ -279,6 +298,11 @@ public class TumascotikProvider extends ContentProvider {
 		case SERVICE_BUDGETS:
 			tableName = ServiceBudgetEntity.TABLE;
 			target = URI_SERVICE_BUDGET;
+			break;
+			
+		case SOCIAL_NETWORKS:
+			tableName = SocialNetworkEntity.TABLE;
+			target = URI_SOCIAL_NETWORK;
 			break;
 		default:
 			throw new IllegalArgumentException("Unsupported UR" + uri);
@@ -427,6 +451,17 @@ public class TumascotikProvider extends ContentProvider {
 		case SERVICE_BUDGET_ID:
 			tableName = ServiceBudgetEntity.TABLE;
 			target = URI_SERVICE_BUDGET;
+			single = true;
+			break;
+			
+		case SOCIAL_NETWORKS:
+			tableName = SocialNetworkEntity.TABLE;
+			target = URI_SOCIAL_NETWORK;
+			break;
+			
+		case SOCIAL_NETWORK_ID:
+			tableName = SocialNetworkEntity.TABLE;
+			target = URI_SOCIAL_NETWORK;
 			single = true;
 			break;
 
@@ -624,6 +659,20 @@ public class TumascotikProvider extends ContentProvider {
 			count = db.update(ServiceBudgetEntity.TABLE, values, selection,
 					selectionArgs);
 			break;
+		case SOCIAL_NETWORKS:
+			count = db.update(SocialNetworkEntity.TABLE, values, selection,
+					selectionArgs);
+			break;
+
+		case SOCIAL_NETWORK_ID:
+			selection = SocialNetworkEntity.COLUMN_SYSTEM_ID
+					+ " = "
+					+ uri.getPathSegments().get(1)
+					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
+							+ ')' : "");
+			count = db.update(SocialNetworkEntity.TABLE, values, selection,
+					selectionArgs);
+			break;
 
 		default:
 			throw new IllegalArgumentException("Unsupported URI" + uri);
@@ -785,6 +834,21 @@ public class TumascotikProvider extends ContentProvider {
 					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
 							+ ')' : "");
 			rowsAffected = db.delete(ServiceBudgetEntity.TABLE, selection,
+					selectionArgs);
+			break;
+			
+		case SOCIAL_NETWORKS:
+			rowsAffected = db.delete(SocialNetworkEntity.TABLE, selection,
+					selectionArgs);
+			break;
+
+		case SOCIAL_NETWORK_ID:
+			selection = SocialNetworkEntity.COLUMN_SYSTEM_ID
+					+ " = "
+					+ uri.getPathSegments().get(1)
+					+ (!TextUtils.isEmpty(selection) ? "AND (" + selection
+							+ ')' : "");
+			rowsAffected = db.delete(SocialNetworkEntity.TABLE, selection,
 					selectionArgs);
 			break;
 

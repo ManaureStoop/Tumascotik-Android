@@ -215,6 +215,7 @@
     <string name="budget_actionbar_title">My Orders</string>
     <string name="budget_dialog_order_ready">Order Ready</string>
     <string name="budget_dialog_cancel_order">Cancel Order</string>
+     <string name="budget_dialog_call">Call</string>
     <string name="budget_dialog_order_delivered">Order Delivered</string>
 
     <!-- Budget/Request View -->

@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
-import com.arawaney.tumascotik.client.R;
 
+import com.arawaney.tumascotik.client.R;
 import com.arawaney.tumascotik.client.activity.ViewRequests;
 import com.arawaney.tumascotik.client.backend.ParseProvider;
 import com.arawaney.tumascotik.client.backend.ParseRequestProvider;
@@ -37,6 +37,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -92,6 +93,9 @@ public class BudgetItemDialog extends DialogFragment {
 			}
 		});
 		if (MainController.USER.getisAdmin() == User.IS_ADMIN) {
+			if (budget.getStatus() == Budget.STATUS_CANCELED) {
+				setcCallPacientButton(builder);
+			}
 			if (budget.getStatus() == Budget.STATUS_IN_PROCESS) {
 				builder.setNeutralButton(
 						context.getResources().getString(
@@ -125,10 +129,35 @@ public class BudgetItemDialog extends DialogFragment {
 								listener.onBudgetStatusChanged(budget);
 							}
 						});
+				setcCallPacientButton(builder);	
 			}
 		}
 
 		return builder.create();
+	}
+
+	private void setcCallPacientButton(AlertDialog.Builder builder) {
+		final User pacient = UserProvider.readUser(context, budget.getUserId());
+		if (pacient != null) {
+			if (pacient.getMobile_telephone() != null) {
+				String callPacientTitle = context.getResources().getString(
+						R.string.budget_dialog_call)+ " a "+ pacient.getName();
+				
+				builder.setNegativeButton(callPacientTitle,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								String number = "tel:0"+pacient.getMobile_telephone();
+								Intent callIntent = new Intent(Intent.ACTION_CALL);
+								callIntent.setData(Uri.parse(number));
+								startActivity(callIntent);
+							}
+						});
+			}
+		
+		}
 	}
 
 }

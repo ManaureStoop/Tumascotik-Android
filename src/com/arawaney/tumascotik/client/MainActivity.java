@@ -58,6 +58,7 @@ import com.arawaney.tumascotik.client.db.provider.PetPropertieProvider;
 import com.arawaney.tumascotik.client.db.provider.PetProvider;
 import com.arawaney.tumascotik.client.db.provider.RequestProvider;
 import com.arawaney.tumascotik.client.db.provider.ServiceProvider;
+import com.arawaney.tumascotik.client.db.provider.SocialNetworkProvider;
 import com.arawaney.tumascotik.client.db.provider.SpecieProvider;
 import com.arawaney.tumascotik.client.db.provider.UserProvider;
 import com.arawaney.tumascotik.client.dialog.ConnectionDialog;
@@ -66,6 +67,7 @@ import com.arawaney.tumascotik.client.listener.ParsePetListener;
 import com.arawaney.tumascotik.client.listener.ParseRequestListener;
 import com.arawaney.tumascotik.client.listener.ParseServiceListener;
 import com.arawaney.tumascotik.client.listener.ParseUserListener;
+import com.arawaney.tumascotik.client.listener.SocialNetworkListener;
 import com.arawaney.tumascotik.client.model.Breed;
 import com.arawaney.tumascotik.client.model.Budget;
 import com.arawaney.tumascotik.client.model.BudgetService;
@@ -73,6 +75,7 @@ import com.arawaney.tumascotik.client.model.Pet;
 import com.arawaney.tumascotik.client.model.PetPropertie;
 import com.arawaney.tumascotik.client.model.Request;
 import com.arawaney.tumascotik.client.model.Service;
+import com.arawaney.tumascotik.client.model.SocialNetwork;
 import com.arawaney.tumascotik.client.model.Specie;
 import com.arawaney.tumascotik.client.model.User;
 import com.arawaney.tumascotik.client.sidebarmenu.ActivityBase;
@@ -84,12 +87,14 @@ import com.arawaney.tumascotik.client.util.NetworkUtil;
 
 public class MainActivity extends ActivityBase implements ParsePetListener,
 		ParseUserListener, ParseRequestListener, ParseServiceListener,
-		ParseBudgetListener {
+		ParseBudgetListener, SocialNetworkListener {
 	Date fechainicio;
 	ProgressDialog progressDialog;
 	SharedPreferences savedpendingappoint;
 	int pendingApointments;
 	ActionBar actionBar;
+	
+	ArrayList<SocialNetwork> socialNetworks;
 
 	private final String LOG_TAG = "Tumascotik-Client-Main Menu";
 
@@ -143,6 +148,7 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 		if (MainController.Initialize(this)) {
 			setMainMenu();
 			if (checkingInternetConnections()) {
+				getSocialNetworks();
 				loadActionBar();
 				ParseProvider.getCurrentUser(this);
 				updateData();
@@ -153,9 +159,16 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 		} else {
 			setLogIn();
 			checkingInternetConnections();
+			getSocialNetworks();
+
 
 		}
 
+	}
+
+	private void getSocialNetworks() {
+		updateSocialNetworks();
+		socialNetworks = SocialNetworkProvider.readSocialNetworks(this);
 	}
 
 	private void updateData() {
@@ -325,9 +338,17 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 
 			@Override
 			public void onClick(View v) {
-
-				startActivity(new Intent(Intent.ACTION_VIEW, Uri
-						.parse("http://www.youtube.com/watch?v=XIMprgXfrCo")));
+			if (socialNetworks != null) {
+				SocialNetwork socialNetwork = getSocialNetworkByName(SocialNetwork.YOUTUBE);
+				if (socialNetwork!= null) {
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri
+							.parse(socialNetwork.getField())));
+				}else
+					Log.d(LOG_TAG, "SocialNetwork by name is null");
+				
+			}else
+				Log.d(LOG_TAG, "SocialNetworks are null");
+				
 			}
 		});
 
@@ -335,8 +356,18 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 
 			@Override
 			public void onClick(View v) {
-
-				getOpenFacebookIntent(MainActivity.this);
+				if (socialNetworks != null) {
+					SocialNetwork socialNetworkapp = getSocialNetworkByName(SocialNetwork.FACEBOOK_APP);
+					SocialNetwork socialNetworkweb = getSocialNetworkByName(SocialNetwork.FACEBOOK_WEB);
+					if (socialNetworkapp != null && socialNetworkweb != null) {
+						getOpenFacebookIntent(MainActivity.this, socialNetworkapp.getField(), socialNetworkweb.getField());
+					
+					}else
+						Log.d(LOG_TAG, "SocialNetwork by name is null");
+									}else
+					Log.d(LOG_TAG, "SocialNetworks are null");
+	
+				
 			}
 		});
 
@@ -344,8 +375,17 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 
 			@Override
 			public void onClick(View v) {
+				if (socialNetworks != null) {
+					SocialNetwork socialNetworkapp = getSocialNetworkByName(SocialNetwork.TWITTER_APP);
+					SocialNetwork socialNetworkweb = getSocialNetworkByName(SocialNetwork.TWITTER_WEB);
+					if (socialNetworkapp != null && socialNetworkweb != null) {
+						getOpenTwitterIntent(MainActivity.this, socialNetworkapp.getField(), socialNetworkweb.getField());
+					}else
+						Log.d(LOG_TAG, "SocialNetwork by name is null");
+					}else
+					Log.d(LOG_TAG, "SocialNetworks are null");
 
-				getOpenTwitterIntent(MainActivity.this);
+				
 			}
 		});
 
@@ -353,9 +393,19 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 
 			@Override
 			public void onClick(View v) {
-				Intent callIntent = new Intent(Intent.ACTION_CALL);
-				callIntent.setData(Uri.parse("tel:04142564227"));
-				startActivity(callIntent);
+				if (socialNetworks != null) {
+					SocialNetwork socialNetwork = getSocialNetworkByName(SocialNetwork.PHONE);
+					if (socialNetwork!= null) {
+						Intent callIntent = new Intent(Intent.ACTION_CALL);
+						callIntent.setData(Uri.parse("tel:"+socialNetwork.getField()));
+						startActivity(callIntent);
+						
+					}else
+						Log.d(LOG_TAG, "SocialNetwork by name is null");
+					
+				}else
+					Log.d(LOG_TAG, "SocialNetworks are null");
+				
 
 			}
 		});
@@ -446,7 +496,6 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 		String notificationtitle;
 		String notificationcontent;
 		Class tapclass;
-		Log.d("TEST2", "REQUEST: " + request.getSystem_id());
 		String petName = request.getPet().getName();
 
 		if (accepted) {
@@ -518,33 +567,33 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 		mNotificationManager.notify(0, mBuilder.build());
 	}
 
-	public static Intent getOpenFacebookIntent(Context context) {
+	public static Intent getOpenFacebookIntent(Context context, String fieldApp, String fieldWeb) {
 		Intent intent;
 		try {
 			context.getPackageManager()
 					.getPackageInfo("com.facebook.katana", 0);
 			intent = new Intent(Intent.ACTION_VIEW,
-					Uri.parse("fb://profile/100000796583747"));
+					Uri.parse(fieldApp));
 			context.startActivity(intent);
 			return intent;
 		} catch (Exception e) {
 			intent = new Intent(Intent.ACTION_VIEW,
-					Uri.parse("https://www.facebook.com/tumascotik"));
+					Uri.parse(fieldWeb));
 			context.startActivity(intent);
 			return intent;
 		}
 	}
 
-	public static Intent getOpenTwitterIntent(Context context) {
+	public static Intent getOpenTwitterIntent(Context context, String fieldApp, String fieldWeb) {
 		Intent intent;
 		try {
 			intent = new Intent(Intent.ACTION_VIEW,
-					Uri.parse("twitter://user?user_id=289100088"));
+					Uri.parse(fieldApp));
 			context.startActivity(intent);
 
 		} catch (Exception e) {
 			intent = new Intent(Intent.ACTION_VIEW,
-					Uri.parse("https://twitter.com/#!/[tumascotik]"));
+					Uri.parse(fieldWeb));
 			context.startActivity(intent);
 
 		}
@@ -626,6 +675,19 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 		loadPetProperties();
 		loadMotives();
 
+	}
+
+	private void updateSocialNetworks() {
+		ParseProvider.updateAllSocialNetworks(this, this);		
+	}
+	
+	private SocialNetwork getSocialNetworkByName(String name) {
+		for (SocialNetwork socialNetwork : socialNetworks) {
+			if (socialNetwork.getName().equals(name)) {
+				return socialNetwork;
+			}
+		}
+		return null;
 	}
 
 	private void loadMotives() {
@@ -847,7 +909,7 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 		}
 		speciesDone = true;
 
-		if (breedsDone && speciesDone && motivesDone && petPropertiesDone) {
+		if (breedsDone && speciesDone && motivesDone && petPropertiesDone ) {
 			progressDialog.dismiss();
 			setUpBackendUpdateServiceAlarm();
 			finish();
@@ -942,11 +1004,6 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 			if (!budgets.isEmpty()) {
 				for (Budget budget : budgets) {
 
-					Log.d(LOG_TAG,
-							"1Request isDelivery : " + budget.isDelivery());
-
-					Log.d(LOG_TAG, "1Request : " + budget.getSystem_id());
-
 					Budget savedBudget = BudgetProvider.readBudget(this,
 							budget.getSystem_id());
 
@@ -967,8 +1024,6 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 	@Override
 	public void onBudgetQueryFInished(Budget budget) {
 		if (budget != null) {
-			Log.d(LOG_TAG, "2Request Status " + budget.getStatus());
-			Log.d(LOG_TAG, "1Request isDelivery : " + budget.isDelivery());
 
 			Budget savedBudget = BudgetProvider.readBudget(this,
 					budget.getSystem_id());
@@ -1110,5 +1165,34 @@ public class MainActivity extends ActivityBase implements ParsePetListener,
 	public void onOnePriceQueryFinished(int price) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onAllSocialNetworksQueryFinished(boolean b,
+			ArrayList<SocialNetwork> socialNetworks) {
+		if (b) {
+			for (SocialNetwork socialNetwork : socialNetworks) {
+				SocialNetworkProvider.insertSocialNetwork(this, socialNetwork);
+			}
+		getSocialNetworks();
+		}
+
+	}
+
+	@Override
+	public void onUpdateSocialNetworksFinished(boolean b,
+			ArrayList<SocialNetwork> socialNetworks) {
+		if (b) {
+			for (SocialNetwork socialNetwork : socialNetworks) {
+				SocialNetwork socialNetworkSaved = SocialNetworkProvider
+						.readSocialNetwork(this, socialNetwork.getSystemId());
+				if (socialNetworkSaved == null) {
+					SocialNetworkProvider.insertSocialNetwork(this, socialNetwork);
+				} else {
+					SocialNetworkProvider.updateSocialNetwork(this, socialNetwork);
+				}
+			}
+
+		}
 	}
 }

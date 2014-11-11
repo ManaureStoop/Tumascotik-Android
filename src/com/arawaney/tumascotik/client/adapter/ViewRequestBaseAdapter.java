@@ -76,8 +76,8 @@ public class ViewRequestBaseAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		if (requests.get(position).getPet() != null) {
-			Log.d("PRUEBA REQUEST", "PET IS NULL");
+		if (requests.get(position).getPet().getBreed()== null) {
+			Log.d("PRUEBA REQUEST", "PET IS NULL" + requests.get(position).getSystem_id());
 		}
 		String path = new String("mini_"+ String.valueOf(requests.get(position).getPet().getBreed().getSpecie().getName()));
 		holder.petName.setText(requests.get(position).getPet().getName().toString());

@@ -224,6 +224,7 @@
     <string name="budget_date_title">Fecha de emisión : </string>
     <string name="budget_actionbar_title">Mis Pedidos</string>
     <string name="budget_dialog_order_ready">Pedido Listo</string>
+    <string name="budget_dialog_call">Llamar</string>
     <string name="budget_dialog_cancel_order">Cancelar Pedido</string>
     <string name="budget_dialog_order_delivered">Pedido Entregado</string>
 

@@ -46,8 +46,6 @@ public class PetPicker extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_picker);
 
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-Log.d(LOG_TAG, "METRICS:"+metrics.densityDpi);
 		loadViews();
 		loadPets();
 		loadAddButtons();
@@ -99,7 +97,6 @@ Log.d(LOG_TAG, "METRICS:"+metrics.densityDpi);
 
 			@Override
 			public void onClick(View v) {
-				Log.d(LOG_TAG, "Add new pet!!");
 				Pet pet = new Pet();
 				User owner;
 				if (userIsClient()) {

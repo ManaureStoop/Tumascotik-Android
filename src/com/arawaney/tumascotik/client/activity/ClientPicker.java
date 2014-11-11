@@ -85,7 +85,6 @@ public class ClientPicker extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Log.d(LOG_TAG, "Add new user!!");
 				User user = new User();
 				user.setAdmin(User.NOT_ADMIN); 
 				MainController.setCLIENTUSER(user);

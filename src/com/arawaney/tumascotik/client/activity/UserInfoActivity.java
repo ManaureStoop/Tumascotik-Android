@@ -250,11 +250,9 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 					} else if (viewMode == MODE_EDIT_LIST) {
 						saveUser();
 						if (newUser()) {
-							Log.d(LOG_TAG, "New user");
 							if (checkFields()) {
 								setSavingUserDialog();
 								insertUser();
-								Log.d(LOG_TAG, "Fields checked");
 							}
 						} else {
 							if (userDataChanged()) {
@@ -488,7 +486,8 @@ public class UserInfoActivity extends Activity implements ParseUserListener {
 	}
 
 	private void setSavingUserDialog() {
-		progressDialog = ProgressDialog.show(this, "", getResources().getString(R.string.user_info_button_saving));
+		progressDialog = ProgressDialog.show(this, "", getResources()
+				.getString(R.string.user_info_button_saving));
 		progressDialog.setCancelable(true);
 	}
 

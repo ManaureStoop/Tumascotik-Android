@@ -32,6 +32,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 			db.execSQL(ServiceEntity.CREATE_TABLE_SERVICE);
 			db.execSQL(BudgetEntity.CREATE_TABLE_BUDGET);
 			db.execSQL(ServiceBudgetEntity.CREATE_TABLE_SERVICE_BUDGET);
+			db.execSQL(SocialNetworkEntity.CREATE_TABLE_SOCIAL_NETWORK);
+
 		} catch (SQLException e) {
 			Log.d(LOG_TAG, "Error creating table:"+e.getMessage());
 		}catch (Exception e) {
@@ -60,6 +62,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 					+ BudgetEntity.TABLE);
 			db.execSQL("DROP TABLE IF EXISTS"
 					+ ServiceBudgetEntity.TABLE);
+			db.execSQL("DROP TABLE IF EXISTS"
+					+ SocialNetworkEntity.TABLE);
 		} catch (SQLException e) {
 			Log.d(LOG_TAG, "Error Ddroping table:"+e.getMessage());
 		}

@@ -273,7 +273,6 @@ public class SetDate extends FragmentActivity implements ParseRequestListener {
 
 				if (auxFinalDate.after(finalScheduledDates[i])
 						&& cursorDate.before(finalScheduledDates[i])) {
-					Log.d(LOG_TAG, "Test true raro");
 					appointmentAtFirstBLock = true;
 					break;
 				}
@@ -436,7 +435,7 @@ public class SetDate extends FragmentActivity implements ParseRequestListener {
 								minutef[j] = cal2.get(Calendar.MINUTE);
 								houri[j] = cal1.get(Calendar.HOUR_OF_DAY);
 								hourf[j] = cal2.get(Calendar.HOUR_OF_DAY);
-								Log.d("AJA09", timeBlocks[j]);
+								Log.d(LOG_TAG, timeBlocks[j]);
 								j++;
 							}
 						} else {
@@ -469,7 +468,7 @@ public class SetDate extends FragmentActivity implements ParseRequestListener {
 								minutef[j] = cal2.get(Calendar.MINUTE);
 								houri[j] = cal1.get(Calendar.HOUR_OF_DAY);
 								hourf[j] = cal2.get(Calendar.HOUR_OF_DAY);
-								Log.d("AJA10", timeBlocks[j]);
+								Log.d(LOG_TAG, timeBlocks[j]);
 								j++;
 							}
 						}
@@ -510,7 +509,7 @@ public class SetDate extends FragmentActivity implements ParseRequestListener {
 					houri[j] = cal1.get(Calendar.HOUR_OF_DAY);
 					hourf[j] = cal2.get(Calendar.HOUR_OF_DAY);
 
-					Log.d("AJA11", timeBlocks[j]);
+					Log.d(LOG_TAG, timeBlocks[j]);
 					j++;
 					cursorDateEn = auxFinalDate;
 				}
